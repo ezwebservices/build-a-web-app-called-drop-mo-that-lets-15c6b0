@@ -1,14 +1,6 @@
 You are Engineer (Full-Stack Engineer). Make this specific change:
 
-Fix two TypeScript errors blocking Amplify backend synth, then run `npm run build` locally until it passes, then commit and push.
-
-Error 1 — amplify/backend.ts:57:
-`backend.sendInvites.resources.lambda.addEnvironment('PUBLIC_SHARE_URL', publicShareUrl.url)` fails because `resources.lambda` is typed as `IFunction`, which has no `addEnvironment`. Cast to the concrete `Function` from aws-cdk-lib/aws-lambda: `(backend.sendInvites.resources.lambda as import('aws-cdk-lib/aws-lambda').Function).addEnvironment('PUBLIC_SHARE_URL', publicShareUrl.url)` (or import Function at top and cast). Do the same for any other similar addEnvironment calls in backend.ts.
-
-Error 2 — amplify/functions/public-share/handler.ts:188:
-The handler is typed `LambdaFunctionURLHandler` but returns objects where `headers` has an optional `'Cache-Control'?: undefined` — which isn't assignable to the index signature `{ [header: string]: string | number | boolean }`. Fix by ensuring every returned response object uses a consistently-typed headers record. Simplest fix: type the handler's returned headers as `Record<string, string>` explicitly, OR build each response so the two branches have identical header shapes (e.g., always include 'Cache-Control' with a concrete string, or always omit it — do not conditionally set it to undefined). You can also change the handler signature to return `Promise<APIGatewayProxyStructuredResultV2>` and keep `LambdaFunctionURLHandler` — but prefer the handler type from aws-lambda that matches Function URL invocation. Ensure no property is typed as `undefined`.
-
-Do NOT disable pipeline-deploy, do NOT stub amplify_outputs.json, do NOT switch resource.ts secrets to process.env. After fixes, run `npm run build` and iterate until exit 0, then `git add -A && git commit -m "fix: backend.ts addEnvironment cast + public-share handler header types" && git push`.
+Fix Amplify CloudformationStackCircularDependencyError between data and function stacks. In each amplify/functions/<name>/resource.ts (send-invites-lambda, schedule-drop-lambda, progress-image-lambda, drop-day-lambda, public-share-lambda), add `resourceGroupName: 'data'` to the defineFunction call for any function that is used as a data resolver or calls the data/GraphQL API (which includes all of these, since they read/write drops/pledges). Do NOT disable pipeline-deploy. Do NOT commit amplify_outputs.json. Keep all runtime secrets using secret('NAME'), never process.env. After the edit, run `npm install` then `npm run build` until it exits 0. Then `git add -A && git commit -m "Fix: assign data-using Lambdas to data resourceGroup to break circular stack dependency" && git push`.
 
 Context: The user asked for: An AWS Amplify deployment FAILED for this project. You must analyze the build error logs below, identify the ROOT CAUSE, fix the underlying problem, run `npm run build` locally to verify it compiles cleanly, then commit and push.
 
@@ -85,58 +77,66 @@ Gets hit with multiple Venmo payments on drop day. That's it.
 
 DEPLOY ERROR LOGS (last 8000 chars from Amplify):
 ```
-d in the next major release.
-2026-04-17T20:56:12.398Z [WARNING]: Bundling asset amplify-d1u2km81dncoin-main-branch-30a4492368/function/schedule-drop-lambda/Code/Stage...
-2026-04-17T20:56:12.812Z [WARNING]: [WARNING] aws-cdk-lib.aws_lambda.FunctionOptions#logRetention is deprecated.
+4427b9b768d1fa36c3917f293daa875c478a5a20-building/index.js  961.6kb
+                                    ⚡ Done in 73ms
+2026-04-17T21:02:07.507Z [WARNING]: [WARNING] aws-cdk-lib.aws_lambda.FunctionOptions#logRetention is deprecated.
                                     use `logGroup` instead
                                     This API will be removed in the next major release.
-2026-04-17T20:56:12.820Z [WARNING]: [WARNING] aws-cdk-lib.aws_lambda.FunctionOptions#logRetention is deprecated.
+2026-04-17T21:02:07.507Z [WARNING]: [WARNING] aws-cdk-lib.aws_lambda.FunctionOptions#logRetention is deprecated.
                                     use `logGroup` instead
                                     This API will be removed in the next major release.
-                                    Bundling asset amplify-d1u2km81dncoin-main-branch-30a4492368/function/progress-image-lambda/Code/Stage...
-2026-04-17T20:56:13.123Z [WARNING]: [WARNING] aws-cdk-lib.aws_lambda.FunctionOptions#logRetention is deprecated.
+2026-04-17T21:02:07.508Z [WARNING]: Bundling asset amplify-d1u2km81dncoin-main-branch-30a4492368/function/send-invites-lambda/Code/Stage...
+2026-04-17T21:02:07.982Z [WARNING]: Be careful when using @auth directives on a field in a root type. @auth directives on field definitions use the source object to perform authorization logic and the source will be an empty object for fields on root types. Static group authorization should perform as expected.
+2026-04-17T21:02:08.237Z [WARNING]: [WARNING] aws-cdk-lib.aws_lambda.FunctionOptions#logRetention is deprecated.
                                     use `logGroup` instead
                                     This API will be removed in the next major release.
-2026-04-17T20:56:13.124Z [WARNING]: [WARNING] aws-cdk-lib.aws_lambda.FunctionOptions#logRetention is deprecated.
+2026-04-17T21:02:08.237Z [WARNING]: [WARNING] aws-cdk-lib.aws_lambda.FunctionOptions#logRetention is deprecated.
                                     use `logGroup` instead
                                     This API will be removed in the next major release.
-2026-04-17T20:56:13.125Z [WARNING]: Bundling asset amplify-d1u2km81dncoin-main-branch-30a4492368/function/drop-day-lambda/Code/Stage...
-2026-04-17T20:56:13.549Z [WARNING]: [WARNING] aws-cdk-lib.aws_lambda.FunctionOptions#logRetention is deprecated.
+2026-04-17T21:02:08.238Z [WARNING]: Bundling asset amplify-d1u2km81dncoin-main-branch-30a4492368/function/schedule-drop-lambda/Code/Stage...
+2026-04-17T21:02:08.611Z [WARNING]: [WARNING] aws-cdk-lib.aws_lambda.FunctionOptions#logRetention is deprecated.
                                     use `logGroup` instead
                                     This API will be removed in the next major release.
-2026-04-17T20:56:13.549Z [WARNING]: [WARNING] aws-cdk-lib.aws_lambda.FunctionOptions#logRetention is deprecated.
+2026-04-17T21:02:08.611Z [WARNING]: [WARNING] aws-cdk-lib.aws_lambda.FunctionOptions#logRetention is deprecated.
                                     use `logGroup` instead
                                     This API will be removed in the next major release.
-2026-04-17T20:56:13.550Z [WARNING]: Bundling asset amplify-d1u2km81dncoin-main-branch-30a4492368/function/public-share-lambda/Code/Stage...
-2026-04-17T20:56:14.627Z [INFO]: 8:56:14 PM ✔ Backend synthesized in 5.42 seconds
-2026-04-17T20:56:14.627Z [INFO]: 8:56:14 PM Running type checks...
-2026-04-17T20:56:25.911Z [INFO]: 8:56:25 PM ✔ Type checks completed in 11.28 seconds
-2026-04-17T20:56:26.100Z [INFO]: 
-2026-04-17T20:56:26.101Z [INFO]: Notices:
+2026-04-17T21:02:08.618Z [WARNING]: Bundling asset amplify-d1u2km81dncoin-main-branch-30a4492368/function/progress-image-lambda/Code/Stage...
+2026-04-17T21:02:08.914Z [WARNING]: [WARNING] aws-cdk-lib.aws_lambda.FunctionOptions#logRetention is deprecated.
+                                    use `logGroup` instead
+                                    This API will be removed in the next major release.
+2026-04-17T21:02:08.920Z [WARNING]: [WARNING] aws-cdk-lib.aws_lambda.FunctionOptions#logRetention is deprecated.
+                                    use `logGroup` instead
+                                    This API will be removed in the next major release.
+                                    Bundling asset amplify-d1u2km81dncoin-main-branch-30a4492368/function/drop-day-lambda/Code/Stage...
+2026-04-17T21:02:09.318Z [WARNING]: [WARNING] aws-cdk-lib.aws_lambda.FunctionOptions#logRetention is deprecated.
+                                    use `logGroup` instead
+                                    This API will be removed in the next major release.
+2026-04-17T21:02:09.318Z [WARNING]: [WARNING] aws-cdk-lib.aws_lambda.FunctionOptions#logRetention is deprecated.
+                                    use `logGroup` instead
+                                    This API will be removed in the next major release.
+2026-04-17T21:02:09.319Z [WARNING]: Bundling asset amplify-d1u2km81dncoin-main-branch-30a4492368/function/public-share-lambda/Code/Stage...
+2026-04-17T21:02:10.308Z [INFO]: 9:02:10 PM ✔ Backend synthesized in 5.09 seconds
+2026-04-17T21:02:10.308Z [INFO]: 
+2026-04-17T21:02:10.309Z [INFO]: 9:02:10 PM Running type checks...
+2026-04-17T21:02:10.309Z [INFO]: 
+2026-04-17T21:02:20.262Z [INFO]: 9:02:20 PM ✔ Type checks completed in 9.95 seconds
+2026-04-17T21:02:20.279Z [INFO]: 9:02:20 PM Building and publishing assets...
+2026-04-17T21:02:21.995Z [INFO]: 9:02:21 PM ✔ Built and published assets
+2026-04-17T21:02:22.717Z [INFO]: 
+2026-04-17T21:02:22.718Z [INFO]: Notices:
                                  3127	Amplify Function is dropping support of Node 16 Lambda Functions
                                  If you have Node 16 Lambda functions defined with Amplify Function, we highly
                                  recommend updating your function's runtime to newer Node LTS versions (Node 20+).
                                  More information at: https://github.com/aws-amplify/amplify-backend/issues/3127
                                  If you don't want to see a notice anymore, use npx ampx notices acknowledge <notice-id>
-2026-04-17T20:56:26.147Z [INFO]: 
-2026-04-17T20:56:26.148Z [INFO]: [SyntaxError] TypeScript validation check failed.
-                                 Resolution: Fix the syntax and type errors in your backend definition.
-                                 Details: amplify/backend.ts:57:38 - error TS2339: Property 'addEnvironment' does not exist on type 'IFunction'.
-                                 57 backend.sendInvites.resources.lambda.addEnvironment('PUBLIC_SHARE_URL', publicShareUrl.url);
-                                 ~~~~~~~~~~~~~~
-                                 amplify/functions/public-share/handler.ts:188:14 - error TS2322: Type '(event: APIGatewayProxyEventV2) => Promise<{ statusCode: number; headers: { 'Content-Type': string; 'Cache-Control'?: undefined; }; body: string; } | { statusCode: number; headers: { ...; }; body: string; }>' is not assignable to type 'LambdaFunctionURLHandler'.
-                                 Type 'Promise<{ statusCode: number; headers: { 'Content-Type': string; 'Cache-Control'?: undefined; }; body: string; } | { statusCode: number; headers: { 'Content-Type': string; 'Cache-Control': string; }; body: string; }>' is not assignable to type 'void | Promise<LambdaFunctionURLResult<never>>'.
-                                 Type 'Promise<{ statusCode: number; headers: { 'Content-Type': string; 'Cache-Control'?: undefined; }; body: string; } | { statusCode: number; headers: { 'Content-Type': string; 'Cache-Control': string; }; body: string; }>' is not assignable to type 'Promise<LambdaFunctionURLResult<never>>'.
-                                 Type '{ statusCode: number; headers: { 'Content-Type': string; 'Cache-Control'?: undefined; }; body: string; } | { statusCode: number; headers: { 'Content-Type': string; 'Cache-Control': string; }; body: string; }' is not assignable to type 'LambdaFunctionURLResult<never>'.
-                                 Type '{ statusCode: number; headers: { 'Content-Type': string; 'Cache-Control'?: undefined; }; body: string; }' is not assignable to type 'LambdaFunctionURLResult<never>'.
-                                 Type '{ statusCode: number; headers: { 'Content-Type': string; 'Cache-Control'?: undefined; }; body: string; }' is not assignable to type 'APIGatewayProxyStructuredResultV2'.
-                                 Types of property 'headers' are incompatible.
-                                 Type '{ 'Content-Type': string; 'Cache-Control'?: undefined; }' is not assignable to type '{ [header: string]: string | number | boolean; }'.
-                                 Property ''Cache-Control'' is incompatible with index signature.
-                                 Type 'undefined' is not assignable to type 'string | number | boolean'.
-                                 188 export const handler: LambdaFunctionURLHandler = async (event) => {
-                                 ~~~~~~~
-2026-04-17T20:56:26.148Z [WARNING]: ampx pipeline-deploy
+2026-04-17T21:02:22.761Z [INFO]: 
+2026-04-17T21:02:22.762Z [INFO]: [CloudformationStackCircularDependencyError] The CloudFormation deployment failed due to circular dependency found between nested stacks [data7552DF31, function1351588B]
+                                 Resolution: If you are using functions then you can assign them to existing nested stacks that are dependent on functions or functions depend on them, for example:
+                                 1. If your function is defined as auth triggers, you should assign this function to auth stack.
+                                 2. If your function is used as data resolver or calls data API, you should assign this function to data stack.
+                                 To assign a function to a different stack, use the property 'resourceGroupName' in the defineFunction call and choose auth, data or any custom stack.
+                                 If your circular dependency issue is not resolved with this workaround, please create an issue here https://github.com/aws-amplify/amplify-backend/issues/new/choose
+2026-04-17T21:02:22.762Z [WARNING]: ampx pipeline-deploy
                                     Command to deploy backends in a custom CI/CD pipeline. This command is not inten
                                     ded to be used locally.
                                     Options:
@@ -155,12 +155,12 @@ d in the next major release.
                                     --outputs-format   amplify_outputs file format
                                     [string] [choices: "mjs", "json", "json-mobile", "ts", "dart"]
                                     -h, --help             Show help                                     [boolean]
-2026-04-17T20:56:26.219Z [ERROR]: !!! Build failed
-2026-04-17T20:56:26.219Z [ERROR]: !!! Error: Command failed with exit code 1
-2026-04-17T20:56:26.219Z [INFO]: # Starting environment caching...
-2026-04-17T20:56:26.219Z [INFO]: # Uploading environment cache artifact...
-2026-04-17T20:56:26.360Z [INFO]: # Uploaded environment cache artifact
-2026-04-17T20:56:26.360Z [INFO]: # Environment caching completed
+2026-04-17T21:02:22.838Z [ERROR]: !!! Build failed
+2026-04-17T21:02:22.839Z [ERROR]: !!! Error: Command failed with exit code 1
+2026-04-17T21:02:22.839Z [INFO]: # Starting environment caching...
+2026-04-17T21:02:22.839Z [INFO]: # Uploading environment cache artifact...
+2026-04-17T21:02:22.945Z [INFO]: # Uploaded environment cache artifact
+2026-04-17T21:02:22.945Z [INFO]: # Environment caching completed
 
 
 ```
