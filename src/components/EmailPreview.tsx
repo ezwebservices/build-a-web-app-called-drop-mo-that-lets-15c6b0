@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 import { formatDropTime, formatMoney } from '../lib/utils';
-import type { DropRecord } from '../lib/store';
+import type { DropRecord } from '../lib/types';
 
 type Props = {
   drop: DropRecord;

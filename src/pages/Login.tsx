@@ -1,36 +1,67 @@
-import { useState, type FormEvent } from 'react';
+import { useEffect, useState, type FormEvent } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
+import {
+  autoSignIn,
+  confirmSignUp,
+  resendSignUpCode,
+  signIn,
+  signUp,
+} from 'aws-amplify/auth';
 import { Button } from '../components/ui/Button';
 import { Field, Input } from '../components/ui/Input';
-import { setSession } from '../lib/session';
 import { Logo } from '../components/Logo';
+import { isAmplifyConfigured } from '../lib/amplify';
+import { useSessionState } from '../hooks/useSession';
 
 type Mode = 'signIn' | 'signUp';
+type Stage = 'form' | 'confirm';
 
 export function LoginPage(): React.ReactElement {
   const nav = useNavigate();
   const [params, setParams] = useSearchParams();
   const initialMode: Mode = params.get('mode') === 'signUp' ? 'signUp' : 'signIn';
   const [mode, setMode] = useState<Mode>(initialMode);
+  const [stage, setStage] = useState<Stage>('form');
   const [email, setEmail] = useState('');
   const [name, setName] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState<string>('');
+  const [code, setCode] = useState('');
+  const [error, setError] = useState('');
+  const [info, setInfo] = useState('');
+  const [submitting, setSubmitting] = useState(false);
+  const { session, loading } = useSessionState();
+
+  useEffect(() => {
+    if (!loading && session) nav('/dashboard', { replace: true });
+  }, [loading, session, nav]);
 
   const isSignUp = mode === 'signUp';
 
   function switchMode(next: Mode): void {
     setMode(next);
     setError('');
+    setInfo('');
+    setStage('form');
     const nextParams = new URLSearchParams(params);
     if (next === 'signUp') nextParams.set('mode', 'signUp');
     else nextParams.delete('mode');
     setParams(nextParams, { replace: true });
   }
 
-  function onSubmit(e: FormEvent): void {
+  function requireBackend(): boolean {
+    if (isAmplifyConfigured()) return true;
+    setError(
+      'Authentication is not configured yet. Deploy the Amplify backend (amplify_outputs.json) to sign in.'
+    );
+    return false;
+  }
+
+  async function onSubmit(e: FormEvent): Promise<void> {
     e.preventDefault();
-    if (!email.trim()) {
+    setError('');
+    setInfo('');
+    const trimmedEmail = email.trim().toLowerCase();
+    if (!trimmedEmail) {
       setError('We need an email to send you back into your drops.');
       return;
     }
@@ -38,21 +69,88 @@ export function LoginPage(): React.ReactElement {
       setError('Your name shows up on the invites you send — drop it in.');
       return;
     }
-    if (password.length < 6) {
-      setError('Password must be at least 6 characters.');
+    if (password.length < 8) {
+      setError('Password must be at least 8 characters.');
       return;
     }
-    setSession({
-      email: email.trim().toLowerCase(),
-      name: (name.trim() || email.trim().split('@')[0]) as string,
-    });
-    nav('/dashboard');
+    if (!requireBackend()) return;
+    setSubmitting(true);
+    try {
+      if (isSignUp) {
+        const result = await signUp({
+          username: trimmedEmail,
+          password,
+          options: {
+            userAttributes: {
+              email: trimmedEmail,
+              preferredUsername: name.trim(),
+            },
+            autoSignIn: true,
+          },
+        });
+        if (result.isSignUpComplete) {
+          try {
+            await autoSignIn();
+          } catch {
+            await signIn({ username: trimmedEmail, password });
+          }
+          nav('/dashboard');
+        } else {
+          setStage('confirm');
+          setInfo('We emailed you a 6-digit code. Enter it to finish creating your account.');
+        }
+      } else {
+        const result = await signIn({ username: trimmedEmail, password });
+        if (!result.isSignedIn && result.nextStep?.signInStep === 'CONFIRM_SIGN_UP') {
+          setStage('confirm');
+          setInfo('Your account still needs a confirmation code — check your email.');
+        } else {
+          nav('/dashboard');
+        }
+      }
+    } catch (err) {
+      setError(friendlyAuthError(err));
+    } finally {
+      setSubmitting(false);
+    }
   }
 
-  function onGoogle(): void {
-    const demoEmail = email || 'you@gmail.com';
-    setSession({ email: demoEmail.toLowerCase(), name: name || 'Friend' });
-    nav('/dashboard');
+  async function onConfirm(e: FormEvent): Promise<void> {
+    e.preventDefault();
+    setError('');
+    setInfo('');
+    const trimmedEmail = email.trim().toLowerCase();
+    if (!code.trim()) {
+      setError('Pop in the 6-digit code we emailed you.');
+      return;
+    }
+    setSubmitting(true);
+    try {
+      await confirmSignUp({ username: trimmedEmail, confirmationCode: code.trim() });
+      try {
+        await autoSignIn();
+      } catch {
+        if (password) {
+          await signIn({ username: trimmedEmail, password });
+        }
+      }
+      nav('/dashboard');
+    } catch (err) {
+      setError(friendlyAuthError(err));
+    } finally {
+      setSubmitting(false);
+    }
+  }
+
+  async function onResend(): Promise<void> {
+    setError('');
+    setInfo('');
+    try {
+      await resendSignUpCode({ username: email.trim().toLowerCase() });
+      setInfo('Sent a fresh code — check your inbox.');
+    } catch (err) {
+      setError(friendlyAuthError(err));
+    }
   }
 
   return (
@@ -92,80 +190,121 @@ export function LoginPage(): React.ReactElement {
 
       <div className="rounded-2xl bg-ink-800/70 border border-ink-700 p-7">
         <h1 className="font-display text-4xl text-white">
-          {isSignUp ? 'Start a drop' : 'Welcome back'}
+          {stage === 'confirm'
+            ? 'Confirm your email'
+            : isSignUp
+              ? 'Start a drop'
+              : 'Welcome back'}
         </h1>
         <p className="text-ink-300 mt-1 text-sm">
-          {isSignUp
-            ? 'Make an account so you can rally the group and pull off the surprise.'
-            : "Pick up where you left off — your drops are waiting."}
+          {stage === 'confirm'
+            ? 'We sent a 6-digit code to your inbox.'
+            : isSignUp
+              ? 'Make an account so you can rally the group and pull off the surprise.'
+              : "Pick up where you left off — your drops are waiting."}
         </p>
-        <Button variant="outline" className="w-full mt-6" onClick={onGoogle} type="button">
-          <span className="inline-block w-4 h-4 bg-white rounded-sm" />
-          {isSignUp ? 'Sign up with Google' : 'Continue with Google'}
-        </Button>
-        <div className="my-6 flex items-center gap-3 text-xs text-ink-400">
-          <div className="flex-1 h-px bg-ink-700" />
-          or email
-          <div className="flex-1 h-px bg-ink-700" />
-        </div>
-        <form onSubmit={onSubmit} className="space-y-4">
-          {isSignUp && (
-            <Field label="Your name">
+
+        {stage === 'form' ? (
+          <form onSubmit={onSubmit} className="mt-6 space-y-4">
+            {isSignUp && (
+              <Field label="Your name">
+                <Input
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  placeholder="Jamie Rivera"
+                  autoComplete="name"
+                />
+              </Field>
+            )}
+            <Field label="Email">
               <Input
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                placeholder="Jamie Rivera"
-                autoComplete="name"
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="you@example.com"
+                autoComplete="email"
               />
             </Field>
-          )}
-          <Field label="Email">
-            <Input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="you@example.com"
-              autoComplete="email"
-            />
-          </Field>
-          <Field label="Password" hint={isSignUp ? 'At least 6 characters.' : undefined}>
-            <Input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              autoComplete={isSignUp ? 'new-password' : 'current-password'}
-            />
-          </Field>
-          {error && <p className="text-sm text-drop-300">{error}</p>}
-          <Button type="submit" className="w-full" size="lg">
-            {isSignUp ? 'Create my account' : 'Sign in'}
-          </Button>
-        </form>
-        <p className="text-sm text-ink-300 mt-6 text-center">
-          {isSignUp ? (
-            <>
-              Already in on a drop?{' '}
+            <Field label="Password" hint={isSignUp ? 'At least 8 characters.' : undefined}>
+              <Input
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                autoComplete={isSignUp ? 'new-password' : 'current-password'}
+              />
+            </Field>
+            {error && <p className="text-sm text-drop-300">{error}</p>}
+            {info && <p className="text-sm text-ink-200">{info}</p>}
+            <Button type="submit" className="w-full" size="lg" disabled={submitting}>
+              {submitting
+                ? 'Working…'
+                : isSignUp
+                  ? 'Create my account'
+                  : 'Sign in'}
+            </Button>
+          </form>
+        ) : (
+          <form onSubmit={onConfirm} className="mt-6 space-y-4">
+            <Field label="Confirmation code">
+              <Input
+                inputMode="numeric"
+                value={code}
+                onChange={(e) => setCode(e.target.value.replace(/[^0-9]/g, ''))}
+                placeholder="123456"
+                autoComplete="one-time-code"
+              />
+            </Field>
+            {error && <p className="text-sm text-drop-300">{error}</p>}
+            {info && <p className="text-sm text-ink-200">{info}</p>}
+            <Button type="submit" className="w-full" size="lg" disabled={submitting}>
+              {submitting ? 'Confirming…' : 'Confirm & continue'}
+            </Button>
+            <div className="flex justify-between text-xs text-ink-300">
               <button
                 type="button"
-                onClick={() => switchMode('signIn')}
-                className="text-drop-300 hover:text-white underline-offset-2 hover:underline"
+                onClick={onResend}
+                className="hover:text-white underline-offset-2 hover:underline"
               >
-                Sign in
+                Resend code
               </button>
-            </>
-          ) : (
-            <>
-              New here?{' '}
               <button
                 type="button"
-                onClick={() => switchMode('signUp')}
-                className="text-drop-300 hover:text-white underline-offset-2 hover:underline"
+                onClick={() => setStage('form')}
+                className="hover:text-white"
               >
-                Create an account
+                ← back
               </button>
-            </>
-          )}
-        </p>
+            </div>
+          </form>
+        )}
+
+        {stage === 'form' && (
+          <p className="text-sm text-ink-300 mt-6 text-center">
+            {isSignUp ? (
+              <>
+                Already in on a drop?{' '}
+                <button
+                  type="button"
+                  onClick={() => switchMode('signIn')}
+                  className="text-drop-300 hover:text-white underline-offset-2 hover:underline"
+                >
+                  Sign in
+                </button>
+              </>
+            ) : (
+              <>
+                New here?{' '}
+                <button
+                  type="button"
+                  onClick={() => switchMode('signUp')}
+                  className="text-drop-300 hover:text-white underline-offset-2 hover:underline"
+                >
+                  Create an account
+                </button>
+              </>
+            )}
+          </p>
+        )}
         <p className="text-xs text-ink-400 mt-6">
           By {isSignUp ? 'creating an account' : 'signing in'} you agree to keep drops private from
           their recipients. Keeping the surprise is everything.
@@ -178,4 +317,31 @@ export function LoginPage(): React.ReactElement {
       </p>
     </div>
   );
+}
+
+function friendlyAuthError(err: unknown): string {
+  const msg = err instanceof Error ? err.message : String(err);
+  const name = (err as { name?: string })?.name ?? '';
+  if (name === 'UserAlreadyAuthenticatedException') {
+    return 'You\u2019re already signed in — head to your dashboard.';
+  }
+  if (name === 'UsernameExistsException') {
+    return 'An account already exists for that email. Try signing in.';
+  }
+  if (name === 'NotAuthorizedException') {
+    return 'Wrong email or password.';
+  }
+  if (name === 'UserNotFoundException') {
+    return "We don\u2019t have an account for that email yet.";
+  }
+  if (name === 'CodeMismatchException') {
+    return 'That code didn\u2019t match. Try again or resend.';
+  }
+  if (name === 'ExpiredCodeException') {
+    return 'That code expired — tap "Resend code".';
+  }
+  if (name === 'InvalidPasswordException') {
+    return 'Password doesn\u2019t meet the requirements. Try a longer mix of letters and numbers.';
+  }
+  return msg || 'Something went wrong. Try again.';
 }

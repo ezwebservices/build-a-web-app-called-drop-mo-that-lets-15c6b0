@@ -22,7 +22,7 @@ const schema = a.schema({
     .secondaryIndexes((index) => [index('publicToken')])
     .authorization((allow) => [
       allow.publicApiKey(),
-      allow.authenticated().to(['read']),
+      allow.authenticated(),
     ]),
 
   Pledge: a
@@ -39,7 +39,7 @@ const schema = a.schema({
     })
     .authorization((allow) => [
       allow.publicApiKey(),
-      allow.authenticated().to(['read']),
+      allow.authenticated(),
     ]),
 
   Invite: a
@@ -52,7 +52,7 @@ const schema = a.schema({
     })
     .authorization((allow) => [
       allow.publicApiKey(),
-      allow.authenticated().to(['read']),
+      allow.authenticated(),
     ]),
 
   sendDropEmails: a

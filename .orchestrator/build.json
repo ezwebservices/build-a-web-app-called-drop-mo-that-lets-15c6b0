@@ -5006,6 +5006,736 @@
     {
       "type": "employee_status",
       "message": "QA finished"
+    },
+    {
+      "type": "done",
+      "message": "Changes applied by 2 team member(s) across 2 subtask(s)"
+    },
+    {
+      "type": "phase_progress",
+      "message": "Orchestrator planning change",
+      "phase": 1,
+      "total_phases": 0
+    },
+    {
+      "type": "status",
+      "message": "Orchestrator starting..."
+    },
+    {
+      "type": "token_usage",
+      "message": "0K in / 0K out / 16K cached  ~$0.0432"
+    },
+    {
+      "type": "token_usage",
+      "message": "0K in / 0K out / 16K cached  ~$0.0432"
+    },
+    {
+      "type": "file_created",
+      "message": "Created C:/Users/brand/Documents/Orchestrator/workspaces/15c6b06b-0b3a-46dc-be91-7a83c249e074/.orchestrator/_iteration_plan.json",
+      "file_path": "C:/Users/brand/Documents/Orchestrator/workspaces/15c6b06b-0b3a-46dc-be91-7a83c249e074/.orchestrator/_iteration_plan.json"
+    },
+    {
+      "type": "token_usage",
+      "message": "0K in / 0K out / 26K cached  ~$0.0122"
+    },
+    {
+      "type": "thinking",
+      "message": "Plan written: Architect audits for localStorage/sessionStorage misuse → Engineer fixes any violations by routing through Amplify Data + live auth → QA verifies."
+    },
+    {
+      "type": "token_usage",
+      "message": "0K in / 1K out / 42K cached  ~$0.0712"
+    },
+    {
+      "type": "status",
+      "message": "Orchestrator finished (exit 0)"
+    },
+    {
+      "type": "thinking",
+      "message": "This is an audit-and-fix task: verify no localStorage/sessionStorage is used for persistence, and confirm all stateful data lives in DynamoDB via Amplify Data and auth state comes from live Cognito sessions. Architect audits first to identify violations; Engineer fixes any found; QA verifies."
+    },
+    {
+      "type": "status",
+      "message": "Orchestrator split this into 3 subtask(s)"
+    },
+    {
+      "type": "phase_progress",
+      "message": "Architect",
+      "phase": 2,
+      "total_phases": 4
+    },
+    {
+      "type": "employee_status",
+      "message": "Architect is working: Audit the entire codebase (src/ and amplify/) for any use of localStorage, sessionStorage, IndexedDB, or in-memory caches that hold persistent app data (drops, pledges, invites, user profile, draft form state that should survive). Also verify auth state is read from Amplify Auth (fetchAuthSession/getCurrentUser / <Authenticator>) rather than any cached token in localStorage that the app reads directly. Note: Amplify/Cognito internally uses localStorage for token storage — that is expected and OK; flag only app-level reads/writes. Produce a written report at .orchestrator/_persistence_audit.md listing every finding with file:line, what it stores, and whether it should move to DynamoDB (via Amplify Data models) or to live auth session. If everything is already clean, state that explicitly."
+    },
+    {
+      "type": "status",
+      "message": "Architect starting..."
+    },
+    {
+      "type": "token_usage",
+      "message": "0K in / 0K out / 16K cached  ~$0.0422"
+    },
+    {
+      "type": "token_usage",
+      "message": "0K in / 0K out / 16K cached  ~$0.0422"
+    },
+    {
+      "type": "token_usage",
+      "message": "0K in / 0K out / 16K cached  ~$0.0422"
+    },
+    {
+      "type": "command_run",
+      "message": "$ ls C:/Users/brand/Documents/Orchestrator/workspaces/15c6b06b-0b3a-46dc-be91-7a83c249e074"
+    },
+    {
+      "type": "token_usage",
+      "message": "0K in / 0K out / 26K cached  ~$0.0136"
+    },
+    {
+      "type": "token_usage",
+      "message": "0K in / 0K out / 26K cached  ~$0.0136"
+    },
+    {
+      "type": "token_usage",
+      "message": "0K in / 0K out / 26K cached  ~$0.0136"
+    },
+    {
+      "type": "token_usage",
+      "message": "0K in / 0K out / 27K cached  ~$0.0310"
+    },
+    {
+      "type": "token_usage",
+      "message": "0K in / 0K out / 27K cached  ~$0.0310"
+    },
+    {
+      "type": "command_run",
+      "message": "$ ls C:/Users/brand/Documents/Orchestrator/workspaces/15c6b06b-0b3a-46dc-be91-7a83c249e074/src C:/Users/brand/Documents/Orchestrator/workspaces/15c6b06b-0b3a-46dc-be91-7a83c249e074/src/lib C:/Users/bran"
+    },
+    {
+      "type": "token_usage",
+      "message": "0K in / 0K out / 27K cached  ~$0.0310"
+    },
+    {
+      "type": "token_usage",
+      "message": "0K in / 0K out / 27K cached  ~$0.0310"
+    },
+    {
+      "type": "token_usage",
+      "message": "0K in / 0K out / 33K cached  ~$0.0202"
+    },
+    {
+      "type": "token_usage",
+      "message": "0K in / 0K out / 33K cached  ~$0.0202"
+    },
+    {
+      "type": "token_usage",
+      "message": "0K in / 0K out / 33K cached  ~$0.0202"
+    },
+    {
+      "type": "token_usage",
+      "message": "0K in / 0K out / 33K cached  ~$0.0202"
+    },
+    {
+      "type": "token_usage",
+      "message": "0K in / 0K out / 33K cached  ~$0.0202"
+    },
+    {
+      "type": "token_usage",
+      "message": "0K in / 0K out / 33K cached  ~$0.0202"
+    },
+    {
+      "type": "token_usage",
+      "message": "0K in / 0K out / 33K cached  ~$0.0202"
+    },
+    {
+      "type": "token_usage",
+      "message": "0K in / 0K out / 35K cached  ~$0.0362"
+    },
+    {
+      "type": "token_usage",
+      "message": "0K in / 0K out / 35K cached  ~$0.0362"
+    },
+    {
+      "type": "file_created",
+      "message": "Created C:/Users/brand/Documents/Orchestrator/workspaces/15c6b06b-0b3a-46dc-be91-7a83c249e074/.orchestrator/_persistence_audit.md",
+      "file_path": "C:/Users/brand/Documents/Orchestrator/workspaces/15c6b06b-0b3a-46dc-be91-7a83c249e074/.orchestrator/_persistence_audit.md"
+    },
+    {
+      "type": "token_usage",
+      "message": "0K in / 0K out / 42K cached  ~$0.0303"
+    },
+    {
+      "type": "thinking",
+      "message": "Audit complete. Report written to `.orchestrator/_persistence_audit.md`.\n\n**Verdict: NOT CLEAN.** Three findings, two critical:\n\n1. **`src/lib/session.ts`** — app reads/writes its own `{email, name}` session object in localStorage instead of using Amplify Auth. `Login.tsx` never calls Cognito `signI"
+    },
+    {
+      "type": "token_usage",
+      "message": "0K in / 7K out / 181K cached  ~$0.2846"
+    },
+    {
+      "type": "status",
+      "message": "Architect finished (exit 0)"
+    },
+    {
+      "type": "employee_status",
+      "message": "Architect finished"
+    },
+    {
+      "type": "phase_progress",
+      "message": "Engineer",
+      "phase": 3,
+      "total_phases": 4
+    },
+    {
+      "type": "employee_status",
+      "message": "Engineer is working: Read .orchestrator/_persistence_audit.md. For every violation the Architect flagged, replace it with the correct persistence path: DynamoDB through Amplify Data client (generateClient<Schema>()) for domain data, and live auth via fetchAuthSession()/getCurrentUser() for the signed-in user. Remove any localStorage.getItem/setItem and sessionStorage calls used for app data. If the audit reports the codebase is already clean, make no code changes. Run npm run build until it exits 0."
+    },
+    {
+      "type": "status",
+      "message": "Engineer starting..."
+    },
+    {
+      "type": "token_usage",
+      "message": "0K in / 0K out / 16K cached  ~$0.0419"
+    },
+    {
+      "type": "token_usage",
+      "message": "0K in / 0K out / 16K cached  ~$0.0419"
+    },
+    {
+      "type": "token_usage",
+      "message": "0K in / 0K out / 26K cached  ~$0.0261"
+    },
+    {
+      "type": "token_usage",
+      "message": "0K in / 0K out / 26K cached  ~$0.0261"
+    },
+    {
+      "type": "command_run",
+      "message": "$ ls C:/Users/brand/Documents/Orchestrator/workspaces/15c6b06b-0b3a-46dc-be91-7a83c249e074/src/"
+    },
+    {
+      "type": "token_usage",
+      "message": "0K in / 0K out / 30K cached  ~$0.0111"
+    },
+    {
+      "type": "command_run",
+      "message": "$ ls C:/Users/brand/Documents/Orchestrator/workspaces/15c6b06b-0b3a-46dc-be91-7a83c249e074/src/lib C:/Users/brand/Documents/Orchestrator/workspaces/15c6b06b-0b3a-46dc-be91-7a83c249e074/src/hooks C:/User"
+    },
+    {
+      "type": "token_usage",
+      "message": "0K in / 0K out / 30K cached  ~$0.0140"
+    },
+    {
+      "type": "token_usage",
+      "message": "0K in / 0K out / 31K cached  ~$0.0221"
+    },
+    {
+      "type": "token_usage",
+      "message": "0K in / 0K out / 34K cached  ~$0.0136"
+    },
+    {
+      "type": "token_usage",
+      "message": "0K in / 0K out / 35K cached  ~$0.0128"
+    },
+    {
+      "type": "token_usage",
+      "message": "0K in / 0K out / 35K cached  ~$0.0128"
+    },
+    {
+      "type": "token_usage",
+      "message": "0K in / 0K out / 36K cached  ~$0.0198"
+    },
+    {
+      "type": "token_usage",
+      "message": "0K in / 0K out / 38K cached  ~$0.0141"
+    },
+    {
+      "type": "token_usage",
+      "message": "0K in / 0K out / 38K cached  ~$0.0165"
+    },
+    {
+      "type": "token_usage",
+      "message": "0K in / 0K out / 39K cached  ~$0.0183"
+    },
+    {
+      "type": "token_usage",
+      "message": "0K in / 0K out / 40K cached  ~$0.0235"
+    },
+    {
+      "type": "token_usage",
+      "message": "0K in / 0K out / 40K cached  ~$0.0297"
+    },
+    {
+      "type": "token_usage",
+      "message": "0K in / 0K out / 45K cached  ~$0.0262"
+    },
+    {
+      "type": "token_usage",
+      "message": "0K in / 0K out / 48K cached  ~$0.0237"
+    },
+    {
+      "type": "token_usage",
+      "message": "0K in / 0K out / 50K cached  ~$0.0345"
+    },
+    {
+      "type": "token_usage",
+      "message": "0K in / 0K out / 55K cached  ~$0.0325"
+    },
+    {
+      "type": "token_usage",
+      "message": "0K in / 0K out / 59K cached  ~$0.0293"
+    },
+    {
+      "type": "token_usage",
+      "message": "0K in / 0K out / 62K cached  ~$0.0231"
+    },
+    {
+      "type": "token_usage",
+      "message": "0K in / 0K out / 63K cached  ~$0.0248"
+    },
+    {
+      "type": "token_usage",
+      "message": "0K in / 0K out / 64K cached  ~$0.0249"
+    },
+    {
+      "type": "token_usage",
+      "message": "0K in / 0K out / 65K cached  ~$0.0266"
+    },
+    {
+      "type": "token_usage",
+      "message": "0K in / 0K out / 65K cached  ~$0.0266"
+    },
+    {
+      "type": "token_usage",
+      "message": "0K in / 0K out / 67K cached  ~$0.0284"
+    },
+    {
+      "type": "token_usage",
+      "message": "0K in / 0K out / 69K cached  ~$0.0258"
+    },
+    {
+      "type": "token_usage",
+      "message": "0K in / 0K out / 70K cached  ~$0.0230"
+    },
+    {
+      "type": "token_usage",
+      "message": "0K in / 0K out / 70K cached  ~$0.0230"
+    },
+    {
+      "type": "thinking",
+      "message": "Now I have a complete picture. This is a large refactor — rewriting auth + data layer while keeping app behavior intact. Let me execute."
+    },
+    {
+      "type": "token_usage",
+      "message": "0K in / 0K out / 70K cached  ~$0.0230"
+    },
+    {
+      "type": "file_created",
+      "message": "Created C:/Users/brand/Documents/Orchestrator/workspaces/15c6b06b-0b3a-46dc-be91-7a83c249e074/src/lib/types.ts",
+      "file_path": "C:/Users/brand/Documents/Orchestrator/workspaces/15c6b06b-0b3a-46dc-be91-7a83c249e074/src/lib/types.ts"
+    },
+    {
+      "type": "token_usage",
+      "message": "0K in / 0K out / 70K cached  ~$0.0326"
+    },
+    {
+      "type": "thinking",
+      "message": "Now the data layer — async Amplify Data API replacing `store.ts`:"
+    },
+    {
+      "type": "token_usage",
+      "message": "0K in / 0K out / 70K cached  ~$0.0326"
+    },
+    {
+      "type": "file_created",
+      "message": "Created C:/Users/brand/Documents/Orchestrator/workspaces/15c6b06b-0b3a-46dc-be91-7a83c249e074/src/lib/data.ts",
+      "file_path": "C:/Users/brand/Documents/Orchestrator/workspaces/15c6b06b-0b3a-46dc-be91-7a83c249e074/src/lib/data.ts"
+    },
+    {
+      "type": "token_usage",
+      "message": "0K in / 0K out / 73K cached  ~$0.0370"
+    },
+    {
+      "type": "thinking",
+      "message": "Now the auth hook using Amplify Auth live session:"
+    },
+    {
+      "type": "token_usage",
+      "message": "0K in / 0K out / 73K cached  ~$0.0370"
+    },
+    {
+      "type": "file_created",
+      "message": "Created C:/Users/brand/Documents/Orchestrator/workspaces/15c6b06b-0b3a-46dc-be91-7a83c249e074/src/hooks/useSession.ts",
+      "file_path": "C:/Users/brand/Documents/Orchestrator/workspaces/15c6b06b-0b3a-46dc-be91-7a83c249e074/src/hooks/useSession.ts"
+    },
+    {
+      "type": "token_usage",
+      "message": "0K in / 0K out / 77K cached  ~$0.0275"
+    },
+    {
+      "type": "thinking",
+      "message": "Now the Data schema — authenticated organizer writes need to work. Let me also widen authorization so userPool auth has full CRUD:"
+    },
+    {
+      "type": "token_usage",
+      "message": "0K in / 0K out / 77K cached  ~$0.0275"
+    },
+    {
+      "type": "file_created",
+      "message": "Created C:/Users/brand/Documents/Orchestrator/workspaces/15c6b06b-0b3a-46dc-be91-7a83c249e074/amplify/data/resource.ts",
+      "file_path": "C:/Users/brand/Documents/Orchestrator/workspaces/15c6b06b-0b3a-46dc-be91-7a83c249e074/amplify/data/resource.ts"
+    },
+    {
+      "type": "token_usage",
+      "message": "0K in / 0K out / 78K cached  ~$0.0264"
+    },
+    {
+      "type": "file_created",
+      "message": "Created C:/Users/brand/Documents/Orchestrator/workspaces/15c6b06b-0b3a-46dc-be91-7a83c249e074/amplify/data/resource.ts",
+      "file_path": "C:/Users/brand/Documents/Orchestrator/workspaces/15c6b06b-0b3a-46dc-be91-7a83c249e074/amplify/data/resource.ts"
+    },
+    {
+      "type": "token_usage",
+      "message": "0K in / 0K out / 79K cached  ~$0.0263"
+    },
+    {
+      "type": "file_created",
+      "message": "Created C:/Users/brand/Documents/Orchestrator/workspaces/15c6b06b-0b3a-46dc-be91-7a83c249e074/amplify/data/resource.ts",
+      "file_path": "C:/Users/brand/Documents/Orchestrator/workspaces/15c6b06b-0b3a-46dc-be91-7a83c249e074/amplify/data/resource.ts"
+    },
+    {
+      "type": "token_usage",
+      "message": "0K in / 0K out / 79K cached  ~$0.0254"
+    },
+    {
+      "type": "thinking",
+      "message": "Now rewrite `email.ts` to use types.ts and delete old stores. Let me also update email.ts import:"
+    },
+    {
+      "type": "token_usage",
+      "message": "0K in / 0K out / 79K cached  ~$0.0254"
+    },
+    {
+      "type": "file_created",
+      "message": "Created C:/Users/brand/Documents/Orchestrator/workspaces/15c6b06b-0b3a-46dc-be91-7a83c249e074/src/lib/email.ts",
+      "file_path": "C:/Users/brand/Documents/Orchestrator/workspaces/15c6b06b-0b3a-46dc-be91-7a83c249e074/src/lib/email.ts"
+    },
+    {
+      "type": "token_usage",
+      "message": "0K in / 0K out / 80K cached  ~$0.0255"
+    },
+    {
+      "type": "thinking",
+      "message": "Now delete the old persistence files and useStore hook:"
+    },
+    {
+      "type": "token_usage",
+      "message": "0K in / 0K out / 80K cached  ~$0.0255"
+    },
+    {
+      "type": "command_run",
+      "message": "$ cd C:/Users/brand/Documents/Orchestrator/workspaces/15c6b06b-0b3a-46dc-be91-7a83c249e074 && rm src/lib/store.ts src/lib/session.ts src/lib/remoteDrop.ts src/hooks/useStore.ts"
+    },
+    {
+      "type": "token_usage",
+      "message": "0K in / 0K out / 80K cached  ~$0.0251"
+    },
+    {
+      "type": "thinking",
+      "message": "Now rewrite EmailPreview import:"
+    },
+    {
+      "type": "token_usage",
+      "message": "0K in / 0K out / 80K cached  ~$0.0251"
+    },
+    {
+      "type": "file_created",
+      "message": "Created C:/Users/brand/Documents/Orchestrator/workspaces/15c6b06b-0b3a-46dc-be91-7a83c249e074/src/components/EmailPreview.tsx",
+      "file_path": "C:/Users/brand/Documents/Orchestrator/workspaces/15c6b06b-0b3a-46dc-be91-7a83c249e074/src/components/EmailPreview.tsx"
+    },
+    {
+      "type": "token_usage",
+      "message": "0K in / 0K out / 80K cached  ~$0.0261"
+    },
+    {
+      "type": "thinking",
+      "message": "Now rewrite Login.tsx with real Cognito signIn/signUp:"
+    },
+    {
+      "type": "token_usage",
+      "message": "0K in / 0K out / 80K cached  ~$0.0261"
+    },
+    {
+      "type": "file_created",
+      "message": "Created C:/Users/brand/Documents/Orchestrator/workspaces/15c6b06b-0b3a-46dc-be91-7a83c249e074/src/pages/Login.tsx",
+      "file_path": "C:/Users/brand/Documents/Orchestrator/workspaces/15c6b06b-0b3a-46dc-be91-7a83c249e074/src/pages/Login.tsx"
+    },
+    {
+      "type": "token_usage",
+      "message": "0K in / 0K out / 81K cached  ~$0.0410"
+    },
+    {
+      "type": "thinking",
+      "message": "Now Nav.tsx using signOut:"
+    },
+    {
+      "type": "token_usage",
+      "message": "0K in / 0K out / 81K cached  ~$0.0410"
+    },
+    {
+      "type": "file_created",
+      "message": "Created C:/Users/brand/Documents/Orchestrator/workspaces/15c6b06b-0b3a-46dc-be91-7a83c249e074/src/components/Nav.tsx",
+      "file_path": "C:/Users/brand/Documents/Orchestrator/workspaces/15c6b06b-0b3a-46dc-be91-7a83c249e074/src/components/Nav.tsx"
+    },
+    {
+      "type": "token_usage",
+      "message": "0K in / 0K out / 85K cached  ~$0.0293"
+    },
+    {
+      "type": "thinking",
+      "message": "Now Dashboard.tsx:"
+    },
+    {
+      "type": "token_usage",
+      "message": "0K in / 0K out / 85K cached  ~$0.0293"
+    },
+    {
+      "type": "file_created",
+      "message": "Created C:/Users/brand/Documents/Orchestrator/workspaces/15c6b06b-0b3a-46dc-be91-7a83c249e074/src/pages/Dashboard.tsx",
+      "file_path": "C:/Users/brand/Documents/Orchestrator/workspaces/15c6b06b-0b3a-46dc-be91-7a83c249e074/src/pages/Dashboard.tsx"
+    },
+    {
+      "type": "token_usage",
+      "message": "0K in / 0K out / 86K cached  ~$0.0337"
+    },
+    {
+      "type": "thinking",
+      "message": "Now NewDrop.tsx:"
+    },
+    {
+      "type": "token_usage",
+      "message": "0K in / 0K out / 86K cached  ~$0.0337"
+    },
+    {
+      "type": "file_created",
+      "message": "Created C:/Users/brand/Documents/Orchestrator/workspaces/15c6b06b-0b3a-46dc-be91-7a83c249e074/src/pages/NewDrop.tsx",
+      "file_path": "C:/Users/brand/Documents/Orchestrator/workspaces/15c6b06b-0b3a-46dc-be91-7a83c249e074/src/pages/NewDrop.tsx"
+    },
+    {
+      "type": "token_usage",
+      "message": "0K in / 0K out / 88K cached  ~$0.0379"
+    },
+    {
+      "type": "thinking",
+      "message": "Now ReviewDrop.tsx:"
+    },
+    {
+      "type": "token_usage",
+      "message": "0K in / 0K out / 88K cached  ~$0.0379"
+    },
+    {
+      "type": "file_created",
+      "message": "Created C:/Users/brand/Documents/Orchestrator/workspaces/15c6b06b-0b3a-46dc-be91-7a83c249e074/src/pages/ReviewDrop.tsx",
+      "file_path": "C:/Users/brand/Documents/Orchestrator/workspaces/15c6b06b-0b3a-46dc-be91-7a83c249e074/src/pages/ReviewDrop.tsx"
+    },
+    {
+      "type": "token_usage",
+      "message": "0K in / 0K out / 91K cached  ~$0.0369"
+    },
+    {
+      "type": "thinking",
+      "message": "Now DropDetail.tsx:"
+    },
+    {
+      "type": "token_usage",
+      "message": "0K in / 0K out / 91K cached  ~$0.0369"
+    },
+    {
+      "type": "file_created",
+      "message": "Created C:/Users/brand/Documents/Orchestrator/workspaces/15c6b06b-0b3a-46dc-be91-7a83c249e074/src/pages/DropDetail.tsx",
+      "file_path": "C:/Users/brand/Documents/Orchestrator/workspaces/15c6b06b-0b3a-46dc-be91-7a83c249e074/src/pages/DropDetail.tsx"
+    },
+    {
+      "type": "token_usage",
+      "message": "0K in / 0K out / 94K cached  ~$0.0470"
+    },
+    {
+      "type": "thinking",
+      "message": "Now PublicDrop.tsx:"
+    },
+    {
+      "type": "token_usage",
+      "message": "0K in / 0K out / 94K cached  ~$0.0470"
+    },
+    {
+      "type": "file_created",
+      "message": "Created C:/Users/brand/Documents/Orchestrator/workspaces/15c6b06b-0b3a-46dc-be91-7a83c249e074/src/pages/PublicDrop.tsx",
+      "file_path": "C:/Users/brand/Documents/Orchestrator/workspaces/15c6b06b-0b3a-46dc-be91-7a83c249e074/src/pages/PublicDrop.tsx"
+    },
+    {
+      "type": "token_usage",
+      "message": "0K in / 0K out / 99K cached  ~$0.0437"
+    },
+    {
+      "type": "thinking",
+      "message": "Now PledgeStatus.tsx:"
+    },
+    {
+      "type": "token_usage",
+      "message": "0K in / 0K out / 99K cached  ~$0.0437"
+    },
+    {
+      "type": "file_created",
+      "message": "Created C:/Users/brand/Documents/Orchestrator/workspaces/15c6b06b-0b3a-46dc-be91-7a83c249e074/src/pages/PledgeStatus.tsx",
+      "file_path": "C:/Users/brand/Documents/Orchestrator/workspaces/15c6b06b-0b3a-46dc-be91-7a83c249e074/src/pages/PledgeStatus.tsx"
+    },
+    {
+      "type": "token_usage",
+      "message": "0K in / 0K out / 102K cached  ~$0.0426"
+    },
+    {
+      "type": "thinking",
+      "message": "Now let me verify no lingering references and run the build:"
+    },
+    {
+      "type": "token_usage",
+      "message": "0K in / 0K out / 102K cached  ~$0.0426"
+    },
+    {
+      "type": "token_usage",
+      "message": "0K in / 0K out / 105K cached  ~$0.0333"
+    },
+    {
+      "type": "thinking",
+      "message": "Clean. Those are local useState calls, not localStorage. Now let me check for any remaining problems and run build:"
+    },
+    {
+      "type": "token_usage",
+      "message": "0K in / 0K out / 105K cached  ~$0.0333"
+    },
+    {
+      "type": "command_run",
+      "message": "$ cd C:/Users/brand/Documents/Orchestrator/workspaces/15c6b06b-0b3a-46dc-be91-7a83c249e074 && ls node_modules/.bin 2>/dev/null | head -5 || echo \"No node_modules\""
+    },
+    {
+      "type": "token_usage",
+      "message": "0K in / 0K out / 106K cached  ~$0.0345"
+    },
+    {
+      "type": "command_run",
+      "message": "$ cd C:/Users/brand/Documents/Orchestrator/workspaces/15c6b06b-0b3a-46dc-be91-7a83c249e074 && npm run build 2>&1 | tail -80"
+    },
+    {
+      "type": "token_usage",
+      "message": "0K in / 0K out / 106K cached  ~$0.0345"
+    },
+    {
+      "type": "thinking",
+      "message": "Build passes. Let me do a final sanity check for any remaining localStorage usage:"
+    },
+    {
+      "type": "token_usage",
+      "message": "0K in / 0K out / 106K cached  ~$0.0345"
+    },
+    {
+      "type": "token_usage",
+      "message": "0K in / 0K out / 107K cached  ~$0.0330"
+    },
+    {
+      "type": "thinking",
+      "message": "All app-level `localStorage` / `sessionStorage` usage is gone. Build exits 0.\n\nSummary of changes:\n\n**Removed** (all app-data localStorage):\n- `src/lib/store.ts`, `src/lib/session.ts`, `src/lib/remoteDrop.ts`, `src/hooks/useStore.ts`\n\n**Added**:\n- `src/lib/types.ts` — shared record types.\n- `src/lib"
+    },
+    {
+      "type": "token_usage",
+      "message": "0K in / 39K out / 3053K cached  ~$1.8657"
+    },
+    {
+      "type": "status",
+      "message": "Engineer finished (exit 0)"
+    },
+    {
+      "type": "employee_status",
+      "message": "Engineer finished"
+    },
+    {
+      "type": "phase_progress",
+      "message": "QA",
+      "phase": 4,
+      "total_phases": 4
+    },
+    {
+      "type": "employee_status",
+      "message": "QA is working: Verify by grep that no src/**/*.{ts,tsx} file contains localStorage, sessionStorage, or indexedDB references outside of Amplify/Cognito internal code. Confirm all drop/pledge/invite data flows through the Amplify Data client and that auth-gated UI uses live session hooks. Report pass/fail with file:line evidence."
+    },
+    {
+      "type": "status",
+      "message": "QA starting..."
+    },
+    {
+      "type": "token_usage",
+      "message": "0K in / 0K out / 16K cached  ~$0.0427"
+    },
+    {
+      "type": "token_usage",
+      "message": "0K in / 0K out / 16K cached  ~$0.0427"
+    },
+    {
+      "type": "token_usage",
+      "message": "0K in / 0K out / 16K cached  ~$0.0427"
+    },
+    {
+      "type": "token_usage",
+      "message": "0K in / 0K out / 26K cached  ~$0.0101"
+    },
+    {
+      "type": "token_usage",
+      "message": "0K in / 0K out / 26K cached  ~$0.0101"
+    },
+    {
+      "type": "token_usage",
+      "message": "0K in / 0K out / 26K cached  ~$0.0101"
+    },
+    {
+      "type": "token_usage",
+      "message": "0K in / 0K out / 26K cached  ~$0.0324"
+    },
+    {
+      "type": "token_usage",
+      "message": "0K in / 0K out / 26K cached  ~$0.0324"
+    },
+    {
+      "type": "thinking",
+      "message": "No edits needed — the code is already clean. Let me verify build."
+    },
+    {
+      "type": "token_usage",
+      "message": "0K in / 0K out / 26K cached  ~$0.0324"
+    },
+    {
+      "type": "command_run",
+      "message": "$ cd \"C:\\Users\\brand\\Documents\\Orchestrator\\workspaces\\15c6b06b-0b3a-46dc-be91-7a83c249e074\" && npm run build 2>&1 | tail -30"
+    },
+    {
+      "type": "token_usage",
+      "message": "0K in / 0K out / 33K cached  ~$0.0129"
+    },
+    {
+      "type": "thinking",
+      "message": "## QA Report: PASS ✅\n\n**Storage audit** — `grep -rE \"localStorage|sessionStorage|indexedDB\"` across `src/**` and `amplify/**`: **0 matches**.\n\n**Data-layer audit** — all drop/pledge/invite reads & writes go through the Amplify Data client:\n- `src/lib/data.ts:23` — `generateClient<Schema>({ authMode:"
+    },
+    {
+      "type": "token_usage",
+      "message": "0K in / 1K out / 102K cached  ~$0.1204"
+    },
+    {
+      "type": "status",
+      "message": "QA finished (exit 0)"
+    },
+    {
+      "type": "employee_status",
+      "message": "QA finished"
     }
   ],
   "created_at": "2026-04-17T15:54:51.211871600+00:00",

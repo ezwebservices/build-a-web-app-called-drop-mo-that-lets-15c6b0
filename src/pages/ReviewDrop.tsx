@@ -1,29 +1,54 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Button } from '../components/ui/Button';
 import { Field, Input, Textarea } from '../components/ui/Input';
 import { EmailPreview } from '../components/EmailPreview';
-import { store } from '../lib/store';
+import { addInvites, getDrop, markInviteResent, updateDrop } from '../lib/data';
 import { parseEmailList } from '../lib/utils';
-import { useStoreVersion } from '../hooks/useStore';
 import { sendDropEmails } from '../lib/email';
-import { persistDrop } from '../lib/remoteDrop';
+import type { DropRecord } from '../lib/types';
 
 export function ReviewDropPage(): React.ReactElement {
   const { id } = useParams();
-  useStoreVersion();
   const nav = useNavigate();
-  const drop = useMemo(() => (id ? store.getDrop(id) : null), [id]);
-  const [subject, setSubject] = useState(drop?.inviteSubject ?? '');
-  const [note, setNote] = useState(drop?.personalNote ?? '');
+  const [drop, setDrop] = useState<DropRecord | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [subject, setSubject] = useState('');
+  const [note, setNote] = useState('');
   const [emails, setEmails] = useState('');
   const [err, setErr] = useState('');
   const [warning, setWarning] = useState('');
   const [sending, setSending] = useState(false);
 
-  if (!drop) {
-    return <NotFound />;
+  useEffect(() => {
+    if (!id) return;
+    let cancelled = false;
+    (async () => {
+      try {
+        const d = await getDrop(id);
+        if (cancelled) return;
+        setDrop(d);
+        if (d) {
+          setSubject(d.inviteSubject);
+          setNote(d.personalNote);
+        }
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [id]);
+
+  if (loading) {
+    return (
+      <div className="max-w-xl mx-auto px-5 py-24 text-center">
+        <p className="text-ink-300">Loading…</p>
+      </div>
+    );
   }
+  if (!drop) return <NotFound />;
 
   const parsed = parseEmailList(emails);
 
@@ -35,26 +60,30 @@ export function ReviewDropPage(): React.ReactElement {
       return;
     }
     setSending(true);
-    const updated = store.updateDrop(drop!.id, {
-      inviteSubject: subject.trim() || drop!.inviteSubject,
-      personalNote: note,
-      status: 'scheduled',
-    });
-    store.addInvites(drop!.id, parsed);
-    await persistDrop(updated ?? drop!);
-    const result = await sendDropEmails('invite', updated ?? drop!, parsed);
-    setSending(false);
-    if (!result.ok) {
-      setErr(`Couldn't send invites: ${result.error}`);
-      return;
+    try {
+      const updated = await updateDrop(drop!.id, {
+        inviteSubject: subject.trim() || drop!.inviteSubject,
+        personalNote: note,
+        status: 'scheduled',
+      });
+      await addInvites(drop!.id, parsed);
+      const result = await sendDropEmails('invite', updated, parsed);
+      if (!result.ok) {
+        setErr(`Couldn't send invites: ${result.error}`);
+        return;
+      }
+      await Promise.all(parsed.map((email) => markInviteResent(drop!.id, email)));
+      if (result.sent < result.attempted) {
+        setWarning(
+          `Sent ${result.sent} of ${result.attempted}. Check the dashboard for failures.`
+        );
+      }
+      nav(`/drops/${drop!.id}`);
+    } catch (e) {
+      setErr((e as Error).message);
+    } finally {
+      setSending(false);
     }
-    for (const email of parsed) {
-      store.markInviteResent(drop!.id, email);
-    }
-    if (result.sent < result.attempted) {
-      setWarning(`Sent ${result.sent} of ${result.attempted}. Check the dashboard for failures.`);
-    }
-    nav(`/drops/${drop!.id}`);
   }
 
   return (

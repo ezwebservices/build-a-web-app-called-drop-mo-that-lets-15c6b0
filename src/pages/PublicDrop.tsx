@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState, type FormEvent } from 'react';
+import { useEffect, useState, type FormEvent } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import ReactMarkdown from 'react-markdown';
@@ -6,9 +6,8 @@ import { Button } from '../components/ui/Button';
 import { Field, Input, Textarea } from '../components/ui/Input';
 import { ProgressBar } from '../components/ProgressBar';
 import { Countdown } from '../components/Countdown';
-import { store, type DropRecord } from '../lib/store';
-import { useStoreVersion } from '../hooks/useStore';
-import { fetchDropByToken, persistPledge } from '../lib/remoteDrop';
+import { addPledge, getDropByToken, listPledgesByDrop } from '../lib/data';
+import type { DropRecord, PledgeRecord } from '../lib/types';
 import { formatDropTime, formatMoney, parseDollarsToCents } from '../lib/utils';
 import { Logo } from '../components/Logo';
 
@@ -16,30 +15,35 @@ const SUGGESTED = [25, 50, 100, 250];
 
 export function PublicDropPage(): React.ReactElement {
   const { token } = useParams();
-  useStoreVersion();
   const nav = useNavigate();
-  const localDrop = useMemo(() => (token ? store.getDropByToken(token) : null), [token]);
-  const [remoteDrop, setRemoteDrop] = useState<DropRecord | null>(null);
-  const [loading, setLoading] = useState<boolean>(!localDrop);
+  const [drop, setDrop] = useState<DropRecord | null>(null);
+  const [pledges, setPledges] = useState<PledgeRecord[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    let cancelled = false;
-    if (localDrop || !token) {
+    if (!token) {
       setLoading(false);
       return;
     }
+    let cancelled = false;
     setLoading(true);
-    fetchDropByToken(token).then((d) => {
-      if (cancelled) return;
-      setRemoteDrop(d);
-      setLoading(false);
-    });
+    (async () => {
+      try {
+        const d = await getDropByToken(token);
+        if (cancelled) return;
+        setDrop(d);
+        if (d) {
+          const p = await listPledgesByDrop(d.id);
+          if (!cancelled) setPledges(p);
+        }
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
+    })();
     return () => {
       cancelled = true;
     };
-  }, [token, localDrop]);
-
-  const drop = localDrop ?? remoteDrop;
+  }, [token]);
 
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -47,6 +51,7 @@ export function PublicDropPage(): React.ReactElement {
   const [amount, setAmount] = useState('50');
   const [noteText, setNoteText] = useState('');
   const [err, setErr] = useState('');
+  const [submitting, setSubmitting] = useState(false);
 
   if (loading) {
     return (
@@ -81,26 +86,30 @@ export function PublicDropPage(): React.ReactElement {
     );
   }
 
-  const pledges = store.listPledgesByDrop(drop.id);
   const raised = pledges.reduce((s, p) => s + p.amountCents, 0);
 
-  function onPledge(e: FormEvent): void {
+  async function onPledge(e: FormEvent): Promise<void> {
     e.preventDefault();
     setErr('');
     const cents = parseDollarsToCents(amount);
     if (cents < 100) return setErr('Pick an amount of at least $1.');
     if (!email.trim()) return setErr('We need your email to send you the drop-day link.');
     if (!anonymous && !name.trim()) return setErr("What's your name?");
-    const p = store.addPledge({
-      dropId: drop!.id,
-      contributorName: name.trim() || 'Friend',
-      contributorEmail: email.trim().toLowerCase(),
-      anonymous,
-      amountCents: cents,
-      note: noteText.trim(),
-    });
-    void persistPledge(p);
-    nav(`/p/${p.pledgeToken}`);
+    setSubmitting(true);
+    try {
+      const p = await addPledge({
+        dropId: drop!.id,
+        contributorName: name.trim() || 'Friend',
+        contributorEmail: email.trim().toLowerCase(),
+        anonymous,
+        amountCents: cents,
+        note: noteText.trim(),
+      });
+      nav(`/p/${p.pledgeToken}`);
+    } catch (error) {
+      setErr((error as Error).message);
+      setSubmitting(false);
+    }
   }
 
   return (
@@ -225,8 +234,10 @@ export function PublicDropPage(): React.ReactElement {
             />
           </Field>
           {err && <p className="text-sm text-drop-300">{err}</p>}
-          <Button type="submit" size="lg" className="w-full">
-            I'm in for {formatMoney(parseDollarsToCents(amount))}
+          <Button type="submit" size="lg" className="w-full" disabled={submitting}>
+            {submitting
+              ? 'Locking it in…'
+              : `I'm in for ${formatMoney(parseDollarsToCents(amount))}`}
           </Button>
           <p className="text-xs text-ink-400 text-center">
             Drop doesn't charge you. On drop day you'll send the amount yourself via Venmo.

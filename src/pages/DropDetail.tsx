@@ -1,25 +1,70 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Button } from '../components/ui/Button';
 import { Field, Input, Textarea } from '../components/ui/Input';
 import { ProgressBar } from '../components/ProgressBar';
-import { store } from '../lib/store';
-import { useStoreVersion } from '../hooks/useStore';
-import { fetchPledgesByDropId } from '../lib/remoteDrop';
+import {
+  addInvites,
+  getDrop,
+  listInvitesByDrop,
+  listPledgesByDrop,
+  markInviteResent,
+  updateDrop,
+} from '../lib/data';
+import type { DropRecord, InviteRecord, PledgeRecord } from '../lib/types';
 import { formatDropTime, formatMoney, parseEmailList } from '../lib/utils';
 
 export function DropDetailPage(): React.ReactElement {
   const { id } = useParams();
-  useStoreVersion();
   const nav = useNavigate();
-  const drop = useMemo(() => (id ? store.getDrop(id) : null), [id]);
+  const [drop, setDrop] = useState<DropRecord | null>(null);
+  const [pledges, setPledges] = useState<PledgeRecord[]>([]);
+  const [invites, setInvites] = useState<InviteRecord[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
+
   const [showInvite, setShowInvite] = useState(false);
   const [inviteEmails, setInviteEmails] = useState('');
   const [editOpen, setEditOpen] = useState(false);
-  const [dropAt, setDropAt] = useState(drop ? drop.dropAtIso.slice(0, 16) : '');
+  const [dropAt, setDropAt] = useState('');
   const [toast, setToast] = useState<string | null>(null);
   const toastTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const refresh = useCallback(async (): Promise<void> => {
+    if (!id) return;
+    const [d, p, i] = await Promise.all([
+      getDrop(id),
+      listPledgesByDrop(id),
+      listInvitesByDrop(id),
+    ]);
+    setDrop(d);
+    setPledges(p);
+    setInvites(i);
+    if (d && !dropAt) setDropAt(d.dropAtIso.slice(0, 16));
+  }, [id, dropAt]);
+
+  useEffect(() => {
+    let cancelled = false;
+    setLoading(true);
+    setError('');
+    (async () => {
+      try {
+        await refresh();
+      } catch (err) {
+        if (!cancelled) setError((err as Error).message);
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
+    })();
+    const interval = window.setInterval(() => {
+      if (!cancelled) void refresh().catch(() => undefined);
+    }, 15000);
+    return () => {
+      cancelled = true;
+      window.clearInterval(interval);
+    };
+  }, [refresh]);
 
   useEffect(() => {
     return () => {
@@ -27,52 +72,51 @@ export function DropDetailPage(): React.ReactElement {
     };
   }, []);
 
-  useEffect(() => {
-    if (!drop) return;
-    let cancelled = false;
-    const load = (): void => {
-      fetchPledgesByDropId(drop.id).then((remote) => {
-        if (cancelled || remote.length === 0) return;
-        store.mergePledges(remote);
-      });
-    };
-    load();
-    const interval = window.setInterval(load, 15000);
-    return () => {
-      cancelled = true;
-      window.clearInterval(interval);
-    };
-  }, [drop]);
-
   function showToast(message: string): void {
     setToast(message);
     if (toastTimer.current) clearTimeout(toastTimer.current);
     toastTimer.current = setTimeout(() => setToast(null), 3200);
   }
 
+  if (loading) {
+    return (
+      <div className="max-w-xl mx-auto px-5 py-24 text-center">
+        <p className="text-ink-300">Loading the drop…</p>
+      </div>
+    );
+  }
   if (!drop) {
     return (
       <div className="max-w-xl mx-auto px-5 py-24 text-center">
         <h1 className="font-display text-5xl text-white">Drop not found</h1>
+        {error && <p className="text-ink-300 mt-3 text-sm">{error}</p>}
       </div>
     );
   }
 
-  const pledges = store.listPledgesByDrop(drop.id);
-  const invites = store.listInvitesByDrop(drop.id);
   const raised = pledges.reduce((s, p) => s + p.amountCents, 0);
   const shareUrl = `${window.location.origin}/d/${drop.publicToken}`;
 
-  function onInviteMore(): void {
+  async function onInviteMore(): Promise<void> {
     const list = parseEmailList(inviteEmails);
     if (list.length === 0) return;
-    store.addInvites(drop!.id, list);
-    setInviteEmails('');
-    setShowInvite(false);
+    try {
+      await addInvites(drop!.id, list);
+      setInviteEmails('');
+      setShowInvite(false);
+      await refresh();
+    } catch (err) {
+      showToast((err as Error).message);
+    }
   }
 
-  function onNudge(email: string): void {
-    store.markInviteResent(drop!.id, email);
+  async function onNudge(email: string): Promise<void> {
+    try {
+      await markInviteResent(drop!.id, email);
+      await refresh();
+    } catch (err) {
+      showToast((err as Error).message);
+    }
   }
 
   function onCopyLink(): void {
@@ -91,16 +135,25 @@ export function DropDetailPage(): React.ReactElement {
       .catch(() => showToast('Couldn\u2019t copy — long-press the link to copy manually'));
   }
 
-  function onPostpone(): void {
+  async function onPostpone(): Promise<void> {
     if (!dropAt) return;
-    store.updateDrop(drop!.id, { dropAtIso: new Date(dropAt).toISOString() });
-    setEditOpen(false);
+    try {
+      await updateDrop(drop!.id, { dropAtIso: new Date(dropAt).toISOString() });
+      setEditOpen(false);
+      await refresh();
+    } catch (err) {
+      showToast((err as Error).message);
+    }
   }
 
-  function onCancel(): void {
+  async function onCancel(): Promise<void> {
     if (!window.confirm('Cancel this drop? Contributors will stop receiving reminders.')) return;
-    store.updateDrop(drop!.id, { status: 'cancelled' });
-    nav('/dashboard');
+    try {
+      await updateDrop(drop!.id, { status: 'cancelled' });
+      nav('/dashboard');
+    } catch (err) {
+      showToast((err as Error).message);
+    }
   }
 
   return (

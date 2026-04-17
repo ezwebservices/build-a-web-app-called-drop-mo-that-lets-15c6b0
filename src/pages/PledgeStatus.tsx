@@ -1,28 +1,63 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useParams, useSearchParams, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Button } from '../components/ui/Button';
 import { Countdown } from '../components/Countdown';
 import { Logo } from '../components/Logo';
-import { store } from '../lib/store';
-import { useStoreVersion } from '../hooks/useStore';
+import { getDrop, getPledgeByToken, updatePledgeStatus } from '../lib/data';
+import type { DropRecord, PledgeRecord } from '../lib/types';
 import { formatDropTime, formatMoney, venmoDeepLink } from '../lib/utils';
 
 export function PledgeStatusPage(): React.ReactElement {
   const { token } = useParams();
   const [sp] = useSearchParams();
-  useStoreVersion();
+  const [pledge, setPledge] = useState<PledgeRecord | null>(null);
+  const [drop, setDrop] = useState<DropRecord | null>(null);
+  const [loading, setLoading] = useState(true);
   const [justSent, setJustSent] = useState(false);
-
-  const pledge = useMemo(() => (token ? store.getPledgeByToken(token) : null), [token]);
-  const drop = useMemo(() => (pledge ? store.getDrop(pledge.dropId) : null), [pledge]);
+  const autoMarkRan = useRef(false);
 
   useEffect(() => {
-    if (pledge && sp.get('sent') === '1' && pledge.status !== 'sent') {
-      store.updatePledge(pledge.id, { status: 'sent' });
-      setJustSent(true);
+    if (!token) {
+      setLoading(false);
+      return;
+    }
+    let cancelled = false;
+    (async () => {
+      const p = await getPledgeByToken(token);
+      if (cancelled) return;
+      setPledge(p);
+      if (p) {
+        const d = await getDrop(p.dropId);
+        if (!cancelled) setDrop(d);
+      }
+      if (!cancelled) setLoading(false);
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [token]);
+
+  useEffect(() => {
+    if (!pledge) return;
+    if (autoMarkRan.current) return;
+    if (sp.get('sent') === '1' && pledge.status !== 'sent') {
+      autoMarkRan.current = true;
+      void updatePledgeStatus(pledge.id, 'sent').then((updated) => {
+        setPledge(updated);
+        setJustSent(true);
+      });
     }
   }, [pledge, sp]);
+
+  if (loading) {
+    return (
+      <div className="max-w-xl mx-auto px-5 py-24 text-center">
+        <Logo size={36} />
+        <p className="text-ink-300 mt-6">Loading your pledge…</p>
+      </div>
+    );
+  }
 
   if (!pledge || !drop) {
     return (
@@ -40,17 +75,21 @@ export function PledgeStatusPage(): React.ReactElement {
   const note = pledge.note?.trim() || `For ${drop.recipientFirstName} ❤️`;
   const venmoUrl = venmoDeepLink(drop.recipientVenmoHandle, pledge.amountCents, note);
 
-  function markSent(): void {
-    store.updatePledge(pledge!.id, { status: 'sent' });
+  async function markSent(): Promise<void> {
+    const updated = await updatePledgeStatus(pledge!.id, 'sent');
+    setPledge(updated);
     setJustSent(true);
   }
 
-  function markSkipped(): void {
-    store.updatePledge(pledge!.id, { status: 'skipped' });
+  async function markSkipped(): Promise<void> {
+    const updated = await updatePledgeStatus(pledge!.id, 'skipped');
+    setPledge(updated);
   }
 
-  function resetStatus(): void {
-    store.updatePledge(pledge!.id, { status: 'pledged' });
+  async function resetStatus(): Promise<void> {
+    const updated = await updatePledgeStatus(pledge!.id, 'pledged');
+    setPledge(updated);
+    setJustSent(false);
   }
 
   return (

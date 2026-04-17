@@ -1,5 +1,5 @@
 import { getClient, getPublicClient } from './client';
-import type { DropRecord } from './store';
+import type { DropRecord } from './types';
 
 export type EmailKind = 'invite' | 'organizerConfirm';
 

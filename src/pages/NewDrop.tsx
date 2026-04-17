@@ -2,10 +2,9 @@ import { useState, type FormEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '../components/ui/Button';
 import { Field, Input, Textarea } from '../components/ui/Input';
-import { useSession } from '../hooks/useSession';
-import { store } from '../lib/store';
+import { useSessionState } from '../hooks/useSession';
+import { createDrop } from '../lib/data';
 import { sendDropEmails } from '../lib/email';
-import { persistDrop } from '../lib/remoteDrop';
 import {
   getBrowserTimezone,
   parseDollarsToCents,
@@ -26,7 +25,7 @@ function defaultDropDate(): string {
 
 export function NewDropPage(): React.ReactElement {
   const nav = useNavigate();
-  const session = useSession();
+  const { session, loading } = useSessionState();
   const [firstName, setFirstName] = useState('');
   const [venmo, setVenmo] = useState('');
   const [story, setStory] = useState('');
@@ -36,6 +35,14 @@ export function NewDropPage(): React.ReactElement {
   const [err, setErr] = useState('');
   const [warning, setWarning] = useState('');
   const [submitting, setSubmitting] = useState(false);
+
+  if (loading) {
+    return (
+      <div className="max-w-xl mx-auto px-5 py-24 text-center">
+        <p className="text-ink-300">Loading…</p>
+      </div>
+    );
+  }
 
   if (!session) {
     return (
@@ -72,27 +79,30 @@ export function NewDropPage(): React.ReactElement {
       return;
     }
     setSubmitting(true);
-    const cents = goal ? parseDollarsToCents(goal) : 0;
-    const d = store.createDrop({
-      owner: session!.email,
-      recipientFirstName: firstName.trim(),
-      recipientVenmoHandle: handle,
-      story: story.trim(),
-      goalAmountCents: cents || null,
-      dropAtIso: new Date(dropAt).toISOString(),
-      timezone: getBrowserTimezone(),
-      personalNote: note.trim(),
-      inviteSubject: `A surprise for ${firstName.trim()} — are you in?`,
-      organizerName: session!.name,
-      organizerEmail: session!.email,
-    });
-    await persistDrop(d);
-    const result = await sendDropEmails('organizerConfirm', d, [session!.email]);
-    setSubmitting(false);
-    if (!result.ok) {
-      setWarning(`Drop saved, but the confirmation email didn't go out: ${result.error}`);
+    try {
+      const cents = goal ? parseDollarsToCents(goal) : 0;
+      const drop = await createDrop({
+        recipientFirstName: firstName.trim(),
+        recipientVenmoHandle: handle,
+        story: story.trim(),
+        goalAmountCents: cents || null,
+        dropAtIso: new Date(dropAt).toISOString(),
+        timezone: getBrowserTimezone(),
+        personalNote: note.trim(),
+        inviteSubject: `A surprise for ${firstName.trim()} — are you in?`,
+        organizerName: session!.name,
+        organizerEmail: session!.email,
+      });
+      const result = await sendDropEmails('organizerConfirm', drop, [session!.email]);
+      if (!result.ok) {
+        setWarning(`Drop saved, but the confirmation email didn't go out: ${result.error}`);
+      }
+      nav(`/drops/${drop.id}/review`);
+    } catch (error) {
+      setErr((error as Error).message);
+    } finally {
+      setSubmitting(false);
     }
-    nav(`/drops/${d.id}/review`);
   }
 
   return (

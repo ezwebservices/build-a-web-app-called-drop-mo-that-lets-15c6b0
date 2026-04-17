@@ -1,12 +1,21 @@
 import { Link, useNavigate } from 'react-router-dom';
+import { signOut } from 'aws-amplify/auth';
 import { Logo } from './Logo';
 import { Button } from './ui/Button';
 import { useSession } from '../hooks/useSession';
-import { setSession } from '../lib/session';
 
 export function Nav(): React.ReactElement {
   const session = useSession();
   const nav = useNavigate();
+
+  async function onSignOut(): Promise<void> {
+    try {
+      await signOut();
+    } catch {
+      // Already signed out — Hub will clear state regardless.
+    }
+    nav('/');
+  }
 
   return (
     <header className="sticky top-0 z-20 backdrop-blur-md bg-ink-900/70 border-b border-ink-700">
@@ -23,14 +32,7 @@ export function Nav(): React.ReactElement {
               >
                 Dashboard
               </Link>
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => {
-                  setSession(null);
-                  nav('/');
-                }}
-              >
+              <Button variant="ghost" size="sm" onClick={onSignOut}>
                 Sign out
               </Button>
               <Link to="/new">

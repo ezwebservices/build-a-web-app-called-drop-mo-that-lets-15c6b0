@@ -1,7 +1,7 @@
 You are QA (QA Engineer). Make this specific change:
 
-Verify both fixes end-to-end: (a) as an organizer, create a drop and invite 2+ emails entered as a newline-separated list AND as a comma-separated list — both should send without the 'e.emails is not iterable' error, and the invitee list should show pending statuses. (b) Open the public drop link in a private/incognito window (no Cognito session) and confirm the page renders recipient name, story, progress, and a working pledge form; submit a pledge and confirm it appears on the organizer dashboard. Report any console errors, network 4xx/5xx, or regressions.
+Verify by grep that no src/**/*.{ts,tsx} file contains localStorage, sessionStorage, or indexedDB references outside of Amplify/Cognito internal code. Confirm all drop/pledge/invite data flows through the Amplify Data client and that auth-gated UI uses live session hooks. Report pass/fail with file:line evidence.
 
-Context: The user asked for: th public page is still not working also i now got this error trying to send the email: Couldn't send invites: e.emails is not iterable
+Context: The user asked for: confirm that everything in this app that needs to persists to dynamodb and live auth sessions. no local storage should be used
 
 Read the relevant source files, make targeted edits, and run `npm run build` to verify.
