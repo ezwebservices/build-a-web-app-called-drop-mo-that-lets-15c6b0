@@ -2,6 +2,7 @@ import { Amplify } from 'aws-amplify';
 
 let configured = false;
 let hasConfig = false;
+let publicShareUrl = '';
 
 export function configureAmplify(): void {
   if (configured) return;
@@ -17,6 +18,10 @@ export function configureAmplify(): void {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     Amplify.configure(outputs as any);
     hasConfig = true;
+    const custom = (outputs as { custom?: { publicShareUrl?: string } }).custom;
+    if (custom && typeof custom.publicShareUrl === 'string') {
+      publicShareUrl = custom.publicShareUrl;
+    }
   } catch {
     hasConfig = false;
   }
@@ -24,4 +29,8 @@ export function configureAmplify(): void {
 
 export function isAmplifyConfigured(): boolean {
   return hasConfig;
+}
+
+export function getPublicShareUrl(): string {
+  return publicShareUrl;
 }

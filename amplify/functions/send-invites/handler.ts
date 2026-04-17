@@ -104,8 +104,13 @@ export const handler: Handler<IncomingEvent> = async (raw) => {
     console.error(msg);
     return { sent: 0, results: [], error: msg };
   }
-  const dropUrl = `${base}/d/${event.publicToken}`;
-  const imageUrl = `${base}/api/progress/${event.publicToken}.png`;
+  const shareBase = (process.env.PUBLIC_SHARE_URL ?? '').trim().replace(/\/+$/, '');
+  const dropUrl = shareBase
+    ? `${shareBase}/s/${event.publicToken}`
+    : `${base}/d/${event.publicToken}/`;
+  const imageUrl = shareBase
+    ? `${shareBase}/og/${event.publicToken}.png`
+    : `${base}/api/progress/${event.publicToken}.png`;
 
   const html = kind === 'organizerConfirm'
     ? organizerConfirmHtml(event, dropUrl)

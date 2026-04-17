@@ -37,18 +37,41 @@ do NOT stub `amplify_outputs.json`, do NOT skip backend synth in `amplify.yml`.
 
 ## SPA rewrites for deep links (e.g. `/d/:token`)
 
-`public/_redirects` ships `/* /index.html 200` so Vite's build output includes it.
-Amplify Hosting also needs the equivalent rule registered in the console for
-existing apps:
+**Source of truth:** `amplify.yml` runs a `postBuild` step that calls
+`aws amplify update-app --custom-rules ...` on every deploy, registering the
+standard SPA rewrite so Amplify Hosting serves `index.html` for all non-asset
+routes. This is the primary fix — `public/_redirects` is retained as a belt-
+and-suspenders fallback but Amplify Hosting does not read it reliably.
+
+The command is wrapped with `|| echo "...manual fallback..."` so a deploy
+does not fail if the CodeBuild role lacks `amplify:UpdateApp`. If you see
+that message in build logs, apply the rule manually:
 
 1. Amplify Console → the app → **Rewrites and redirects**
 2. Add rule:
-   - Source: `</^[^.]+$|\.(?!(css|gif|ico|jpg|js|png|txt|svg|woff|woff2|ttf|map|json|webp)$)([^.]+$)/>`
+   - Source: `</^[^.]+$|\.(?!(css|gif|ico|jpg|js|png|txt|svg|woff|woff2|ttf|map|json|webp|xml)$)([^.]+$)/>`
    - Target: `/index.html`
    - Type: `200 (Rewrite)`
 
 Without this, `https://.../d/<token>` returns "webpage can't be found" because
 Amplify looks for a static file at that path.
+
+## Share-link previews (Open Graph)
+
+The `public-share` Lambda (Function URL, unauth) serves:
+
+- `GET /s/<token>` — HTML with per-drop OG/Twitter meta (title, description,
+  image) so iMessage/Slack/Discord/Twitter render a branded preview card.
+  Regular browsers meta-refresh to `/d/<token>/` on the SPA; crawlers (matched
+  by user-agent) see the meta without the redirect.
+- `GET /og/<token>.png` — 1200x630 branded SVG (served with
+  `Content-Type: image/svg+xml`) showing the recipient's first name, progress
+  bar, contributor count, and drop date.
+
+The Function URL is published to `amplify_outputs.json` under
+`custom.publicShareUrl`. `send-invites` reads `PUBLIC_SHARE_URL` (injected via
+CDK) to build email links; the dashboard UI reads it from amplify_outputs so
+"Copy share link" produces `${publicShareUrl}/s/<token>`.
 
 ## SES invite email delivery
 

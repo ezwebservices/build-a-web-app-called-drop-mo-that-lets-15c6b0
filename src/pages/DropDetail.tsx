@@ -14,6 +14,7 @@ import {
 } from '../lib/data';
 import type { DropRecord, InviteRecord, PledgeRecord } from '../lib/types';
 import { formatDropTime, formatMoney, parseEmailList } from '../lib/utils';
+import { getPublicShareUrl } from '../lib/amplify';
 
 export function DropDetailPage(): React.ReactElement {
   const { id } = useParams();
@@ -95,7 +96,10 @@ export function DropDetailPage(): React.ReactElement {
   }
 
   const raised = pledges.reduce((s, p) => s + p.amountCents, 0);
-  const shareUrl = `${window.location.origin}/d/${drop.publicToken}`;
+  const shareBase = getPublicShareUrl();
+  const shareUrl = shareBase
+    ? `${shareBase.replace(/\/+$/, '')}/s/${drop.publicToken}`
+    : `${window.location.origin}/d/${drop.publicToken}/`;
 
   async function onInviteMore(): Promise<void> {
     const list = parseEmailList(inviteEmails);

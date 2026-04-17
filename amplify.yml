@@ -13,6 +13,19 @@ frontend:
     build:
       commands:
         - npm run build
+    postBuild:
+      commands:
+        - |
+          REGION="${AWS_REGION:-us-east-1}"
+          if [ -n "$AWS_APP_ID" ]; then
+            aws amplify update-app \
+              --app-id "$AWS_APP_ID" \
+              --region "$REGION" \
+              --custom-rules '[{"source":"</^[^.]+$|\\.(?!(css|gif|ico|jpg|js|png|txt|svg|woff|woff2|ttf|map|json|webp|xml)$)([^.]+$)/>","target":"/index.html","status":"200"}]' \
+              || echo "amplify update-app failed — set the rewrite manually in the Amplify Console (Rewrites and redirects)."
+          else
+            echo "AWS_APP_ID not set; skipping SPA custom-rules update."
+          fi
   artifacts:
     baseDirectory: dist
     files:

@@ -1,12 +1,15 @@
 You are QA (QA Engineer). Make this specific change:
 
-After Engineer's fix is deployed, verify end-to-end on the live Amplify URL:
-1) Visit https://main.d1u2km81dncoin.amplifyapp.com/d/<any-token> directly (fresh tab, no history) — confirm the SPA loads the public drop page (or a proper 'drop not found' state for an invalid token) instead of a 404 'webpage can't be found'. Also hard-refresh the page and confirm it still renders (this is the real SPA-rewrite test).
-2) As an organizer, create a drop and send an invite to brandondezzo@gmail.com. Confirm the email arrives within ~2 minutes, the invite link points to the deployed Amplify domain (not localhost), and clicking it opens the public drop page successfully. If SES is still in sandbox mode, document that clearly and verify with a sandbox-verified recipient.
-3) Check browser console on the public page — no unsafe-URL/CSP errors, no 404s on assets.
-Report pass/fail for each with screenshots or the exact error if anything fails.
+Verify both fixes end-to-end on the deployed Amplify URL (https://main.d1u2km81dncoin.amplifyapp.com):
 
-Context: The user asked for: The public page still is not working: This main.d1u2km81dncoin.amplifyapp.com page can’t be found
-No webpage was found for the web address: https://main.d1u2km81dncoin.amplifyapp.com/d/dEMDjjhHh2dGSRK2qdGUm1RK/ console log: (index):1 Unsafe attempt to load URL https://main.d1u2km81dncoin.amplifyapp.com/d/BXF3k4aFhUA3MT5EVjNigm2e/ from frame with URL chrome-error://chromewebdata/. Domains, protocols and ports must match. Also on the invite  i did not not receive the email?
+1) Public page routing: in an incognito window (no Cognito session), navigate to /d/<real-token>/ and confirm the branded drop page renders with recipient name, story, progress bar, and pledge form. Confirm no chrome-error://chromewebdata, no 'Unsafe attempt to load URL' console error, and no auth redirect. Also test /d/<bad-token>/ renders a proper 'drop not found' state (not a crash).
+
+2) Branded share card: curl -A 'facebookexternalhit/1.1' https://.../d/<token>/ and confirm the response HTML contains og:title, og:description, og:image, og:url, twitter:card meta tags with real values (not empty/defaults). Fetch the og:image URL directly and confirm it returns a 1200x630 PNG with the Drop branding, recipient first name, progress, and drop date. Paste the link into iMessage and/or Slack and visually confirm a branded card renders.
+
+3) Regression: confirm organizer dashboard, sign-in, invite-send flows still work; no console errors in production paths.
+
+Report any failures with exact URL, user-agent, HTTP status, and screenshot/console output. Do not sign off unless both (1) and (2) pass.
+
+Context: The user asked for: when you are in a drop i cannot open the public page and get this console error: Unsafe attempt to load URL https://main.d1u2km81dncoin.amplifyapp.com/d/dEMDjjhHh2dGSRK2qdGUm1RK/ from frame with URL chrome-error://chromewebdata/. Domains, protocols and ports must match. perhaps its an auth issue or COrs? also on text share link it is not a branded card just a simple url
 
 Read the relevant source files, make targeted edits, and run `npm run build` to verify.

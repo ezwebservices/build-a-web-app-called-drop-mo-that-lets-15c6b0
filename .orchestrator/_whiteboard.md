@@ -1,30 +1,35 @@
 # Iteration Whiteboard
 
-**Change request:** The public page still is not working: This main.d1u2km81dncoin.amplifyapp.com page can’t be found
-No webpage was found for the web address: https://main.d1u2km81dncoin.amplifyapp.com/d/dEMDjjhHh2dGSRK2qdGUm1RK/ console log: (index):1 Unsafe attempt to load URL https://main.d1u2km81dncoin.amplifyapp.com/d/BXF3k4aFhUA3MT5EVjNigm2e/ from frame with URL chrome-error://chromewebdata/. Domains, protocols and ports must match. Also on the invite  i did not not receive the email?
+**Change request:** when you are in a drop i cannot open the public page and get this console error: Unsafe attempt to load URL https://main.d1u2km81dncoin.amplifyapp.com/d/dEMDjjhHh2dGSRK2qdGUm1RK/ from frame with URL chrome-error://chromewebdata/. Domains, protocols and ports must match. perhaps its an auth issue or COrs? also on text share link it is not a branded card just a simple url
 
 **Subtasks planned:** 2
 
-1. **Engineer**: Fix two production bugs on the deployed Amplify site (main.d1u2km81dncoin.amplifyapp.com):
+1. **Engineer**: Fix the public drop page at /d/:token so it loads without auth and produces a branded link-preview card.
 
-1) PUBLIC DROP PAGE 404 — /d/:token returns 'webpage can't be found'. Root cause is almost certainly that Amplify Hosting isn't rewriting unknown paths to /index.html for the Vite SPA. Fix by adding a SPA rewrite rule. Two acceptable approaches:
-   a) Add a `customHttp.yml` or update `amplify.yml` with a redirect rule: source `</^[^.]+$|\.(?!(css|gif|ico|jpg|js|png|txt|svg|woff|woff2|ttf|map|json|webp)$)([^.]+$)/>` target `/index.html` status `200` (rewrite).
-   b) Or write `public/_redirects` with `/* /index.html 200` (Amplify Hosting supports Netlify-style _redirects when placed in the build output).
-   Verify the React Router (or whichever router is used) has a route registered for `/d/:token` that renders the public contributor page, and that the page does NOT require auth (contributors have no account — they access via unguessable signed link, per CLAUDE.md).
-   Also check the route path casing matches what the invite email links to.
+1) SPA ROUTING FIX (root cause of the chrome-error://chromewebdata failure):
+   - Inspect amplify.yml, customHttp.yml, and any Amplify Hosting rewrite/redirect rules currently deployed. The previous commit 54041e6 ('SPA rewrites for /d/:token') is insufficient — the live URL https://main.d1u2km81dncoin.amplifyapp.com/d/<token>/ still returns an error page.
+   - Add/verify the Amplify Hosting rewrite: source '</^[^.]+$|\.(?!(css|gif|ico|jpg|js|png|txt|svg|woff|woff2|ttf|map|json|webp|xml)$)([^.]+$)/>' target '/index.html' status '200' (or the documented SPA catch-all). Ensure it is committed in a file Amplify picks up (customHttp.yml OR via the Amplify console redirects — document in code where the source of truth is).
+   - Confirm the React Router route for /d/:token exists, is PUBLIC (no <Authenticator> wrapper blocking it), and renders even when amplify_outputs.json is missing (per CLAUDE.md guidance).
+   - Verify the token-lookup Data query is configured for unauthenticated access (IAM / apiKey auth mode on the Drop model's public-read-by-token resolver) so contributors without Cognito accounts can load the page.
 
-2) INVITE EMAILS NOT ARRIVING — the Lambda that sends invites via Amazon SES isn't delivering. Investigate and fix:
-   - Confirm the send-invite Lambda (amplify/functions/<send-invite-or-similar>/resource.ts) uses `secret('...')` for any secrets and has IAM permissions for `ses:SendEmail` / `ses:SendRawEmail` on the FROM identity.
-   - Confirm the FROM address (and domain if applicable) is verified in SES in the deployed region. If the account is still in SES sandbox, TO addresses must also be verified — surface this clearly and either (a) verify brandondezzo@gmail.com as a test recipient, or (b) document the SES production-access request. Default FROM should be a verified identity; if none exists, wire it to an env/secret and log a clear error instead of silently failing.
-   - Check CloudWatch logs for the invite Lambda after a send attempt; make sure errors are caught and surfaced back to the frontend (the organizer should see 'Couldn't send invites: <reason>' rather than silent success).
-   - Ensure the invite email body contains the correct absolute URL to /d/:token using the deployed Amplify domain (not localhost), read from an env var like `APP_BASE_URL` (set via Amplify Hosting envVars, not hardcoded).
+2) BRANDED SHARE-CARD (Open Graph):
+   - Add Open Graph + Twitter Card meta tags so pasting the link into iMessage/SMS/Slack/X renders a branded preview instead of a raw URL.
+   - Because index.html is static, create an Amplify Function (Lambda behind a Function URL or API Gateway route, wired through the same Amplify Hosting rewrite) at /d/:token that: (a) looks up the drop by token, (b) returns HTML with og:title ('Help surprise <FirstName>'), og:description (short story excerpt or 'Join the drop'), og:image pointing to an OG-image Lambda, og:url, twitter:card=summary_large_image. For crawlers (user-agent sniff on facebookexternalhit, Twitterbot, Slackbot, Discordbot, WhatsApp, LinkedInBot, iMessage) serve the meta-only HTML; for real browsers serve/redirect to the SPA index.html.
+   - Implement the OG image Lambda using @vercel/og or satori + resvg-js (already called out in CLAUDE.md) at /og/drop/:token.png — render a 1200x630 branded card: Drop wordmark, 'Help surprise <FirstName>', progress bar (pledged / goal), contributor count, drop date. Cache-Control: public, max-age=300.
+   - Use secret('...') for any secrets; read the Amplify Data endpoint from env; do not bake secrets into the Lambda.
 
-After changes: run `npm install` then `npm run build` until it exits 0. Commit with a clear message. Do NOT add TODOs or placeholders — fully implement both fixes per CLAUDE.md.
-2. **QA**: After Engineer's fix is deployed, verify end-to-end on the live Amplify URL:
-1) Visit https://main.d1u2km81dncoin.amplifyapp.com/d/<any-token> directly (fresh tab, no history) — confirm the SPA loads the public drop page (or a proper 'drop not found' state for an invalid token) instead of a 404 'webpage can't be found'. Also hard-refresh the page and confirm it still renders (this is the real SPA-rewrite test).
-2) As an organizer, create a drop and send an invite to brandondezzo@gmail.com. Confirm the email arrives within ~2 minutes, the invite link points to the deployed Amplify domain (not localhost), and clicking it opens the public drop page successfully. If SES is still in sandbox mode, document that clearly and verify with a sandbox-verified recipient.
-3) Check browser console on the public page — no unsafe-URL/CSP errors, no 404s on assets.
-Report pass/fail for each with screenshots or the exact error if anything fails.
+3) Run `npm install` then `npm run build` until it exits 0. No TODOs, no placeholders.
+
+Deliverable: public /d/<token>/ URL loads the drop page unauthenticated in a real browser, AND pasting that URL into iMessage/Slack produces a branded preview card with recipient name, progress, and drop date.
+2. **QA**: Verify both fixes end-to-end on the deployed Amplify URL (https://main.d1u2km81dncoin.amplifyapp.com):
+
+1) Public page routing: in an incognito window (no Cognito session), navigate to /d/<real-token>/ and confirm the branded drop page renders with recipient name, story, progress bar, and pledge form. Confirm no chrome-error://chromewebdata, no 'Unsafe attempt to load URL' console error, and no auth redirect. Also test /d/<bad-token>/ renders a proper 'drop not found' state (not a crash).
+
+2) Branded share card: curl -A 'facebookexternalhit/1.1' https://.../d/<token>/ and confirm the response HTML contains og:title, og:description, og:image, og:url, twitter:card meta tags with real values (not empty/defaults). Fetch the og:image URL directly and confirm it returns a 1200x630 PNG with the Drop branding, recipient first name, progress, and drop date. Paste the link into iMessage and/or Slack and visually confirm a branded card renders.
+
+3) Regression: confirm organizer dashboard, sign-in, invite-send flows still work; no console errors in production paths.
+
+Report any failures with exact URL, user-agent, HTTP status, and screenshot/console output. Do not sign off unless both (1) and (2) pass.
 
 ---
 
