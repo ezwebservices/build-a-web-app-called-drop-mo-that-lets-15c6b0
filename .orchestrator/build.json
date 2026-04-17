@@ -4075,6 +4075,18 @@
     {
       "type": "employee_status",
       "message": "Installer finished"
+    },
+    {
+      "type": "status",
+      "message": "Analyzing deploy error — iam_bootstrap=true yaml_corrupted=false missing_pipeline_deploy=false outputs_tracked=false process_env_in_resource=false"
+    },
+    {
+      "type": "status",
+      "message": "Fix: repairing Amplify IAM service role + CDK bootstrap permissions..."
+    },
+    {
+      "type": "status",
+      "message": "Deploy auto-fix complete — applied 3 fix(es): Ensured CDK bootstrap + service role (arn:aws:iam::767398019868:role/amplifyconsole-backend-role); Attached service role to Amplify app d1u2km81dncoin; Triggered Amplify redeploy"
     }
   ],
   "created_at": "2026-04-17T15:54:51.211871600+00:00",
