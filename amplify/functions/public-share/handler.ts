@@ -196,53 +196,38 @@ export const handler: LambdaFunctionURLHandler = async (event) => {
 
   try {
     if (!kind) {
-      return {
-        statusCode: 404,
-        headers: { 'Content-Type': 'text/plain; charset=utf-8' },
-        body: 'Not found',
-      };
+      const headers: Record<string, string> = { 'Content-Type': 'text/plain; charset=utf-8' };
+      return { statusCode: 404, headers, body: 'Not found' };
     }
 
     const drop = await fetchDropByToken(token);
     if (!drop) {
-      return {
-        statusCode: 404,
-        headers: { 'Content-Type': 'text/plain; charset=utf-8' },
-        body: 'Drop not found',
-      };
+      const headers: Record<string, string> = { 'Content-Type': 'text/plain; charset=utf-8' };
+      return { statusCode: 404, headers, body: 'Drop not found' };
     }
 
     if (kind === 'og') {
       const pledges = await fetchPledges(drop.id);
       const raised = pledges.reduce((s, p) => s + (p.amountCents ?? 0), 0);
       const svg = renderOgSvg(drop, raised, pledges.length);
-      return {
-        statusCode: 200,
-        headers: {
-          'Content-Type': 'image/svg+xml',
-          'Cache-Control': 'public, max-age=300',
-        },
-        body: svg,
+      const headers: Record<string, string> = {
+        'Content-Type': 'image/svg+xml',
+        'Cache-Control': 'public, max-age=300',
       };
+      return { statusCode: 200, headers, body: svg };
     }
 
     const isBot = BOT_UA_REGEX.test(ua);
     const html = renderShareHtml(drop, appBase, functionBase, !isBot);
-    return {
-      statusCode: 200,
-      headers: {
-        'Content-Type': 'text/html; charset=utf-8',
-        'Cache-Control': 'public, max-age=60',
-      },
-      body: html,
+    const headers: Record<string, string> = {
+      'Content-Type': 'text/html; charset=utf-8',
+      'Cache-Control': 'public, max-age=60',
     };
+    return { statusCode: 200, headers, body: html };
   } catch (err) {
     const msg = (err as Error).message ?? String(err);
     console.error(`public-share error: ${msg}`);
-    return {
-      statusCode: 500,
-      headers: { 'Content-Type': 'text/plain; charset=utf-8' },
-      body: `Internal error: ${msg}`,
-    };
+    const headers: Record<string, string> = { 'Content-Type': 'text/plain; charset=utf-8' };
+    return { statusCode: 500, headers, body: `Internal error: ${msg}` };
   }
 };

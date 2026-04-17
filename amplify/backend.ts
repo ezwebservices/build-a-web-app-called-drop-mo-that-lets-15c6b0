@@ -1,6 +1,6 @@
 import { defineBackend } from '@aws-amplify/backend';
 import { PolicyStatement, Effect } from 'aws-cdk-lib/aws-iam';
-import { FunctionUrlAuthType, HttpMethod } from 'aws-cdk-lib/aws-lambda';
+import { FunctionUrlAuthType, HttpMethod, Function as LambdaFunction } from 'aws-cdk-lib/aws-lambda';
 import { auth } from './auth/resource';
 import { data } from './data/resource';
 import { sendInvites } from './functions/send-invites/resource';
@@ -54,7 +54,7 @@ cfnFn.environment = {
 
 // Surface the public-share Function URL to send-invites so emails link to the
 // share endpoint (which serves per-drop OG meta for iMessage/Slack previews).
-backend.sendInvites.resources.lambda.addEnvironment('PUBLIC_SHARE_URL', publicShareUrl.url);
+(backend.sendInvites.resources.lambda as LambdaFunction).addEnvironment('PUBLIC_SHARE_URL', publicShareUrl.url);
 
 backend.addOutput({
   custom: {
