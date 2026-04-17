@@ -1,6 +1,6 @@
 You are Installer (Build Engineer). Make this specific change:
 
-Diagnose the Amplify deploy failure: the root cause is IAM — the AemiliaControlPlaneLambda-CodeBuildRole used by Amplify lacks ssm:GetParameter permission on arn:aws:ssm:*:*:parameter/cdk-bootstrap/*, causing BootstrapDetectionError. This is an AWS Console / IAM issue, NOT a code issue. DO NOT disable or remove `npx ampx pipeline-deploy` from amplify.yml under any circumstances. Steps: (1) Run `npm install` then `npm run build` locally and ensure it exits 0 — fix any TypeScript or bundling errors in src/ or amplify/ if they appear. (2) Inspect amplify.yml to confirm pipeline-deploy still runs in the backend phase BEFORE the frontend `npm run build` — do not modify it unless ordering is wrong. (3) Inspect all amplify/functions/*/resource.ts files and confirm any runtime secrets use `secret('NAME')` from '@aws-amplify/backend' rather than `process.env.X`. Fix any violations. (4) Make sure amplify_outputs.json is NOT tracked in git and that `amplify_outputs*` is in .gitignore. (5) Once local build is green, run: git add -A && git commit -m "Fix: verify local build clean; deploy failure is IAM bootstrap permission (manual AWS Console fix required)" && git push. (6) Report to the user that the next deploy will still fail until they grant the Amplify service role the IAM policy: `ssm:GetParameter` on `arn:aws:ssm:*:*:parameter/cdk-bootstrap/*` (and typically the full AmplifyBackendDeployFullAccess managed policy on the app's service role in the Amplify Console → App settings → IAM service role).
+Run `npm run build` locally and confirm it exits 0. Do NOT modify amplify.yml to skip pipeline-deploy, do NOT commit amplify_outputs.json, do NOT change resource.ts secrets. The deploy failure is a `BootstrapDetectionError` caused by the Amplify app's IAM service role missing `ssm:GetParameter` on `arn:aws:ssm:*:*:parameter/cdk-bootstrap/*` — this is an AWS Console / IAM fix the user must perform (attach a policy granting ssm:GetParameter on cdk-bootstrap params and the standard CDK bootstrap permissions to role AemiliaControlPlaneLambda-CodeBuildRole or the app's configured service role). After verifying the local build is clean, stage any incidental working-tree changes (like .orchestrator/_prompt.txt and build.json) and commit with message `Fix: local build verified clean; deploy blocked on IAM bootstrap permission (manual AWS Console fix: grant ssm:GetParameter on /cdk-bootstrap/* to Amplify service role)` then `git push`. Report clearly in your summary that no code change can fix this — the user must update IAM.
 
 Context: The user asked for: An AWS Amplify deployment FAILED for this project. You must analyze the build error logs below, identify the ROOT CAUSE, fix the underlying problem, run `npm run build` locally to verify it compiles cleanly, then commit and push.
 
@@ -77,62 +77,61 @@ Gets hit with multiple Venmo payments on drop day. That's it.
 
 DEPLOY ERROR LOGS (last 8000 chars from Amplify):
 ```
-ine-deploy --branch $AWS_BRANCH --app-id $AWS_APP_ID
-2026-04-17T18:12:07.873Z [INFO]: 6:12:07 PM Synthesizing backend...
-2026-04-17T18:12:07.879Z [INFO]: 
-2026-04-17T18:12:09.269Z [WARNING]: Bundling asset amplify-d1u2km81dncoin-main-branch-30a4492368/AmplifyBranchLinker/CustomResourceLambda/Code/Stage...
-2026-04-17T18:12:09.628Z [WARNING]: ...05be02fb8d732968e53bc5a229c64116bc639489832eb5-building/index.js  961.6kb
-                                    ⚡ Done in 76ms
-2026-04-17T18:12:09.749Z [WARNING]: Bundling asset amplify-d1u2km81dncoin-main-branch-30a4492368/auth/AmplifySecretFetcherResourceProviderLambda/Code/Stage...
-2026-04-17T18:12:10.074Z [WARNING]: ...050ec4885d1bf1a223594e5324720ed504dc0f264f4271-building/index.js  714.0kb
+ Executing command: npx ampx pipeline-deploy --branch $AWS_BRANCH --app-id $AWS_APP_ID
+2026-04-17T18:17:47.920Z [INFO]: 6:17:47 PM Synthesizing backend...
+2026-04-17T18:17:47.924Z [INFO]: 
+2026-04-17T18:17:49.288Z [WARNING]: Bundling asset amplify-d1u2km81dncoin-main-branch-30a4492368/AmplifyBranchLinker/CustomResourceLambda/Code/Stage...
+2026-04-17T18:17:49.670Z [WARNING]: ...74cd863e2013a38c268ecc440dd07bae694e4a2f9c51dd-building/index.js  961.6kb
+                                    ⚡ Done in 73ms
+2026-04-17T18:17:49.806Z [WARNING]: Bundling asset amplify-d1u2km81dncoin-main-branch-30a4492368/auth/AmplifySecretFetcherResourceProviderLambda/Code/Stage...
+2026-04-17T18:17:50.121Z [WARNING]: ...80a1ff7b5c04b7a9eaea185efa7a47aaf735204e6dcf98-building/index.js  714.0kb
                                     ⚡ Done in 50ms
-2026-04-17T18:12:10.121Z [WARNING]: [WARNING] aws-cdk-lib.aws_lambda.FunctionOptions#logRetention is deprecated.
+2026-04-17T18:17:50.170Z [WARNING]: [WARNING] aws-cdk-lib.aws_lambda.FunctionOptions#logRetention is deprecated.
                                     use `logGroup` instead
                                     This API will be removed in the next major release.
-2026-04-17T18:12:10.122Z [WARNING]: [WARNING] aws-cdk-lib.aws_lambda.FunctionOptions#logRetention is deprecated.
+2026-04-17T18:17:50.170Z [WARNING]: [WARNING] aws-cdk-lib.aws_lambda.FunctionOptions#logRetention is deprecated.
                                     use `logGroup` instead
                                     This API will be removed in the next major release.
-2026-04-17T18:12:10.124Z [WARNING]: Bundling asset amplify-d1u2km81dncoin-main-branch-30a4492368/function/send-invites-lambda/Code/Stage...
-2026-04-17T18:12:10.622Z [WARNING]: Be careful when using @auth directives on a field in a root type. @auth directives on field definitions use the source object to perform authorization logic and the source will be an empty object for fields on root types. Static group authorization should perform as expected.
-2026-04-17T18:12:10.857Z [WARNING]: WARNING: owners may reassign ownership for the following model(s) and role(s): Drop: [owner]. If this is not intentional, you may want to apply field-level authorization rules to these fields. To read more: https://docs.amplify.aws/cli/graphql/authorization-rules/#per-user--owner-based-data-access.
-2026-04-17T18:12:10.909Z [WARNING]: [WARNING] aws-cdk-lib.aws_lambda.FunctionOptions#logRetention is deprecated.
+2026-04-17T18:17:50.172Z [WARNING]: Bundling asset amplify-d1u2km81dncoin-main-branch-30a4492368/function/send-invites-lambda/Code/Stage...
+2026-04-17T18:17:50.673Z [WARNING]: Be careful when using @auth directives on a field in a root type. @auth directives on field definitions use the source object to perform authorization logic and the source will be an empty object for fields on root types. Static group authorization should perform as expected.
+2026-04-17T18:17:50.879Z [WARNING]: WARNING: owners may reassign ownership for the following model(s) and role(s): Drop: [owner]. If this is not intentional, you may want to apply field-level authorization rules to these fields. To read more: https://docs.amplify.aws/cli/graphql/authorization-rules/#per-user--owner-based-data-access.
+2026-04-17T18:17:50.932Z [WARNING]: [WARNING] aws-cdk-lib.aws_lambda.FunctionOptions#logRetention is deprecated.
                                     use `logGroup` instead
                                     This API will be removed in the next major release.
-2026-04-17T18:12:10.909Z [WARNING]: [WARNING] aws-cdk-lib.aws_lambda.FunctionOptions#logRetention is deprecated.
+2026-04-17T18:17:50.933Z [WARNING]: [WARNING] aws-cdk-lib.aws_lambda.FunctionOptions#logRetention is deprecated.
                                     use `logGroup` instead
                                     This API will be removed in the next major release.
-2026-04-17T18:12:10.910Z [WARNING]: Bundling asset amplify-d1u2km81dncoin-main-branch-30a4492368/function/schedule-drop-lambda/Code/Stage...
-2026-04-17T18:12:11.305Z [WARNING]: [WARNING] aws-cdk-lib.aws_lambda.FunctionOptions#logRetention is deprecated.
+2026-04-17T18:17:50.934Z [WARNING]: Bundling asset amplify-d1u2km81dncoin-main-branch-30a4492368/function/schedule-drop-lambda/Code/Stage...
+2026-04-17T18:17:51.317Z [WARNING]: [WARNING] aws-cdk-lib.aws_lambda.FunctionOptions#logRetention is deprecated.
                                     use `logGroup` instead
                                     This API will be removed in the next major release.
-2026-04-17T18:12:11.310Z [WARNING]: [WARNING] aws-cdk-lib.aws_lambda.FunctionOptions#logRetention is deprecated.
+2026-04-17T18:17:51.322Z [WARNING]: [WARNING] aws-cdk-lib.aws_lambda.FunctionOptions#logRetention is deprecated.
                                     use `logGroup` instead
                                     This API will be removed in the next major release.
                                     Bundling asset amplify-d1u2km81dncoin-main-branch-30a4492368/function/progress-image-lambda/Code/Stage...
-2026-04-17T18:12:11.603Z [WARNING]: [WARNING] aws-cdk-lib.aws_lambda.FunctionOptions#logRetention is deprecated.
+2026-04-17T18:17:51.610Z [WARNING]: [WARNING] aws-cdk-lib.aws_lambda.FunctionOptions#logRetention is deprecated.
                                     use `logGroup` instead
                                     This API will be removed in the next major release.
-2026-04-17T18:12:11.604Z [WARNING]: [WARNING] aws-cdk-lib.aws_lambda.FunctionOptions#logRetention is deprecated.
+2026-04-17T18:17:51.610Z [WARNING]: [WARNING] aws-cdk-lib.aws_lambda.FunctionOptions#logRetention is deprecated.
                                     use `logGroup` instead
                                     This API will be removed in the next major release.
-2026-04-17T18:12:11.604Z [WARNING]: Bundling asset amplify-d1u2km81dncoin-main-branch-30a4492368/function/drop-day-lambda/Code/Stage...
-2026-04-17T18:12:12.805Z [INFO]: 6:12:12 PM ✔ Backend synthesized in 5.38 seconds
-2026-04-17T18:12:12.806Z [INFO]: 6:12:12 PM Running type checks...
-2026-04-17T18:12:22.957Z [INFO]: 6:12:22 PM ✔ Type checks completed in 10.15 seconds
-2026-04-17T18:12:22.976Z [INFO]: 6:12:22 PM Building and publishing assets...
-2026-04-17T18:12:23.692Z [INFO]: 
-2026-04-17T18:12:23.693Z [INFO]: Notices:
-2026-04-17T18:12:23.694Z [INFO]: 
-2026-04-17T18:12:23.694Z [INFO]: 3127	Amplify Function is dropping support of Node 16 Lambda Functions
+2026-04-17T18:17:51.611Z [WARNING]: Bundling asset amplify-d1u2km81dncoin-main-branch-30a4492368/function/drop-day-lambda/Code/Stage...
+2026-04-17T18:17:52.840Z [INFO]: 6:17:52 PM ✔ Backend synthesized in 5.38 seconds
+2026-04-17T18:17:52.841Z [INFO]: 6:17:52 PM Running type checks...
+2026-04-17T18:18:03.451Z [INFO]: 6:18:03 PM ✔ Type checks completed in 10.61 seconds
+2026-04-17T18:18:03.469Z [INFO]: 6:18:03 PM Building and publishing assets...
+2026-04-17T18:18:04.126Z [INFO]: 
+2026-04-17T18:18:04.127Z [INFO]: Notices:
+2026-04-17T18:18:04.127Z [INFO]: 3127	Amplify Function is dropping support of Node 16 Lambda Functions
                                  If you have Node 16 Lambda functions defined with Amplify Function, we highly
                                  recommend updating your function's runtime to newer Node LTS versions (Node 20+).
-2026-04-17T18:12:23.694Z [INFO]: More information at: https://github.com/aws-amplify/amplify-backend/issues/3127
-                                 If you don't want to see a notice anymore, use npx ampx notices acknowledge <notice-id>
-2026-04-17T18:12:23.747Z [INFO]: 
-2026-04-17T18:12:23.747Z [INFO]: [BootstrapDetectionError] Unable to detect CDK bootstrap stack due to permission issues.
-                                 ∟ Caused by: [ToolkitError] amplify-d1u2km81dncoin-main-branch-30a4492368: This CDK deployment requires bootstrap stack version '6', but during the confirmation via SSM parameter /cdk-bootstrap/hnb659fds/version the following error occurred: AccessDeniedException: User: arn:aws:sts::073653171576:assumed-role/AemiliaControlPlaneLambda-CodeBuildRole-1PJH7JZRIQRPI/AWSCodeBuild-908b28b3-f4f2-4900-a21a-5a3e5380a18c is not authorized to perform: ssm:GetParameter on resource: arn:aws:ssm:us-east-1:073653171576:parameter/cdk-bootstrap/hnb659fds/version because no identity-based policy allows the ssm:GetParameter action
+                                 More information at: https://github.com/aws-amplify/amplify-backend/issues/3127
+2026-04-17T18:18:04.127Z [INFO]: If you don't want to see a notice anymore, use npx ampx notices acknowledge <notice-id>
+2026-04-17T18:18:04.175Z [INFO]: 
+2026-04-17T18:18:04.176Z [INFO]: [BootstrapDetectionError] Unable to detect CDK bootstrap stack due to permission issues.
+                                 ∟ Caused by: [ToolkitError] amplify-d1u2km81dncoin-main-branch-30a4492368: This CDK deployment requires bootstrap stack version '6', but during the confirmation via SSM parameter /cdk-bootstrap/hnb659fds/version the following error occurred: AccessDeniedException: User: arn:aws:sts::073653171576:assumed-role/AemiliaControlPlaneLambda-CodeBuildRole-1PJH7JZRIQRPI/AWSCodeBuild-3cf5ae15-efe8-4eb3-abaf-585aabdb18b1 is not authorized to perform: ssm:GetParameter on resource: arn:aws:ssm:us-east-1:073653171576:parameter/cdk-bootstrap/hnb659fds/version because no identity-based policy allows the ssm:GetParameter action
                                  Resolution: Ensure that AWS credentials have an IAM policy that grants read access to 'arn:aws:ssm:*:*:parameter/cdk-bootstrap/*' SSM parameters.
-2026-04-17T18:12:23.747Z [WARNING]: ampx pipeline-deploy
+2026-04-17T18:18:04.176Z [WARNING]: ampx pipeline-deploy
                                     Command to deploy backends in a custom CI/CD pipeline. This command is not inten
                                     ded to be used locally.
                                     Options:
@@ -151,10 +150,10 @@ ine-deploy --branch $AWS_BRANCH --app-id $AWS_APP_ID
                                     --outputs-format   amplify_outputs file format
                                     [string] [choices: "mjs", "json", "json-mobile", "ts", "dart"]
                                     -h, --help             Show help                                     [boolean]
-2026-04-17T18:12:23.831Z [ERROR]: !!! Build failed
-2026-04-17T18:12:23.831Z [ERROR]: !!! Error: Command failed with exit code 1
-2026-04-17T18:12:23.831Z [INFO]: # Starting environment caching...
-2026-04-17T18:12:23.831Z [INFO]: # Environment caching completed
+2026-04-17T18:18:04.247Z [ERROR]: !!! Build failed
+2026-04-17T18:18:04.248Z [ERROR]: !!! Error: Command failed with exit code 1
+2026-04-17T18:18:04.248Z [INFO]: # Starting environment caching...
+2026-04-17T18:18:04.248Z [INFO]: # Environment caching completed
 
 
 ```

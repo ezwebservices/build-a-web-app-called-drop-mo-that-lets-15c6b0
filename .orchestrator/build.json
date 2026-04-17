@@ -3732,6 +3732,155 @@
       "message": "Installer",
       "phase": 2,
       "total_phases": 2
+    },
+    {
+      "type": "employee_status",
+      "message": "Installer is working: Diagnose the Amplify deploy failure: the root cause is IAM — the AemiliaControlPlaneLambda-CodeBuildRole used by Amplify lacks ssm:GetParameter permission on arn:aws:ssm:*:*:parameter/cdk-bootstrap/*, causing BootstrapDetectionError. This is an AWS Console / IAM issue, NOT a code issue. DO NOT disable or remove `npx ampx pipeline-deploy` from amplify.yml under any circumstances. Steps: (1) Run `npm install` then `npm run build` locally and ensure it exits 0 — fix any TypeScript or bundling errors in src/ or amplify/ if they appear. (2) Inspect amplify.yml to confirm pipeline-deploy still runs in the backend phase BEFORE the frontend `npm run build` — do not modify it unless ordering is wrong. (3) Inspect all amplify/functions/*/resource.ts files and confirm any runtime secrets use `secret('NAME')` from '@aws-amplify/backend' rather than `process.env.X`. Fix any violations. (4) Make sure amplify_outputs.json is NOT tracked in git and that `amplify_outputs*` is in .gitignore. (5) Once local build is green, run: git add -A && git commit -m \"Fix: verify local build clean; deploy failure is IAM bootstrap permission (manual AWS Console fix required)\" && git push. (6) Report to the user that the next deploy will still fail until they grant the Amplify service role the IAM policy: `ssm:GetParameter` on `arn:aws:ssm:*:*:parameter/cdk-bootstrap/*` (and typically the full AmplifyBackendDeployFullAccess managed policy on the app's service role in the Amplify Console → App settings → IAM service role)."
+    },
+    {
+      "type": "status",
+      "message": "Installer starting..."
+    },
+    {
+      "type": "token_usage",
+      "message": "0K in / 0K out / 16K cached  ~$0.0647"
+    },
+    {
+      "type": "token_usage",
+      "message": "0K in / 0K out / 16K cached  ~$0.0647"
+    },
+    {
+      "type": "command_run",
+      "message": "$ cat amplify.yml .gitignore 2>&1 | head -100"
+    },
+    {
+      "type": "token_usage",
+      "message": "0K in / 0K out / 32K cached  ~$0.0117"
+    },
+    {
+      "type": "thinking",
+      "message": "Good - amplify.yml has correct ordering, .gitignore excludes amplify_outputs*. Now check resource.ts files and verify amplify_outputs.json isn't tracked."
+    },
+    {
+      "type": "token_usage",
+      "message": "0K in / 0K out / 32K cached  ~$0.0117"
+    },
+    {
+      "type": "command_run",
+      "message": "$ git ls-files | grep -i amplify_outputs; echo \"---\"; ls amplify/functions/ 2>/dev/null"
+    },
+    {
+      "type": "token_usage",
+      "message": "0K in / 0K out / 32K cached  ~$0.0116"
+    },
+    {
+      "type": "token_usage",
+      "message": "0K in / 0K out / 32K cached  ~$0.0114"
+    },
+    {
+      "type": "command_run",
+      "message": "$ npm install --no-audit --no-fund 2>&1 | tail -20"
+    },
+    {
+      "type": "token_usage",
+      "message": "0K in / 0K out / 33K cached  ~$0.0140"
+    },
+    {
+      "type": "command_run",
+      "message": "$ npm run build 2>&1 | tail -30"
+    },
+    {
+      "type": "token_usage",
+      "message": "0K in / 0K out / 33K cached  ~$0.0124"
+    },
+    {
+      "type": "thinking",
+      "message": "Build is clean. Everything is already in order — amplify.yml has correct ordering, no `process.env` violations in resource.ts files, amplify_outputs.json not tracked. Committing and pushing."
+    },
+    {
+      "type": "token_usage",
+      "message": "0K in / 0K out / 33K cached  ~$0.0124"
+    },
+    {
+      "type": "command_run",
+      "message": "$ git add -A && git commit -m \"Fix: verify local build clean; deploy failure is IAM bootstrap permission (manual AWS Console fix required)\" && git push 2>&1 | tail -20"
+    },
+    {
+      "type": "token_usage",
+      "message": "0K in / 0K out / 34K cached  ~$0.0125"
+    },
+    {
+      "type": "thinking",
+      "message": "Pushed. Local build is clean — the deploy failure is **not a code issue**.\n\n## Action required from you (AWS Console)\n\nThe Amplify CodeBuild role lacks permission to read CDK bootstrap SSM parameters:\n\n```\nUser: AemiliaControlPlaneLambda-CodeBuildRole-... is not authorized\nto perform: ssm:GetParamet"
+    },
+    {
+      "type": "token_usage",
+      "message": "0K in / 1K out / 215K cached  ~$0.1568"
+    },
+    {
+      "type": "status",
+      "message": "Installer finished (exit 0)"
+    },
+    {
+      "type": "employee_status",
+      "message": "Installer finished"
+    },
+    {
+      "type": "done",
+      "message": "Changes applied by 1 team member(s) across 1 subtask(s)"
+    },
+    {
+      "type": "phase_progress",
+      "message": "Orchestrator planning change",
+      "phase": 1,
+      "total_phases": 0
+    },
+    {
+      "type": "status",
+      "message": "Orchestrator starting..."
+    },
+    {
+      "type": "token_usage",
+      "message": "0K in / 0K out / 16K cached  ~$0.0646"
+    },
+    {
+      "type": "token_usage",
+      "message": "0K in / 0K out / 16K cached  ~$0.0646"
+    },
+    {
+      "type": "file_created",
+      "message": "Created C:/Users/brand/Documents/Orchestrator/workspaces/15c6b06b-0b3a-46dc-be91-7a83c249e074/.orchestrator/_iteration_plan.json",
+      "file_path": "C:/Users/brand/Documents/Orchestrator/workspaces/15c6b06b-0b3a-46dc-be91-7a83c249e074/.orchestrator/_iteration_plan.json"
+    },
+    {
+      "type": "token_usage",
+      "message": "0K in / 0K out / 32K cached  ~$0.0135"
+    },
+    {
+      "type": "thinking",
+      "message": "Plan written. Root cause is an IAM permission gap on the Amplify service role (missing `ssm:GetParameter` on `/cdk-bootstrap/*`) — not a code issue. Single subtask: Installer verifies local build is clean and pushes, while flagging that the user must fix IAM in the AWS Console."
+    },
+    {
+      "type": "token_usage",
+      "message": "0K in / 1K out / 48K cached  ~$0.0932"
+    },
+    {
+      "type": "status",
+      "message": "Orchestrator finished (exit 0)"
+    },
+    {
+      "type": "thinking",
+      "message": "The deploy log shows a BootstrapDetectionError: the Amplify CodeBuild role lacks ssm:GetParameter on /cdk-bootstrap/hnb659fds/version. Per the ROOT CAUSE GUIDE this is an IAM/bootstrap issue that must be fixed manually in the AWS Console — NOT by disabling pipeline-deploy. The local source code is not the cause (backend synthesized and type checks passed). One subtask: Installer verifies the local build still compiles cleanly and confirms no source-level fix is warranted, then commits/pushes any incidental changes so a fresh deploy can be retried after the user fixes IAM."
+    },
+    {
+      "type": "status",
+      "message": "Orchestrator split this into 1 subtask(s)"
+    },
+    {
+      "type": "phase_progress",
+      "message": "Installer",
+      "phase": 2,
+      "total_phases": 2
     }
   ],
   "created_at": "2026-04-17T15:54:51.211871600+00:00",
