@@ -21,8 +21,8 @@ const schema = a.schema({
     })
     .secondaryIndexes((index) => [index('publicToken')])
     .authorization((allow) => [
-      allow.owner(),
-      allow.publicApiKey().to(['read']),
+      allow.publicApiKey(),
+      allow.authenticated().to(['read']),
     ]),
 
   Pledge: a

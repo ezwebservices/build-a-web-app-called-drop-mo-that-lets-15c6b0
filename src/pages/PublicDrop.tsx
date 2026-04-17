@@ -8,7 +8,7 @@ import { ProgressBar } from '../components/ProgressBar';
 import { Countdown } from '../components/Countdown';
 import { store, type DropRecord } from '../lib/store';
 import { useStoreVersion } from '../hooks/useStore';
-import { fetchDropByToken } from '../lib/remoteDrop';
+import { fetchDropByToken, persistPledge } from '../lib/remoteDrop';
 import { formatDropTime, formatMoney, parseDollarsToCents } from '../lib/utils';
 import { Logo } from '../components/Logo';
 
@@ -99,6 +99,7 @@ export function PublicDropPage(): React.ReactElement {
       amountCents: cents,
       note: noteText.trim(),
     });
+    void persistPledge(p);
     nav(`/p/${p.pledgeToken}`);
   }
 

@@ -6,6 +6,7 @@ import { Field, Input, Textarea } from '../components/ui/Input';
 import { ProgressBar } from '../components/ProgressBar';
 import { store } from '../lib/store';
 import { useStoreVersion } from '../hooks/useStore';
+import { fetchPledgesByDropId } from '../lib/remoteDrop';
 import { formatDropTime, formatMoney, parseEmailList } from '../lib/utils';
 
 export function DropDetailPage(): React.ReactElement {
@@ -25,6 +26,23 @@ export function DropDetailPage(): React.ReactElement {
       if (toastTimer.current) clearTimeout(toastTimer.current);
     };
   }, []);
+
+  useEffect(() => {
+    if (!drop) return;
+    let cancelled = false;
+    const load = (): void => {
+      fetchPledgesByDropId(drop.id).then((remote) => {
+        if (cancelled || remote.length === 0) return;
+        store.mergePledges(remote);
+      });
+    };
+    load();
+    const interval = window.setInterval(load, 15000);
+    return () => {
+      cancelled = true;
+      window.clearInterval(interval);
+    };
+  }, [drop]);
 
   function showToast(message: string): void {
     setToast(message);

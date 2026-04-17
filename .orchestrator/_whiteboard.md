@@ -1,27 +1,11 @@
 # Iteration Whiteboard
 
-**Change request:** I have this issue when trying to send the email,  is there a free secure way to achioeve this? Couldn't send invites: No federated jwt
+**Change request:** th public page is still not working also i now got this error trying to send the email: Couldn't send invites: e.emails is not iterable
 
 **Subtasks planned:** 2
 
-1. **Engineer**: Fix the 'No federated jwt' error when sending invite emails. Investigation + fix:
-
-1. Locate the invite-send code path (likely amplify/functions/send-invite/ or similar, plus the frontend call site in src/ where organizer clicks 'Send invites').
-2. Root cause: 'No federated jwt' is thrown by Amplify when a call is made with authMode 'userPool' but no Cognito session exists, OR when a Lambda/resolver expects an identityPool/IAM credential it can't get. Determine which: (a) is the organizer actually signed in at the moment of send? (b) what authorization mode is declared on the mutation/function in amplify/data/resource.ts?
-3. Fix approach (free + secure):
-   - Ensure the send-invites mutation in amplify/data/resource.ts uses `allow.authenticated()` (Cognito user pool) so only signed-in organizers can trigger it. Do NOT expose it to public/apiKey.
-   - In the frontend, pass `{ authMode: 'userPool' }` explicitly to the client.mutations.sendInvites(...) call, and guard the UI so the button is disabled until `useAuthenticator`/`getCurrentUser` resolves a signed-in user.
-   - If the organizer is signed in with Google federation, confirm the Cognito User Pool has the Google identity provider wired and that Amplify Auth's `fetchAuthSession()` returns tokens before the mutation is called. If tokens are missing, force a re-auth redirect.
-4. Email delivery (free, secure): use Amazon SES via an Amplify Function. SES sandbox is free and sufficient for testing (verify the sender email + any recipient in the sandbox via AWS Console). Production sending is $0.10 per 1k emails — effectively free at this scale. Configure:
-   - amplify/functions/send-invite/resource.ts: defineFunction with environment { SES_FROM_ADDRESS: secret('SES_FROM_ADDRESS') }.
-   - Grant the function's execution role `ses:SendEmail` on the verified identity (via backend.ts customResources or a resource override).
-   - Function handler uses @aws-sdk/client-ses SendEmailCommand with From = verified address, To = contributor, HTML body = branded invite.
-5. Do NOT use SMTP/nodemailer with hardcoded creds, do NOT use a third-party free SMTP relay — SES is the free + secure path already in our stack.
-6. Add user-facing error handling: if sendInvites throws, surface a toast with the real message (not just 'No federated jwt'); if the user isn't signed in, redirect to /login instead of attempting the call.
-7. Run `npm run build` until clean. Verify the mutation signature matches frontend call. Document in a short comment only if the auth flow is non-obvious.
-
-Deliverable: organizer signed in → clicks Send Invites → emails land in contributor inboxes with no 'No federated jwt' error.
-2. **QA**: Verify the invite-send flow end-to-end after the Engineer's fix: (1) signed-out organizer clicking Send Invites gets a clean redirect/message, not 'No federated jwt'; (2) signed-in organizer (email/password AND Google federation) successfully triggers invites; (3) SES delivers to a verified sandbox recipient; (4) no auth tokens leak to console/network; (5) mutation rejects unauthenticated requests at the AppSync layer (test by stripping the Authorization header). Report pass/fail per case.
+1. **Engineer**: Fix two bugs: (1) 'Couldn't send invites: e.emails is not iterable' — inspect the sendInvites Lambda handler (amplify/functions/**) and its caller in the frontend. The error means the handler is receiving an argument shape where `emails` is undefined/null/string instead of an array. Likely causes: AppSync wraps mutation args under `event.arguments` but handler reads `event.emails`; or the client passes emails as a newline/comma string but the handler expects an already-parsed array; or schema defines emails as a single String instead of [String!]!. Normalize: in the handler, accept both `event.arguments?.emails ?? event.emails`, coerce a string to an array by splitting on commas/newlines and trimming, and guard with `Array.isArray` before iterating. Update the Amplify Data schema if needed so `emails: a.string().array().required()` (or equivalent) and redeploy types. Also ensure the client sends a real array, not a single concatenated string. (2) The public drop page is still not working — load the route that contributors visit via the signed link, reproduce the failure, and fix it. Typical culprits: unauthenticated data access not allowed by the model's authorization rules (need `allow.publicApiKey()` or a custom resolver via signed token), missing API key configuration, route not registered, or the page trying to call an authenticated query. Make the public page render without a Cognito session, fetch the drop by its public id/token, and show recipient first name, story, goal, progress, and the pledge form. Run `npm run build` until it exits 0. No TODOs, no placeholders.
+2. **QA**: Verify both fixes end-to-end: (a) as an organizer, create a drop and invite 2+ emails entered as a newline-separated list AND as a comma-separated list — both should send without the 'e.emails is not iterable' error, and the invitee list should show pending statuses. (b) Open the public drop link in a private/incognito window (no Cognito session) and confirm the page renders recipient name, story, progress, and a working pledge form; submit a pledge and confirm it appears on the organizer dashboard. Report any console errors, network 4xx/5xx, or regressions.
 
 ---
 

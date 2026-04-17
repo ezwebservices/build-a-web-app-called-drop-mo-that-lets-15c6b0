@@ -3,7 +3,7 @@ import type { Handler } from 'aws-lambda';
 
 type EmailKind = 'invite' | 'organizerConfirm' | 'pledgeConfirm';
 
-type Event = {
+type EventArgs = {
   kind?: EmailKind;
   dropId: string;
   publicToken: string;
@@ -15,8 +15,27 @@ type Event = {
   story: string;
   dropAtIso: string;
   goalAmountCents?: number | null;
-  emails: string[];
+  emails: string[] | string | null | undefined;
 };
+
+type Event = Omit<EventArgs, 'emails'> & { emails: string[] };
+
+type IncomingEvent = EventArgs & { arguments?: EventArgs };
+
+function normalizeEmails(value: unknown): string[] {
+  if (Array.isArray(value)) {
+    return value
+      .map((v) => (typeof v === 'string' ? v.trim() : ''))
+      .filter(Boolean);
+  }
+  if (typeof value === 'string') {
+    return value
+      .split(/[\s,;]+/)
+      .map((s) => s.trim())
+      .filter(Boolean);
+  }
+  return [];
+}
 
 const ses = new SESv2Client({});
 
@@ -63,12 +82,18 @@ function subjectFor(kind: EmailKind, event: Event): string {
   return event.inviteSubject;
 }
 
-export const handler: Handler<Event> = async (event) => {
+export const handler: Handler<IncomingEvent> = async (raw) => {
+  const args: EventArgs = (raw && raw.arguments ? raw.arguments : raw) as EventArgs;
+  const event: Event = { ...args, emails: normalizeEmails(args?.emails) };
   const from = process.env.SES_FROM_ADDRESS ?? 'drop@example.com';
   const base = process.env.APP_BASE_URL ?? 'https://drop.app';
   const dropUrl = `${base}/d/${event.publicToken}`;
   const imageUrl = `${base}/api/progress/${event.publicToken}.png`;
   const kind: EmailKind = event.kind ?? 'invite';
+
+  if (!Array.isArray(event.emails) || event.emails.length === 0) {
+    return { sent: 0, results: [], error: 'No recipients provided' };
+  }
 
   const html = kind === 'organizerConfirm'
     ? organizerConfirmHtml(event, dropUrl)

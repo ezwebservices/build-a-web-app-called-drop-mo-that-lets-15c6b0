@@ -48,6 +48,9 @@ export function ReviewDropPage(): React.ReactElement {
       setErr(`Couldn't send invites: ${result.error}`);
       return;
     }
+    for (const email of parsed) {
+      store.markInviteResent(drop!.id, email);
+    }
     if (result.sent < result.attempted) {
       setWarning(`Sent ${result.sent} of ${result.attempted}. Check the dashboard for failures.`);
     }

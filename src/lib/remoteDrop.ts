@@ -1,5 +1,5 @@
-import { getPublicClient, getClient } from './client';
-import type { DropRecord, DropStatus } from './store';
+import { getPublicClient } from './client';
+import type { DropRecord, DropStatus, PledgeRecord, PledgeStatus } from './store';
 
 type RemoteDrop = {
   id: string;
@@ -56,8 +56,69 @@ export async function fetchDropByToken(token: string): Promise<DropRecord | null
   }
 }
 
+type RemotePledge = {
+  id: string;
+  dropId: string;
+  contributorName: string;
+  contributorEmail: string;
+  anonymous?: boolean | null;
+  amountCents: number;
+  note?: string | null;
+  status?: PledgeStatus | null;
+  pledgeToken: string;
+  createdAt?: string | null;
+};
+
+function toPledge(r: RemotePledge): PledgeRecord {
+  return {
+    id: r.id,
+    dropId: r.dropId,
+    contributorName: r.contributorName,
+    contributorEmail: r.contributorEmail,
+    anonymous: r.anonymous ?? false,
+    amountCents: r.amountCents,
+    note: r.note ?? '',
+    status: (r.status as PledgeStatus | null) ?? 'pledged',
+    pledgeToken: r.pledgeToken,
+    createdAt: r.createdAt ?? new Date().toISOString(),
+  };
+}
+
+export async function persistPledge(pledge: PledgeRecord): Promise<void> {
+  const client = getPublicClient();
+  if (!client) return;
+  try {
+    await client.models.Pledge.create({
+      id: pledge.id,
+      dropId: pledge.dropId,
+      contributorName: pledge.contributorName,
+      contributorEmail: pledge.contributorEmail,
+      anonymous: pledge.anonymous,
+      amountCents: pledge.amountCents,
+      note: pledge.note,
+      status: pledge.status,
+      pledgeToken: pledge.pledgeToken,
+    });
+  } catch {
+    // Backend not deployed — localStorage still has the pledge.
+  }
+}
+
+export async function fetchPledgesByDropId(dropId: string): Promise<PledgeRecord[]> {
+  const client = getPublicClient();
+  if (!client) return [];
+  try {
+    const res = await client.models.Pledge.list({
+      filter: { dropId: { eq: dropId } },
+    });
+    return (res.data ?? []).map((p) => toPledge(p as unknown as RemotePledge));
+  } catch {
+    return [];
+  }
+}
+
 export async function persistDrop(drop: DropRecord): Promise<void> {
-  const client = getClient();
+  const client = getPublicClient();
   if (!client) return;
   try {
     await client.models.Drop.create({

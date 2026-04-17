@@ -146,6 +146,18 @@ export const store = {
   getPledgeByToken(token: string): PledgeRecord | null {
     return read().pledges.find((p) => p.pledgeToken === token) ?? null;
   },
+  mergePledges(records: PledgeRecord[]): void {
+    const s = read();
+    const existing = new Set(s.pledges.map((p) => p.id));
+    let changed = false;
+    for (const r of records) {
+      if (existing.has(r.id)) continue;
+      s.pledges.push(r);
+      existing.add(r.id);
+      changed = true;
+    }
+    if (changed) write(s);
+  },
   listPledgesByDrop(dropId: string): PledgeRecord[] {
     return read()
       .pledges.filter((p) => p.dropId === dropId)
@@ -163,8 +175,8 @@ export const store = {
         id: generateToken(16),
         dropId,
         email,
-        status: 'sent',
-        lastSentAt: new Date().toISOString(),
+        status: 'pending',
+        lastSentAt: null,
       };
       s.invites.push(rec);
       created.push(rec);

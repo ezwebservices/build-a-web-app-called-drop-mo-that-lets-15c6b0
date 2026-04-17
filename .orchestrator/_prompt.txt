@@ -1,7 +1,7 @@
 You are QA (QA Engineer). Make this specific change:
 
-Verify the invite-send flow end-to-end after the Engineer's fix: (1) signed-out organizer clicking Send Invites gets a clean redirect/message, not 'No federated jwt'; (2) signed-in organizer (email/password AND Google federation) successfully triggers invites; (3) SES delivers to a verified sandbox recipient; (4) no auth tokens leak to console/network; (5) mutation rejects unauthenticated requests at the AppSync layer (test by stripping the Authorization header). Report pass/fail per case.
+Verify both fixes end-to-end: (a) as an organizer, create a drop and invite 2+ emails entered as a newline-separated list AND as a comma-separated list — both should send without the 'e.emails is not iterable' error, and the invitee list should show pending statuses. (b) Open the public drop link in a private/incognito window (no Cognito session) and confirm the page renders recipient name, story, progress, and a working pledge form; submit a pledge and confirm it appears on the organizer dashboard. Report any console errors, network 4xx/5xx, or regressions.
 
-Context: The user asked for: I have this issue when trying to send the email,  is there a free secure way to achioeve this? Couldn't send invites: No federated jwt
+Context: The user asked for: th public page is still not working also i now got this error trying to send the email: Couldn't send invites: e.emails is not iterable
 
 Read the relevant source files, make targeted edits, and run `npm run build` to verify.
