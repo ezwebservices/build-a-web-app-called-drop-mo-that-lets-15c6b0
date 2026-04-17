@@ -3937,6 +3937,144 @@
     {
       "type": "employee_status",
       "message": "Installer finished"
+    },
+    {
+      "type": "phase_progress",
+      "message": "Orchestrator planning change",
+      "phase": 1,
+      "total_phases": 0
+    },
+    {
+      "type": "status",
+      "message": "Orchestrator starting..."
+    },
+    {
+      "type": "token_usage",
+      "message": "0K in / 0K out / 16K cached  ~$0.0647"
+    },
+    {
+      "type": "token_usage",
+      "message": "0K in / 0K out / 16K cached  ~$0.0647"
+    },
+    {
+      "type": "file_created",
+      "message": "Created C:/Users/brand/Documents/Orchestrator/workspaces/15c6b06b-0b3a-46dc-be91-7a83c249e074/.orchestrator/_iteration_plan.json",
+      "file_path": "C:/Users/brand/Documents/Orchestrator/workspaces/15c6b06b-0b3a-46dc-be91-7a83c249e074/.orchestrator/_iteration_plan.json"
+    },
+    {
+      "type": "token_usage",
+      "message": "0K in / 0K out / 32K cached  ~$0.0135"
+    },
+    {
+      "type": "thinking",
+      "message": "Plan written. Root cause is an IAM permission gap on the Amplify CodeBuild role (missing `ssm:GetParameter` on `/cdk-bootstrap/*`) — not fixable in code. Single subtask to Installer: verify local `npm run build` is clean and push a status commit documenting the required manual AWS Console fix."
+    },
+    {
+      "type": "token_usage",
+      "message": "0K in / 1K out / 48K cached  ~$0.0932"
+    },
+    {
+      "type": "status",
+      "message": "Orchestrator finished (exit 0)"
+    },
+    {
+      "type": "thinking",
+      "message": "The deploy failure is a BootstrapDetectionError caused by the Amplify CodeBuild IAM role lacking ssm:GetParameter on /cdk-bootstrap/*. This is an AWS IAM infrastructure issue, NOT a code issue — there is nothing in the repo to fix. Per HARD RULES we must not disable pipeline-deploy or stub amplify_outputs.json. The only actionable local step is to verify the local build still compiles cleanly and push a no-op/status commit noting the manual AWS Console fix required. One subtask is sufficient."
+    },
+    {
+      "type": "status",
+      "message": "Orchestrator split this into 1 subtask(s)"
+    },
+    {
+      "type": "phase_progress",
+      "message": "Installer",
+      "phase": 2,
+      "total_phases": 2
+    },
+    {
+      "type": "employee_status",
+      "message": "Installer is working: Root cause is an IAM permission issue on the Amplify CodeBuild role (AemiliaControlPlaneLambda-CodeBuildRole-1PJH7JZRIQRPI is missing ssm:GetParameter on arn:aws:ssm:*:*:parameter/cdk-bootstrap/*). This cannot be fixed in the repo — it requires a manual AWS Console action by the user to attach a policy granting ssm:GetParameter on /cdk-bootstrap/* to the Amplify service role. DO NOT disable pipeline-deploy, DO NOT stub amplify_outputs.json, DO NOT edit amplify.yml to skip the backend. Steps: (1) run `npm install` then `npm run build` and confirm it exits 0 locally; (2) if the build is clean, make a small status update to .orchestrator/_prompt.txt or a NOTES file describing the required manual AWS Console fix so the next iteration has context; (3) commit with message like 'Fix: local build verified clean; deploy blocked on IAM bootstrap permission (manual AWS Console: grant ssm:GetParameter on /cdk-bootstrap/* to Amplify CodeBuild role)' and push. If `npm run build` fails for any other reason, fix that underlying issue first before committing."
+    },
+    {
+      "type": "status",
+      "message": "Installer starting..."
+    },
+    {
+      "type": "token_usage",
+      "message": "0K in / 0K out / 16K cached  ~$0.0643"
+    },
+    {
+      "type": "token_usage",
+      "message": "0K in / 0K out / 16K cached  ~$0.0643"
+    },
+    {
+      "type": "command_run",
+      "message": "$ cd \"C:\\Users\\brand\\Documents\\Orchestrator\\workspaces\\15c6b06b-0b3a-46dc-be91-7a83c249e074\" && npm install 2>&1 | tail -20"
+    },
+    {
+      "type": "token_usage",
+      "message": "0K in / 0K out / 31K cached  ~$0.0127"
+    },
+    {
+      "type": "command_run",
+      "message": "$ cd \"C:\\Users\\brand\\Documents\\Orchestrator\\workspaces\\15c6b06b-0b3a-46dc-be91-7a83c249e074\" && npm run build 2>&1 | tail -30"
+    },
+    {
+      "type": "token_usage",
+      "message": "0K in / 0K out / 32K cached  ~$0.0121"
+    },
+    {
+      "type": "thinking",
+      "message": "Build is clean. Now I'll add a status note and commit."
+    },
+    {
+      "type": "token_usage",
+      "message": "0K in / 0K out / 32K cached  ~$0.0121"
+    },
+    {
+      "type": "token_usage",
+      "message": "0K in / 0K out / 33K cached  ~$0.0359"
+    },
+    {
+      "type": "command_run",
+      "message": "$ cd \"C:\\Users\\brand\\Documents\\Orchestrator\\workspaces\\15c6b06b-0b3a-46dc-be91-7a83c249e074\" && ls DEPLOY_NOTES.md 2>&1"
+    },
+    {
+      "type": "token_usage",
+      "message": "0K in / 0K out / 39K cached  ~$0.0138"
+    },
+    {
+      "type": "file_created",
+      "message": "Created C:/Users/brand/Documents/Orchestrator/workspaces/15c6b06b-0b3a-46dc-be91-7a83c249e074/DEPLOY_NOTES.md",
+      "file_path": "C:/Users/brand/Documents/Orchestrator/workspaces/15c6b06b-0b3a-46dc-be91-7a83c249e074/DEPLOY_NOTES.md"
+    },
+    {
+      "type": "token_usage",
+      "message": "0K in / 0K out / 40K cached  ~$0.0162"
+    },
+    {
+      "type": "command_run",
+      "message": "$ cd \"C:\\Users\\brand\\Documents\\Orchestrator\\workspaces\\15c6b06b-0b3a-46dc-be91-7a83c249e074\" && git add DEPLOY_NOTES.md && git commit -m \"Fix: local build verified clean; deploy blocked on IAM bootstrap"
+    },
+    {
+      "type": "token_usage",
+      "message": "0K in / 0K out / 40K cached  ~$0.0142"
+    },
+    {
+      "type": "thinking",
+      "message": "Local `npm run build` exits 0 — code is healthy. Created `DEPLOY_NOTES.md` documenting the blocker and pushed.\n\n**Manual fix required (AWS Console):** Attach inline policy to role `AemiliaControlPlaneLambda-CodeBuildRole-1PJH7JZRIQRPI` granting `ssm:GetParameter` on `arn:aws:ssm:*:*:parameter/cdk-bo"
+    },
+    {
+      "type": "token_usage",
+      "message": "0K in / 1K out / 234K cached  ~$0.1921"
+    },
+    {
+      "type": "status",
+      "message": "Installer finished (exit 0)"
+    },
+    {
+      "type": "employee_status",
+      "message": "Installer finished"
     }
   ],
   "created_at": "2026-04-17T15:54:51.211871600+00:00",
