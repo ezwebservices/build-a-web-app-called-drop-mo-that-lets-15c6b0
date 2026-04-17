@@ -60,8 +60,16 @@ export async function sendDropEmails(
         error: response.errors.map((e) => e.message).join(', '),
       };
     }
-    const data = response.data as { sent?: number } | null;
-    const sent = data?.sent ?? recipients.length;
+    const data = response.data as { sent?: number; error?: string } | null;
+    const sent = data?.sent ?? 0;
+    if (sent === 0 && data?.error) {
+      return {
+        ok: false,
+        sent: 0,
+        attempted: recipients.length,
+        error: data.error,
+      };
+    }
     return { ok: true, sent, attempted: recipients.length };
   } catch (err) {
     return {

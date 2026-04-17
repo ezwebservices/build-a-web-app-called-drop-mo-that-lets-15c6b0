@@ -85,15 +85,27 @@ function subjectFor(kind: EmailKind, event: Event): string {
 export const handler: Handler<IncomingEvent> = async (raw) => {
   const args: EventArgs = (raw && raw.arguments ? raw.arguments : raw) as EventArgs;
   const event: Event = { ...args, emails: normalizeEmails(args?.emails) };
-  const from = process.env.SES_FROM_ADDRESS ?? 'drop@example.com';
-  const base = process.env.APP_BASE_URL ?? 'https://drop.app';
-  const dropUrl = `${base}/d/${event.publicToken}`;
-  const imageUrl = `${base}/api/progress/${event.publicToken}.png`;
+  const from = (process.env.SES_FROM_ADDRESS ?? '').trim();
+  const base = (process.env.APP_BASE_URL ?? '').trim().replace(/\/+$/, '');
   const kind: EmailKind = event.kind ?? 'invite';
 
   if (!Array.isArray(event.emails) || event.emails.length === 0) {
     return { sent: 0, results: [], error: 'No recipients provided' };
   }
+  if (!from) {
+    const msg =
+      'SES_FROM_ADDRESS secret is not configured. Set a verified SES identity in Amplify secrets before sending invites.';
+    console.error(msg);
+    return { sent: 0, results: [], error: msg };
+  }
+  if (!base) {
+    const msg =
+      'APP_BASE_URL secret is not configured. Set it to the deployed site URL (e.g. https://main.d1u2km81dncoin.amplifyapp.com).';
+    console.error(msg);
+    return { sent: 0, results: [], error: msg };
+  }
+  const dropUrl = `${base}/d/${event.publicToken}`;
+  const imageUrl = `${base}/api/progress/${event.publicToken}.png`;
 
   const html = kind === 'organizerConfirm'
     ? organizerConfirmHtml(event, dropUrl)
@@ -123,8 +135,16 @@ export const handler: Handler<IncomingEvent> = async (raw) => {
       );
       results.push({ email, ok: true });
     } catch (err) {
-      results.push({ email, ok: false, error: (err as Error).message });
+      const message = (err as Error).message ?? String(err);
+      console.error(`SES send failed for ${email}: ${message}`);
+      results.push({ email, ok: false, error: message });
     }
   }
-  return { sent: results.filter((r) => r.ok).length, results };
+  const sent = results.filter((r) => r.ok).length;
+  const failures = results.filter((r) => !r.ok);
+  const error =
+    sent === 0 && failures.length > 0
+      ? failures[0].error ?? 'SES send failed'
+      : undefined;
+  return { sent, results, error };
 };
