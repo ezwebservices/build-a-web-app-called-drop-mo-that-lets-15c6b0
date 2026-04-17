@@ -3881,6 +3881,62 @@
       "message": "Installer",
       "phase": 2,
       "total_phases": 2
+    },
+    {
+      "type": "employee_status",
+      "message": "Installer is working: Run `npm run build` locally and confirm it exits 0. Do NOT modify amplify.yml to skip pipeline-deploy, do NOT commit amplify_outputs.json, do NOT change resource.ts secrets. The deploy failure is a `BootstrapDetectionError` caused by the Amplify app's IAM service role missing `ssm:GetParameter` on `arn:aws:ssm:*:*:parameter/cdk-bootstrap/*` — this is an AWS Console / IAM fix the user must perform (attach a policy granting ssm:GetParameter on cdk-bootstrap params and the standard CDK bootstrap permissions to role AemiliaControlPlaneLambda-CodeBuildRole or the app's configured service role). After verifying the local build is clean, stage any incidental working-tree changes (like .orchestrator/_prompt.txt and build.json) and commit with message `Fix: local build verified clean; deploy blocked on IAM bootstrap permission (manual AWS Console fix: grant ssm:GetParameter on /cdk-bootstrap/* to Amplify service role)` then `git push`. Report clearly in your summary that no code change can fix this — the user must update IAM."
+    },
+    {
+      "type": "status",
+      "message": "Installer starting..."
+    },
+    {
+      "type": "token_usage",
+      "message": "0K in / 0K out / 16K cached  ~$0.0641"
+    },
+    {
+      "type": "token_usage",
+      "message": "0K in / 0K out / 16K cached  ~$0.0641"
+    },
+    {
+      "type": "command_run",
+      "message": "$ cd \"C:\\Users\\brand\\Documents\\Orchestrator\\workspaces\\15c6b06b-0b3a-46dc-be91-7a83c249e074\" && npm run build 2>&1 | tail -40"
+    },
+    {
+      "type": "token_usage",
+      "message": "0K in / 0K out / 31K cached  ~$0.0121"
+    },
+    {
+      "type": "thinking",
+      "message": "Build is clean. Committing and pushing."
+    },
+    {
+      "type": "token_usage",
+      "message": "0K in / 0K out / 31K cached  ~$0.0121"
+    },
+    {
+      "type": "command_run",
+      "message": "$ cd \"C:\\Users\\brand\\Documents\\Orchestrator\\workspaces\\15c6b06b-0b3a-46dc-be91-7a83c249e074\" && git add -A && git commit -m \"Fix: local build verified clean; deploy blocked on IAM bootstrap permission ("
+    },
+    {
+      "type": "token_usage",
+      "message": "0K in / 0K out / 32K cached  ~$0.0119"
+    },
+    {
+      "type": "thinking",
+      "message": "## Summary\n\n**Local build: clean** (`tsc && vite build` exits 0, 3.93s).\n\n**Deploy failure CANNOT be fixed by code.** The log shows:\n\n```\n[BootstrapDetectionError] User: AemiliaControlPlaneLambda-CodeBuildRole...\nis not authorized to perform: ssm:GetParameter on\narn:aws:ssm:us-east-1:073653171576:pa"
+    },
+    {
+      "type": "token_usage",
+      "message": "0K in / 0K out / 80K cached  ~$0.1025"
+    },
+    {
+      "type": "status",
+      "message": "Installer finished (exit 0)"
+    },
+    {
+      "type": "employee_status",
+      "message": "Installer finished"
     }
   ],
   "created_at": "2026-04-17T15:54:51.211871600+00:00",
