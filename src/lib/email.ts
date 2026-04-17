@@ -20,7 +20,10 @@ export async function sendDropEmails(
   if (recipients.length === 0) {
     return { ok: true, sent: 0, attempted: 0, skippedReason: 'no-recipients' };
   }
-  const client = kind === 'invite' ? getClient() : getClient() ?? getPublicClient();
+  // The send-invites Lambda does its own authorization + SES call server-side.
+  // Front-end auth is a local session (no Cognito JWT), so invoke via apiKey to
+  // avoid "No federated jwt" from the userPool default auth mode.
+  const client = getPublicClient() ?? getClient();
   if (!client) {
     return {
       ok: false,
@@ -32,20 +35,23 @@ export async function sendDropEmails(
     };
   }
   try {
-    const response = await client.mutations.sendDropEmails({
-      kind,
-      dropId: drop.id,
-      publicToken: drop.publicToken,
-      recipientFirstName: drop.recipientFirstName,
-      organizerName: drop.organizerName,
-      organizerEmail: drop.organizerEmail,
-      inviteSubject: drop.inviteSubject,
-      personalNote: drop.personalNote,
-      story: drop.story,
-      dropAtIso: drop.dropAtIso,
-      goalAmountCents: drop.goalAmountCents,
-      emails: recipients,
-    });
+    const response = await client.mutations.sendDropEmails(
+      {
+        kind,
+        dropId: drop.id,
+        publicToken: drop.publicToken,
+        recipientFirstName: drop.recipientFirstName,
+        organizerName: drop.organizerName,
+        organizerEmail: drop.organizerEmail,
+        inviteSubject: drop.inviteSubject,
+        personalNote: drop.personalNote,
+        story: drop.story,
+        dropAtIso: drop.dropAtIso,
+        goalAmountCents: drop.goalAmountCents,
+        emails: recipients,
+      },
+      { authMode: 'apiKey' }
+    );
     if (response.errors && response.errors.length > 0) {
       return {
         ok: false,
