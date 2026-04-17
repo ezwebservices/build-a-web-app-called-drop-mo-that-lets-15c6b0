@@ -1,0 +1,148 @@
+{
+  "site": {
+    "name": "Drop",
+    "product": "Drop-mo",
+    "domain": "drop-mo.com",
+    "tagline": "Rally the group. Surprise the one.",
+    "description": "Drop is the easiest way to coordinate a surprise Venmo flood for a friend or family member going through it. Everyone pledges in private, then sends at the same moment on drop day — so the recipient just experiences a wave of love hitting their phone, with no idea it was organized.",
+    "shortDescription": "Coordinate a surprise Venmo flood for someone you love. They never see it coming.",
+    "language": "en-US"
+  },
+  "openGraph": {
+    "type": "website",
+    "title": "Drop — Rally the group. Surprise the one.",
+    "description": "Coordinate a surprise Venmo flood for a friend or family member going through it. Everyone pledges in private, sends at the same moment on drop day. The recipient never knows it was organized.",
+    "image": "/og/drop-og.png",
+    "imageAlt": "Drop — a wave of Venmos landing on a phone screen",
+    "siteName": "Drop"
+  },
+  "twitter": {
+    "card": "summary_large_image",
+    "title": "Drop — Rally the group. Surprise the one.",
+    "description": "Surprise Venmo coordination for someone going through it. They feel the love. They never see it coming.",
+    "image": "/og/drop-twitter.png"
+  },
+  "primaryKeywords": [
+    "surprise venmo",
+    "group venmo",
+    "coordinate venmo payments",
+    "surprise gift money",
+    "anonymous group gift",
+    "rally friends to help",
+    "send money together",
+    "venmo flash mob",
+    "group fundraiser without gofundme",
+    "surprise money drop"
+  ],
+  "secondaryKeywords": [
+    "help a friend with medical bills",
+    "help a friend who lost their job",
+    "private group fundraiser",
+    "venmo group payment app",
+    "send money at the same time",
+    "group gift venmo",
+    "surprise donation",
+    "coordinated giving app",
+    "money wave for a friend",
+    "alternative to gofundme",
+    "alternative to group spreadsheet"
+  ],
+  "longTailKeywords": [
+    "how to organize a surprise venmo for a friend",
+    "how to send money to a friend without them knowing it was organized",
+    "best way to rally friends to send money to one person",
+    "app to coordinate venmo payments at the same time",
+    "private way to help a friend financially without gofundme",
+    "surprise birthday money drop venmo",
+    "how to do a venmo flash mob for a sick friend"
+  ],
+  "pages": [
+    {
+      "path": "/",
+      "title": "Drop — Rally the group. Surprise the one.",
+      "description": "Coordinate a surprise Venmo flood for someone you love. Everyone pledges in private, sends at the same moment on drop day. The recipient never sees it coming.",
+      "h1": "Rally the group. Surprise the one.",
+      "keywords": ["surprise venmo", "group venmo", "coordinated giving"]
+    },
+    {
+      "path": "/how-it-works",
+      "title": "How Drop works — surprise Venmo coordination in 4 steps",
+      "description": "Start a private drop, invite the crew, set drop day, and on the morning of, everyone hits send on Venmo at the same time. Here's the whole flow.",
+      "h1": "How a drop works",
+      "keywords": ["how to coordinate venmo payments", "group venmo app"]
+    },
+    {
+      "path": "/why-not-gofundme",
+      "title": "Why Drop isn't a GoFundMe — and when each one is right",
+      "description": "GoFundMe is public, slow, and kills the surprise. Drop is private, peer-to-peer Venmo, and built so the recipient never knows it was organized.",
+      "h1": "Why Drop isn't a GoFundMe",
+      "keywords": ["alternative to gofundme", "private group fundraiser", "gofundme vs venmo"]
+    },
+    {
+      "path": "/use-cases",
+      "title": "When to use Drop — real moments people have rallied for",
+      "description": "Medical bills, layoffs, basement floods, a friend who would never ask. Drop is for the moments a GoFundMe would feel wrong.",
+      "h1": "When to start a drop",
+      "keywords": ["help a friend financially", "surprise gift money", "rally friends to help"]
+    },
+    {
+      "path": "/privacy",
+      "title": "Privacy — the recipient never sees Drop",
+      "description": "Drop never contacts the recipient. No account, no notification, no data. Contributor links are unguessable. The surprise is the whole product.",
+      "h1": "How we protect the surprise",
+      "keywords": ["private group gift", "anonymous group venmo"]
+    }
+  ],
+  "schema": {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Drop",
+    "alternateName": "Drop-mo",
+    "applicationCategory": "SocialNetworkingApplication",
+    "operatingSystem": "Web",
+    "description": "Coordinate a surprise Venmo flood for a friend or family member going through it. Private pledges, simultaneous drop day, recipient never knows.",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    },
+    "creator": {
+      "@type": "Organization",
+      "name": "Drop"
+    }
+  },
+  "faq": [
+    {
+      "q": "Does the recipient know about Drop?",
+      "a": "No. The recipient never has an account, never gets an email from Drop, and never sees the app. The surprise is the whole point."
+    },
+    {
+      "q": "Does Drop hold the money?",
+      "a": "No. Money flows directly Venmo-to-Venmo from each contributor to the recipient. We never touch the funds."
+    },
+    {
+      "q": "Is Drop free?",
+      "a": "Yes, during our launch period."
+    },
+    {
+      "q": "What if someone doesn't send their pledge on drop day?",
+      "a": "Pledges are honor-system, just like a group chat. The organizer can nudge anyone whose pledge hasn't landed."
+    },
+    {
+      "q": "How is this different from a GoFundMe?",
+      "a": "GoFundMe is public, takes a cut, and shows the recipient the running total. Drop is private, peer-to-peer, and engineered so the recipient experiences a spontaneous-feeling wave of Venmos with no idea it was coordinated."
+    }
+  ],
+  "robots": {
+    "index": true,
+    "follow": true,
+    "noindexPaths": ["/d/*", "/dashboard", "/dashboard/*", "/api/*"]
+  },
+  "sitemap": [
+    "/",
+    "/how-it-works",
+    "/why-not-gofundme",
+    "/use-cases",
+    "/privacy"
+  ]
+}

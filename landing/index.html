@@ -1,0 +1,492 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Drop — Rally the group. Surprise the one.</title>
+<meta name="description" content="Drop is the easiest way to coordinate a surprise Venmo flood for a friend or family member going through it. Everyone pledges in private, then sends at the same moment on drop day." />
+<meta name="theme-color" content="#0FB5BA" />
+<link rel="canonical" href="https://drop-mo.app/" />
+
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="Drop" />
+<meta property="og:title" content="Drop — Rally the group. Surprise the one." />
+<meta property="og:description" content="Coordinate a surprise Venmo drop for someone you love. They feel the love. They never see it coming." />
+<meta property="og:url" content="https://drop-mo.app/" />
+<meta property="og:image" content="/og-image.svg" />
+
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Drop — Rally the group. Surprise the one." />
+<meta name="twitter:description" content="Coordinate a surprise Venmo drop for someone you love. They feel the love. They never see it coming." />
+<meta name="twitter:image" content="/og-image.svg" />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        fontFamily: { sans: ['Inter','system-ui','sans-serif'] },
+        colors: {
+          splash:     '#0FB5BA',
+          splashDeep: '#0A8A8E',
+          splashSoft: '#7AE0E3',
+          surprise:   '#FF6F61',
+          sunrise:    '#FFD166',
+          ink:        '#0E1B26',
+          slate2:     '#52606D',
+          mist:       '#E6F4F5',
+          paper:      '#FBFCFD',
+          borderc:    '#D9E2EC',
+          success:    '#2FB57E',
+        },
+        boxShadow: {
+          drop: '0 20px 60px -20px rgba(15,181,186,0.45)',
+          card: '0 10px 40px -20px rgba(14,27,38,0.25)',
+        },
+        animation: {
+          float:  'float 6s ease-in-out infinite',
+          ripple: 'ripple 2.8s ease-out infinite',
+          ticker: 'ticker 20s linear infinite',
+          pop:    'pop 0.6s ease-out both',
+        },
+        keyframes: {
+          float:  { '0%,100%': { transform: 'translateY(0)' }, '50%': { transform: 'translateY(-10px)' } },
+          ripple: { '0%':   { transform: 'scale(0.6)', opacity: '0.6' },
+                    '100%': { transform: 'scale(2.4)', opacity: '0' } },
+          ticker: { '0%':   { transform: 'translateX(0)' },
+                    '100%': { transform: 'translateX(-50%)' } },
+          pop:    { '0%':   { transform: 'scale(0.9)', opacity: '0' },
+                    '100%': { transform: 'scale(1)',   opacity: '1' } },
+        },
+      },
+    },
+  };
+</script>
+
+<style>
+  html { scroll-behavior: smooth; }
+  body { font-family: 'Inter', system-ui, sans-serif; background: #FBFCFD; color: #0E1B26; -webkit-font-smoothing: antialiased; }
+  .hero-bg {
+    background:
+      radial-gradient(1000px 600px at 85% -10%, rgba(122,224,227,0.35), transparent 60%),
+      radial-gradient(700px 500px at -10% 30%, rgba(255,111,97,0.12), transparent 60%),
+      linear-gradient(180deg, #FBFCFD 0%, #E6F4F5 100%);
+  }
+  .grad-text {
+    background: linear-gradient(90deg, #0FB5BA 0%, #0A8A8E 60%, #FF6F61 120%);
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  .dotgrid {
+    background-image: radial-gradient(#D9E2EC 1px, transparent 1px);
+    background-size: 22px 22px;
+  }
+  .chip { display:inline-flex; align-items:center; gap:.5rem; padding:.35rem .75rem; border-radius:999px; font-weight:600; font-size:.78rem; letter-spacing:.02em; }
+</style>
+</head>
+<body class="antialiased">
+
+<!-- NAV -->
+<header class="sticky top-0 z-40 backdrop-blur bg-paper/75 border-b border-borderc/70">
+  <div class="max-w-6xl mx-auto px-5 sm:px-8 h-16 flex items-center justify-between">
+    <a href="#top" class="flex items-center gap-2 group">
+      <svg viewBox="0 0 64 64" class="w-8 h-8" aria-hidden="true">
+        <defs>
+          <linearGradient id="lg" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#7AE0E3"/><stop offset="100%" stop-color="#0FB5BA"/>
+          </linearGradient>
+        </defs>
+        <path d="M32 4 C32 4 8 30 8 46 a24 24 0 0 0 48 0 C56 30 32 4 32 4 Z" fill="url(#lg)"/>
+        <path d="M32 52 L32 28 M24 36 L32 28 L40 36" stroke="#FBFCFD" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+      </svg>
+      <span class="text-xl font-extrabold tracking-tight">drop<span class="text-surprise">.</span></span>
+    </a>
+    <nav class="hidden md:flex items-center gap-8 text-sm font-medium text-slate2">
+      <a href="#how" class="hover:text-ink">How it works</a>
+      <a href="#features" class="hover:text-ink">Features</a>
+      <a href="#story" class="hover:text-ink">Why Drop</a>
+      <a href="#faq" class="hover:text-ink">FAQ</a>
+    </nav>
+    <div class="flex items-center gap-2">
+      <a href="#cta" class="hidden sm:inline-flex items-center px-4 h-10 rounded-full text-sm font-semibold text-ink hover:bg-mist">Sign in</a>
+      <a href="#cta" class="inline-flex items-center px-4 h-10 rounded-full text-sm font-semibold bg-ink text-paper hover:bg-splashDeep transition">Start a drop</a>
+    </div>
+  </div>
+</header>
+
+<main id="top">
+
+<!-- HERO -->
+<section class="hero-bg relative overflow-hidden">
+  <div class="max-w-6xl mx-auto px-5 sm:px-8 pt-16 pb-24 md:pt-24 md:pb-32 grid md:grid-cols-2 gap-12 items-center">
+    <div>
+      <span class="chip bg-mist text-splashDeep border border-splash/20">
+        <span class="w-2 h-2 rounded-full bg-surprise"></span>
+        The surprise IS the product
+      </span>
+      <h1 class="mt-5 text-5xl sm:text-6xl md:text-7xl font-black tracking-tight leading-[1.02]">
+        Rally the group.<br/>
+        <span class="grad-text">Surprise the one.</span>
+      </h1>
+      <p class="mt-6 text-lg md:text-xl text-slate2 max-w-xl leading-relaxed">
+        Drop is how you coordinate a surprise Venmo flood for someone going through it.
+        Everyone pledges in private. On drop day, the phone lights up all at once.
+      </p>
+      <div class="mt-8 flex flex-wrap gap-3">
+        <a href="#cta" class="inline-flex items-center gap-2 px-6 h-12 rounded-full bg-splash text-paper font-semibold shadow-drop hover:bg-splashDeep transition">
+          Start a drop — free
+          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+        </a>
+        <a href="#how" class="inline-flex items-center gap-2 px-6 h-12 rounded-full bg-paper border border-borderc text-ink font-semibold hover:bg-mist transition">
+          See how it works
+        </a>
+      </div>
+      <div class="mt-8 flex items-center gap-4 text-sm text-slate2">
+        <div class="flex -space-x-2">
+          <span class="w-8 h-8 rounded-full bg-splash border-2 border-paper grid place-items-center text-paper text-xs font-bold">MK</span>
+          <span class="w-8 h-8 rounded-full bg-surprise border-2 border-paper grid place-items-center text-paper text-xs font-bold">JL</span>
+          <span class="w-8 h-8 rounded-full bg-sunrise border-2 border-paper grid place-items-center text-ink text-xs font-bold">AP</span>
+          <span class="w-8 h-8 rounded-full bg-success border-2 border-paper grid place-items-center text-paper text-xs font-bold">SR</span>
+        </div>
+        <span>Recipient never knows. That's the whole point.</span>
+      </div>
+    </div>
+
+    <!-- hero card -->
+    <div class="relative">
+      <div class="absolute -top-8 -right-6 w-64 h-64 rounded-full bg-splashSoft/40 blur-3xl"></div>
+      <div class="absolute -bottom-8 -left-6 w-64 h-64 rounded-full bg-surprise/20 blur-3xl"></div>
+
+      <div class="relative bg-paper rounded-3xl border border-borderc shadow-card p-6 md:p-7 animate-float">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-2">
+            <span class="w-2.5 h-2.5 rounded-full bg-surprise"></span>
+            <span class="text-xs font-semibold tracking-wide uppercase text-slate2">Drop day · 9:00 AM</span>
+          </div>
+          <span class="chip bg-mist text-splashDeep text-[11px]">Private</span>
+        </div>
+        <h3 class="mt-3 text-2xl font-extrabold">For Maya 💙</h3>
+        <p class="text-sm text-slate2 mt-1">Basement flooded last week. Let's pull this off.</p>
+
+        <div class="mt-5">
+          <div class="flex items-end justify-between">
+            <div>
+              <div class="text-3xl font-black tracking-tight">$2,840</div>
+              <div class="text-xs text-slate2">pledged of $3,000 goal</div>
+            </div>
+            <div class="text-right">
+              <div class="text-sm font-semibold text-success">24 in</div>
+              <div class="text-xs text-slate2">of 31 invited</div>
+            </div>
+          </div>
+          <div class="mt-3 h-2.5 w-full rounded-full bg-mist overflow-hidden">
+            <div class="h-full rounded-full bg-gradient-to-r from-splash to-splashSoft" style="width:94%"></div>
+          </div>
+        </div>
+
+        <ul class="mt-5 space-y-2.5">
+          <li class="flex items-center justify-between text-sm">
+            <div class="flex items-center gap-2.5">
+              <span class="w-7 h-7 rounded-full bg-splash text-paper grid place-items-center text-[11px] font-bold">JL</span>
+              <span class="font-medium">Jordan L.</span>
+              <span class="text-slate2 hidden sm:inline">“sending love”</span>
+            </div>
+            <span class="font-semibold">$50</span>
+          </li>
+          <li class="flex items-center justify-between text-sm">
+            <div class="flex items-center gap-2.5">
+              <span class="w-7 h-7 rounded-full bg-surprise text-paper grid place-items-center text-[11px] font-bold">AP</span>
+              <span class="font-medium">Ava P.</span>
+              <span class="text-slate2 hidden sm:inline">“anonymous note”</span>
+            </div>
+            <span class="font-semibold">$120</span>
+          </li>
+          <li class="flex items-center justify-between text-sm">
+            <div class="flex items-center gap-2.5">
+              <span class="w-7 h-7 rounded-full bg-sunrise text-ink grid place-items-center text-[11px] font-bold">SR</span>
+              <span class="font-medium">Sam R.</span>
+              <span class="text-slate2 hidden sm:inline">“you got this”</span>
+            </div>
+            <span class="font-semibold">$200</span>
+          </li>
+        </ul>
+
+        <div class="mt-5 p-3 rounded-2xl bg-mist border border-splash/20 flex items-center gap-3">
+          <div class="relative w-9 h-9 shrink-0">
+            <span class="absolute inset-0 rounded-full bg-splash/40 animate-ripple"></span>
+            <span class="relative w-9 h-9 rounded-full bg-splash grid place-items-center text-paper">
+              <svg viewBox="0 0 24 24" class="w-4 h-4" fill="currentColor"><path d="M12 2s-7 8-7 13a7 7 0 0 0 14 0c0-5-7-13-7-13z"/></svg>
+            </span>
+          </div>
+          <div class="text-sm">
+            <div class="font-semibold">New pledge · 12s ago</div>
+            <div class="text-slate2">Tae M. just joined the drop</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ticker -->
+  <div class="border-y border-borderc bg-paper/70">
+    <div class="overflow-hidden py-3">
+      <div class="flex gap-10 whitespace-nowrap animate-ticker w-max text-sm font-semibold text-slate2">
+        <span class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-splash"></span>“Pull it off.”</span>
+        <span class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-surprise"></span>Basement floods</span>
+        <span class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-sunrise"></span>Medical bills</span>
+        <span class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-splash"></span>Job loss</span>
+        <span class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-success"></span>Unexpected moves</span>
+        <span class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-surprise"></span>New baby chaos</span>
+        <span class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-splash"></span>Vet emergencies</span>
+        <span class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-sunrise"></span>Funeral costs</span>
+        <!-- duplicate for seamless loop -->
+        <span class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-splash"></span>“Pull it off.”</span>
+        <span class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-surprise"></span>Basement floods</span>
+        <span class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-sunrise"></span>Medical bills</span>
+        <span class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-splash"></span>Job loss</span>
+        <span class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-success"></span>Unexpected moves</span>
+        <span class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-surprise"></span>New baby chaos</span>
+        <span class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-splash"></span>Vet emergencies</span>
+        <span class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-sunrise"></span>Funeral costs</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section id="how" class="relative py-24 md:py-32">
+  <div class="max-w-6xl mx-auto px-5 sm:px-8">
+    <div class="max-w-2xl">
+      <span class="chip bg-mist text-splashDeep border border-splash/20">How it works</span>
+      <h2 class="mt-4 text-4xl md:text-5xl font-black tracking-tight">Three steps. Zero suspicion.</h2>
+      <p class="mt-4 text-lg text-slate2">It's a group chat that turns into a wave of Venmos hitting their phone at the same moment. No donation page. No public shame. Just friends pulling something off together.</p>
+    </div>
+
+    <ol class="mt-14 grid md:grid-cols-3 gap-6">
+      <li class="relative bg-paper rounded-3xl border border-borderc p-7 shadow-card">
+        <span class="absolute -top-4 left-7 px-3 py-1 rounded-full bg-ink text-paper text-xs font-bold tracking-wide">STEP 01</span>
+        <div class="w-12 h-12 rounded-2xl bg-mist grid place-items-center text-splashDeep">
+          <svg viewBox="0 0 24 24" class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20l9-9-9-9-9 9 9 9z"/><path d="M12 12v4"/></svg>
+        </div>
+        <h3 class="mt-4 text-xl font-extrabold">Start a drop</h3>
+        <p class="mt-2 text-slate2 leading-relaxed">Add their first name, their Venmo handle, a short story, and a drop day. That's the whole setup.</p>
+      </li>
+      <li class="relative bg-paper rounded-3xl border border-borderc p-7 shadow-card">
+        <span class="absolute -top-4 left-7 px-3 py-1 rounded-full bg-ink text-paper text-xs font-bold tracking-wide">STEP 02</span>
+        <div class="w-12 h-12 rounded-2xl bg-mist grid place-items-center text-splashDeep">
+          <svg viewBox="0 0 24 24" class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16v12H4z"/><path d="M4 6l8 7 8-7"/></svg>
+        </div>
+        <h3 class="mt-4 text-xl font-extrabold">Rally the crew</h3>
+        <p class="mt-2 text-slate2 leading-relaxed">Paste in emails. We send a branded invite with a live progress image. Friends pledge in 30 seconds — no account required.</p>
+      </li>
+      <li class="relative bg-paper rounded-3xl border border-borderc p-7 shadow-card">
+        <span class="absolute -top-4 left-7 px-3 py-1 rounded-full bg-surprise text-paper text-xs font-bold tracking-wide">DROP DAY</span>
+        <div class="w-12 h-12 rounded-2xl grid place-items-center text-paper" style="background:linear-gradient(135deg,#FF6F61,#FFD166)">
+          <svg viewBox="0 0 24 24" class="w-6 h-6" fill="currentColor"><path d="M12 2s-7 8-7 13a7 7 0 0 0 14 0c0-5-7-13-7-13z"/></svg>
+        </div>
+        <h3 class="mt-4 text-xl font-extrabold">The wave lands</h3>
+        <p class="mt-2 text-slate2 leading-relaxed">At the scheduled minute, everyone gets a pre-filled Venmo link. They tap send. The recipient's phone erupts.</p>
+      </li>
+    </ol>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section id="features" class="relative py-24 md:py-32 bg-mist/60 border-y border-borderc">
+  <div class="absolute inset-0 dotgrid opacity-40 pointer-events-none"></div>
+  <div class="relative max-w-6xl mx-auto px-5 sm:px-8">
+    <div class="flex items-end justify-between flex-wrap gap-6">
+      <div class="max-w-2xl">
+        <span class="chip bg-paper text-splashDeep border border-splash/20">Built for the surprise</span>
+        <h2 class="mt-4 text-4xl md:text-5xl font-black tracking-tight">Every detail protects the moment.</h2>
+      </div>
+      <p class="text-slate2 max-w-md">We designed Drop the way you'd plan a surprise party in a group chat — fast, quiet, and impossible to ruin.</p>
+    </div>
+
+    <div class="mt-14 grid md:grid-cols-2 lg:grid-cols-3 gap-5">
+      <article class="bg-paper rounded-3xl border border-borderc p-7 hover:shadow-card transition">
+        <div class="w-11 h-11 rounded-2xl bg-splash/10 grid place-items-center text-splashDeep">
+          <svg viewBox="0 0 24 24" class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1l3 6 6 .9-4.5 4.3 1 6.3L12 15.8 6.5 18.5l1-6.3L3 7.9 9 7z"/></svg>
+        </div>
+        <h3 class="mt-4 text-lg font-extrabold">Private by design</h3>
+        <p class="mt-2 text-slate2 text-sm leading-relaxed">Unguessable links, no public pages, no search listings. The recipient can't stumble into it.</p>
+      </article>
+      <article class="bg-paper rounded-3xl border border-borderc p-7 hover:shadow-card transition">
+        <div class="w-11 h-11 rounded-2xl bg-surprise/10 grid place-items-center text-surprise">
+          <svg viewBox="0 0 24 24" class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+        </div>
+        <h3 class="mt-4 text-lg font-extrabold">Synchronized drop</h3>
+        <p class="mt-2 text-slate2 text-sm leading-relaxed">Pick a minute. We email everyone a one-tap Venmo link exactly when it's go time. Timezone-aware.</p>
+      </article>
+      <article class="bg-paper rounded-3xl border border-borderc p-7 hover:shadow-card transition">
+        <div class="w-11 h-11 rounded-2xl bg-sunrise/20 grid place-items-center text-ink">
+          <svg viewBox="0 0 24 24" class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h4l3-8 4 16 3-8h4"/></svg>
+        </div>
+        <h3 class="mt-4 text-lg font-extrabold">Live progress, in email</h3>
+        <p class="mt-2 text-slate2 text-sm leading-relaxed">Branded invites with a progress image that regenerates every time someone opens them. No stale counts.</p>
+      </article>
+      <article class="bg-paper rounded-3xl border border-borderc p-7 hover:shadow-card transition">
+        <div class="w-11 h-11 rounded-2xl bg-splash/10 grid place-items-center text-splashDeep">
+          <svg viewBox="0 0 24 24" class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2"/><circle cx="10" cy="7" r="4"/><path d="M21 21v-2a4 4 0 0 0-3-3.9"/><path d="M16 3.1a4 4 0 0 1 0 7.8"/></svg>
+        </div>
+        <h3 class="mt-4 text-lg font-extrabold">Zero friction for friends</h3>
+        <p class="mt-2 text-slate2 text-sm leading-relaxed">Contributors don't sign up. They pledge on a single scroll, then get the Venmo link on drop day.</p>
+      </article>
+      <article class="bg-paper rounded-3xl border border-borderc p-7 hover:shadow-card transition">
+        <div class="w-11 h-11 rounded-2xl bg-success/10 grid place-items-center text-success">
+          <svg viewBox="0 0 24 24" class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+        </div>
+        <h3 class="mt-4 text-lg font-extrabold">"I sent it" tracking</h3>
+        <p class="mt-2 text-slate2 text-sm leading-relaxed">See who sent, who pledged, who needs a nudge — without the recipient ever hearing about it.</p>
+      </article>
+      <article class="bg-paper rounded-3xl border border-borderc p-7 hover:shadow-card transition">
+        <div class="w-11 h-11 rounded-2xl bg-surprise/10 grid place-items-center text-surprise">
+          <svg viewBox="0 0 24 24" class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7h18M6 7V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v2M6 7l1 13a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-13"/></svg>
+        </div>
+        <h3 class="mt-4 text-lg font-extrabold">Postpone or cancel</h3>
+        <p class="mt-2 text-slate2 text-sm leading-relaxed">Life shifts. Move the drop day with one click and everyone is re-notified automatically.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- STORY -->
+<section id="story" class="py-24 md:py-32">
+  <div class="max-w-6xl mx-auto px-5 sm:px-8 grid md:grid-cols-5 gap-12 items-center">
+    <div class="md:col-span-2 relative">
+      <div class="aspect-square rounded-3xl bg-gradient-to-br from-splashSoft to-splash p-8 text-paper shadow-drop relative overflow-hidden">
+        <div class="absolute -top-10 -right-10 w-48 h-48 rounded-full bg-paper/20 blur-2xl"></div>
+        <div class="absolute bottom-4 left-6 right-6">
+          <div class="text-xs font-bold uppercase tracking-widest opacity-80">Origin</div>
+          <p class="mt-2 text-2xl font-extrabold leading-tight">“A friend's basement flooded. I didn't want a GoFundMe. I wanted a wave.”</p>
+        </div>
+        <svg viewBox="0 0 64 64" class="w-16 h-16" aria-hidden="true">
+          <path d="M32 4 C32 4 8 30 8 46 a24 24 0 0 0 48 0 C56 30 32 4 32 4 Z" fill="rgba(255,255,255,0.95)"/>
+          <path d="M32 52 L32 28 M24 36 L32 28 L40 36" stroke="#0FB5BA" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+        </svg>
+      </div>
+    </div>
+    <div class="md:col-span-3">
+      <span class="chip bg-mist text-splashDeep border border-splash/20">Why Drop</span>
+      <h2 class="mt-4 text-4xl md:text-5xl font-black tracking-tight">The fix isn't a donation page.</h2>
+      <p class="mt-5 text-lg text-slate2 leading-relaxed">Charity platforms make people feel like a case file. Group texts fizzle. Drop is the in-between — a quiet, coordinated surprise that arrives as generosity, not logistics.</p>
+      <ul class="mt-6 space-y-3 text-ink">
+        <li class="flex gap-3"><span class="w-6 h-6 rounded-full bg-splash text-paper grid place-items-center text-xs font-bold shrink-0">1</span><span>No public page. No screenshots the recipient can stumble into.</span></li>
+        <li class="flex gap-3"><span class="w-6 h-6 rounded-full bg-splash text-paper grid place-items-center text-xs font-bold shrink-0">2</span><span>Money moves person-to-person on Venmo. Drop never touches it.</span></li>
+        <li class="flex gap-3"><span class="w-6 h-6 rounded-full bg-splash text-paper grid place-items-center text-xs font-bold shrink-0">3</span><span>When drop day hits, it feels spontaneous. That's the magic.</span></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section id="cta" class="relative py-24 md:py-32">
+  <div class="max-w-5xl mx-auto px-5 sm:px-8">
+    <div class="relative overflow-hidden rounded-[2rem] p-10 md:p-16 text-paper shadow-drop"
+         style="background: radial-gradient(900px 500px at 20% 0%, #7AE0E3 0%, transparent 50%), linear-gradient(135deg, #0A8A8E 0%, #0FB5BA 60%, #FF6F61 130%);">
+      <div class="absolute -top-16 -right-16 w-72 h-72 rounded-full bg-paper/10 blur-2xl"></div>
+      <div class="absolute -bottom-16 -left-16 w-72 h-72 rounded-full bg-surprise/30 blur-2xl"></div>
+      <div class="relative grid md:grid-cols-5 gap-10 items-center">
+        <div class="md:col-span-3">
+          <span class="chip bg-paper/15 text-paper border border-paper/30">Free while we're in beta</span>
+          <h2 class="mt-4 text-4xl md:text-5xl font-black tracking-tight leading-[1.05]">Pull it off this week.</h2>
+          <p class="mt-4 text-paper/85 text-lg max-w-lg">Start a drop in under two minutes. Invite the crew tonight. Send the wave whenever you're ready.</p>
+        </div>
+        <div class="md:col-span-2">
+          <form class="bg-paper rounded-2xl p-4 shadow-card border border-paper/40" onsubmit="event.preventDefault(); this.querySelector('button').textContent='Check your inbox ✓';">
+            <label class="text-xs font-semibold text-slate2 uppercase tracking-wide">Your email</label>
+            <input required type="email" placeholder="you@gmail.com" class="mt-1 w-full h-12 rounded-xl border border-borderc px-4 text-ink placeholder:text-slate2/70 focus:outline-none focus:ring-2 focus:ring-splash" />
+            <button class="mt-3 w-full h-12 rounded-xl bg-ink text-paper font-semibold hover:bg-splashDeep transition">Start a drop — free</button>
+            <p class="mt-2 text-[11px] text-slate2 text-center">No credit card. Recipients never get a login. Ever.</p>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section id="faq" class="pb-24 md:pb-32">
+  <div class="max-w-3xl mx-auto px-5 sm:px-8">
+    <h2 class="text-3xl md:text-4xl font-black tracking-tight text-center">Questions the crew asks</h2>
+    <div class="mt-10 divide-y divide-borderc rounded-3xl border border-borderc bg-paper overflow-hidden">
+      <details class="group p-6" open>
+        <summary class="flex items-center justify-between cursor-pointer list-none">
+          <span class="font-semibold">Does Drop handle the money?</span>
+          <span class="text-slate2 group-open:rotate-45 transition">+</span>
+        </summary>
+        <p class="mt-3 text-slate2 leading-relaxed">No. Money moves directly friend-to-recipient via Venmo. Drop coordinates the timing and delivers a pre-filled deep link so it happens in sync.</p>
+      </details>
+      <details class="group p-6">
+        <summary class="flex items-center justify-between cursor-pointer list-none">
+          <span class="font-semibold">Will the recipient find out?</span>
+          <span class="text-slate2 group-open:rotate-45 transition">+</span>
+        </summary>
+        <p class="mt-3 text-slate2 leading-relaxed">Not from us. Drop never emails them, never lists the page publicly, and uses unguessable links. Only invitees can see the drop.</p>
+      </details>
+      <details class="group p-6">
+        <summary class="flex items-center justify-between cursor-pointer list-none">
+          <span class="font-semibold">Do contributors need an account?</span>
+          <span class="text-slate2 group-open:rotate-45 transition">+</span>
+        </summary>
+        <p class="mt-3 text-slate2 leading-relaxed">Nope. They click the invite, pledge in 30 seconds, and get the Venmo link on drop day. Only organizers sign in.</p>
+      </details>
+      <details class="group p-6">
+        <summary class="flex items-center justify-between cursor-pointer list-none">
+          <span class="font-semibold">What if someone can't send on drop day?</span>
+          <span class="text-slate2 group-open:rotate-45 transition">+</span>
+        </summary>
+        <p class="mt-3 text-slate2 leading-relaxed">Their pledge waits. They can open the email later and still send with one tap — the wave just has a few stragglers, which is fine.</p>
+      </details>
+      <details class="group p-6">
+        <summary class="flex items-center justify-between cursor-pointer list-none">
+          <span class="font-semibold">Can I postpone the drop?</span>
+          <span class="text-slate2 group-open:rotate-45 transition">+</span>
+        </summary>
+        <p class="mt-3 text-slate2 leading-relaxed">Yes. Edit the drop day any time before it fires and everyone is automatically re-notified.</p>
+      </details>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- FOOTER -->
+<footer class="border-t border-borderc bg-paper">
+  <div class="max-w-6xl mx-auto px-5 sm:px-8 py-10 flex flex-col md:flex-row items-center justify-between gap-6">
+    <div class="flex items-center gap-2">
+      <svg viewBox="0 0 64 64" class="w-7 h-7" aria-hidden="true">
+        <defs><linearGradient id="fg" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#7AE0E3"/><stop offset="100%" stop-color="#0FB5BA"/></linearGradient></defs>
+        <path d="M32 4 C32 4 8 30 8 46 a24 24 0 0 0 48 0 C56 30 32 4 32 4 Z" fill="url(#fg)"/>
+        <path d="M32 52 L32 28 M24 36 L32 28 L40 36" stroke="#FBFCFD" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+      </svg>
+      <span class="font-extrabold">drop<span class="text-surprise">.</span></span>
+      <span class="text-slate2 text-sm ml-2">Rally the group. Surprise the one.</span>
+    </div>
+    <div class="flex items-center gap-6 text-sm text-slate2">
+      <a href="#how" class="hover:text-ink">How it works</a>
+      <a href="#features" class="hover:text-ink">Features</a>
+      <a href="#faq" class="hover:text-ink">FAQ</a>
+      <a href="#cta" class="hover:text-ink">Start a drop</a>
+    </div>
+    <div class="text-xs text-slate2">© <span id="yr"></span> Drop. Not affiliated with Venmo.</div>
+  </div>
+</footer>
+
+<script>document.getElementById('yr').textContent = new Date().getFullYear();</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "Drop",
+  "alternateName": "Drop-mo",
+  "url": "https://drop-mo.app/",
+  "description": "Coordinate a surprise Venmo drop for a friend or family member going through it. Everyone pledges in private and sends on drop day."
+}
+</script>
+</body>
+</html>

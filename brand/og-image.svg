@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630" role="img" aria-label="Drop — Rally the group. Surprise the one.">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0FB5BA"/>
+      <stop offset="100%" stop-color="#0A8A8E"/>
+    </linearGradient>
+    <linearGradient id="dropGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.95"/>
+      <stop offset="100%" stop-color="#E6F4F5" stop-opacity="0.85"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#FFD166" stop-opacity="0.35"/>
+      <stop offset="100%" stop-color="#FFD166" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <circle cx="950" cy="180" r="320" fill="url(#glow)"/>
+
+  <!-- decorative falling drops -->
+  <g opacity="0.18" fill="#FFFFFF">
+    <path d="M120 80 c0 0 -18 22 -18 36 a18 18 0 0 0 36 0 C138 102 120 80 120 80 Z"/>
+    <path d="M1050 470 c0 0 -14 18 -14 28 a14 14 0 0 0 28 0 C1064 488 1050 470 1050 470 Z"/>
+    <path d="M200 520 c0 0 -10 14 -10 22 a10 10 0 0 0 20 0 C210 534 200 520 200 520 Z"/>
+    <path d="M1080 110 c0 0 -10 14 -10 22 a10 10 0 0 0 20 0 C1090 124 1080 110 1080 110 Z"/>
+  </g>
+
+  <!-- big drop mark -->
+  <g transform="translate(80,170)">
+    <path d="M110 0 C110 0 0 110 0 180 a110 110 0 0 0 220 0 C220 110 110 0 110 0 Z"
+          fill="url(#dropGrad)"/>
+    <path d="M110 230 L110 110 M75 145 L110 110 L145 145"
+          stroke="#0A8A8E" stroke-width="14" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  </g>
+
+  <!-- copy -->
+  <g font-family="Inter, system-ui, sans-serif" fill="#FFFFFF">
+    <text x="380" y="270" font-size="120" font-weight="800" letter-spacing="-4">drop<tspan fill="#FF6F61">.</tspan></text>
+    <text x="384" y="350" font-size="44" font-weight="600" opacity="0.95">Rally the group. Surprise the one.</text>
+    <text x="384" y="420" font-size="28" font-weight="400" opacity="0.85">Coordinate a surprise Venmo drop for someone</text>
+    <text x="384" y="458" font-size="28" font-weight="400" opacity="0.85">going through it. They never see it coming.</text>
+  </g>
+
+  <!-- footer chip -->
+  <g transform="translate(80,540)">
+    <rect width="260" height="56" rx="28" fill="#FF6F61"/>
+    <text x="130" y="36" font-family="Inter, system-ui, sans-serif" font-size="22" font-weight="700" fill="#FFFFFF" text-anchor="middle">Start a drop →</text>
+  </g>
+</svg>

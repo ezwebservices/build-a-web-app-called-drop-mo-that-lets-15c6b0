@@ -1,0 +1,70 @@
+{
+  "name": "Drop",
+  "description": "Hype but considerate. Group-chat warmth, not charity-platform sterility.",
+  "palette": {
+    "splash": {
+      "hex": "#0FB5BA",
+      "role": "primary",
+      "usage": "Logo, primary buttons, links, progress fill"
+    },
+    "splashDeep": {
+      "hex": "#0A8A8E",
+      "role": "primary-dark",
+      "usage": "Hover, pressed states, dark-mode primary"
+    },
+    "surprise": {
+      "hex": "#FF6F61",
+      "role": "accent",
+      "usage": "Drop-day moments, success bursts, the 'I sent it' button"
+    },
+    "sunrise": {
+      "hex": "#FFD166",
+      "role": "highlight",
+      "usage": "Confetti, celebration accents, milestone hits"
+    },
+    "ink": {
+      "hex": "#0E1B26",
+      "role": "text",
+      "usage": "Body text, headlines"
+    },
+    "slate": {
+      "hex": "#52606D",
+      "role": "muted-text",
+      "usage": "Secondary text, captions, helper copy"
+    },
+    "mist": {
+      "hex": "#E6F4F5",
+      "role": "surface-tint",
+      "usage": "Card backgrounds, hover wash, banded sections"
+    },
+    "paper": {
+      "hex": "#FBFCFD",
+      "role": "background",
+      "usage": "App background, email background"
+    },
+    "border": {
+      "hex": "#D9E2EC",
+      "role": "border",
+      "usage": "Dividers, input borders, card outlines"
+    },
+    "success": {
+      "hex": "#2FB57E",
+      "role": "status",
+      "usage": "Pledge confirmed, sent on drop day"
+    },
+    "warning": {
+      "hex": "#F2A53A",
+      "role": "status",
+      "usage": "Pending nudges, invitee not yet opened"
+    },
+    "danger": {
+      "hex": "#E5484D",
+      "role": "status",
+      "usage": "Cancel drop, destructive confirms"
+    }
+  },
+  "gradients": {
+    "heroWave": ["#0FB5BA", "#7AE0E3"],
+    "dropDay": ["#FF6F61", "#FFD166"]
+  }
+}
