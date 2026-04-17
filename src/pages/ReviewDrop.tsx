@@ -87,11 +87,11 @@ export function ReviewDropPage(): React.ReactElement {
   }
 
   return (
-    <div className="max-w-5xl mx-auto px-5 pt-10 pb-24 grid md:grid-cols-5 gap-8">
+    <div className="max-w-5xl mx-auto px-5 pt-8 sm:pt-10 pb-24 grid md:grid-cols-5 gap-6 md:gap-8">
       <div className="md:col-span-2 space-y-5">
         <div>
           <div className="text-xs uppercase tracking-wider text-drop-300 mb-2">Step 2 of 3</div>
-          <h1 className="font-display text-4xl text-white">Review the invite</h1>
+          <h1 className="font-display text-3xl sm:text-4xl text-white">Review the invite</h1>
           <p className="text-ink-300 text-sm mt-2">
             This is what lands in their inbox. Tweak the subject and note — the live progress image
             updates automatically as people pledge.
@@ -125,16 +125,16 @@ export function ReviewDropPage(): React.ReactElement {
           {err && <p className="text-sm text-drop-300 mt-2">{err}</p>}
           {warning && <p className="text-sm text-amber-300 mt-2">{warning}</p>}
         </div>
-        <div className="flex gap-3 pt-2">
-          <Button size="lg" onClick={onSend} disabled={sending}>
+        <div className="flex flex-col sm:flex-row gap-3 pt-2">
+          <Button size="lg" onClick={onSend} disabled={sending} className="w-full sm:w-auto">
             {sending ? 'Sending…' : 'Send the invites'}
           </Button>
-          <Button variant="ghost" onClick={() => nav(`/drops/${drop.id}`)}>
+          <Button variant="ghost" onClick={() => nav(`/drops/${drop.id}`)} className="w-full sm:w-auto">
             Save as draft
           </Button>
         </div>
       </div>
-      <div className="md:col-span-3">
+      <div className="md:col-span-3 order-first md:order-last">
         <EmailPreview drop={{ ...drop, inviteSubject: subject, personalNote: note }} />
       </div>
     </div>
@@ -144,7 +144,7 @@ export function ReviewDropPage(): React.ReactElement {
 function NotFound(): React.ReactElement {
   return (
     <div className="max-w-xl mx-auto px-5 py-24 text-center">
-      <h1 className="font-display text-5xl text-white">Drop not found</h1>
+      <h1 className="font-display text-4xl sm:text-5xl text-white">Drop not found</h1>
       <p className="text-ink-300 mt-3">It may have been cancelled or the link is wrong.</p>
     </div>
   );

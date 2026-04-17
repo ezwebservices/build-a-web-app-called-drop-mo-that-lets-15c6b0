@@ -89,7 +89,7 @@ export function DropDetailPage(): React.ReactElement {
   if (!drop) {
     return (
       <div className="max-w-xl mx-auto px-5 py-24 text-center">
-        <h1 className="font-display text-5xl text-white">Drop not found</h1>
+        <h1 className="font-display text-4xl sm:text-5xl text-white">Drop not found</h1>
         {error && <p className="text-ink-300 mt-3 text-sm">{error}</p>}
       </div>
     );
@@ -162,24 +162,24 @@ export function DropDetailPage(): React.ReactElement {
 
   return (
     <div className="max-w-5xl mx-auto px-5 pt-10 pb-24">
-      <div className="flex items-center justify-between flex-wrap gap-3">
-        <div>
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between flex-wrap gap-3 sm:gap-4">
+        <div className="min-w-0">
           <div className="text-xs uppercase tracking-wider text-drop-300">{drop.status}</div>
-          <h1 className="font-display text-5xl text-white">
+          <h1 className="font-display text-3xl sm:text-4xl md:text-5xl text-white break-words">
             Drop for {drop.recipientFirstName}
           </h1>
-          <p className="text-ink-300 text-sm mt-1">
+          <p className="text-ink-300 text-xs sm:text-sm mt-1 break-words">
             @{drop.recipientVenmoHandle} · {formatDropTime(drop.dropAtIso, drop.timezone)}
           </p>
         </div>
         <div className="flex gap-2 flex-wrap">
-          <Link to={`/drops/${drop.id}/review`}>
-            <Button variant="outline">Edit invite</Button>
+          <Link to={`/drops/${drop.id}/review`} className="flex-1 sm:flex-initial">
+            <Button variant="outline" size="sm" className="w-full sm:w-auto">Edit invite</Button>
           </Link>
-          <Button variant="outline" onClick={() => setEditOpen((v) => !v)}>
+          <Button variant="outline" size="sm" onClick={() => setEditOpen((v) => !v)} className="flex-1 sm:flex-initial">
             Postpone
           </Button>
-          <Button variant="danger" onClick={onCancel}>
+          <Button variant="danger" size="sm" onClick={onCancel} className="flex-1 sm:flex-initial">
             Cancel drop
           </Button>
         </div>
@@ -191,7 +191,7 @@ export function DropDetailPage(): React.ReactElement {
           animate={{ opacity: 1, y: 0 }}
           className="mt-4 rounded-2xl border border-ink-700 bg-ink-800/70 p-5 flex flex-wrap items-end gap-3"
         >
-          <div className="flex-1 min-w-[220px]">
+          <div className="flex-1 min-w-[160px] sm:min-w-[220px] w-full">
             <Field label="New drop day & time">
               <Input
                 type="datetime-local"
@@ -264,15 +264,15 @@ export function DropDetailPage(): React.ReactElement {
                   key={p.id}
                   initial={{ opacity: 0, x: -10 }}
                   animate={{ opacity: 1, x: 0 }}
-                  className="flex items-center justify-between px-4 py-3"
+                  className="flex items-center justify-between gap-3 px-4 py-3"
                 >
-                  <div>
-                    <div className="text-white font-medium">
+                  <div className="min-w-0 flex-1">
+                    <div className="text-white font-medium truncate">
                       {p.anonymous ? 'Anonymous friend' : p.contributorName}
                     </div>
-                    {p.note && <div className="text-ink-300 text-xs mt-0.5">{p.note}</div>}
+                    {p.note && <div className="text-ink-300 text-xs mt-0.5 line-clamp-2">{p.note}</div>}
                   </div>
-                  <div className="text-right">
+                  <div className="text-right shrink-0">
                     <div className="text-white font-semibold">{formatMoney(p.amountCents)}</div>
                     <div className="text-xs">
                       {p.status === 'sent' ? (
@@ -323,15 +323,15 @@ export function DropDetailPage(): React.ReactElement {
           ) : (
             <ul className="mt-3 divide-y divide-ink-700 border border-ink-700 rounded-xl overflow-hidden bg-ink-800/60">
               {invites.map((inv) => (
-                <li key={inv.id} className="flex items-center justify-between px-4 py-3">
-                  <div>
-                    <div className="text-white text-sm">{inv.email}</div>
+                <li key={inv.id} className="flex items-center justify-between gap-3 px-4 py-3">
+                  <div className="min-w-0 flex-1">
+                    <div className="text-white text-sm truncate">{inv.email}</div>
                     <div className="text-xs text-ink-400 mt-0.5">
                       {inv.status}
                       {inv.lastSentAt ? ` · sent ${new Date(inv.lastSentAt).toLocaleDateString()}` : ''}
                     </div>
                   </div>
-                  <Button size="sm" variant="ghost" onClick={() => onNudge(inv.email)}>
+                  <Button size="sm" variant="ghost" onClick={() => onNudge(inv.email)} className="shrink-0">
                     Nudge
                   </Button>
                 </li>

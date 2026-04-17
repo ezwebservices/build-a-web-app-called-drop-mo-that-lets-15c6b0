@@ -19,9 +19,9 @@ const variants: Record<Variant, string> = {
 };
 
 const sizes: Record<Size, string> = {
-  sm: 'px-3 py-1.5 text-sm rounded-full',
-  md: 'px-5 py-2.5 text-sm rounded-full',
-  lg: 'px-7 py-3.5 text-base rounded-full',
+  sm: 'px-3 py-2 text-sm rounded-full min-h-[44px]',
+  md: 'px-5 py-2.5 text-sm rounded-full min-h-[44px]',
+  lg: 'px-7 py-3.5 text-base rounded-full min-h-[52px]',
 };
 
 export const Button = forwardRef<HTMLButtonElement, Props>(function Button(

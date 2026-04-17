@@ -148,7 +148,7 @@ export function LoginPage(): React.ReactElement {
   }
 
   return (
-    <div className="max-w-md mx-auto px-5 pt-16 pb-24">
+    <div className="max-w-md mx-auto px-5 pt-10 sm:pt-16 pb-24">
       <div className="flex justify-center mb-8">
         <Logo size={40} />
       </div>
@@ -163,7 +163,7 @@ export function LoginPage(): React.ReactElement {
           aria-selected={!isSignUp}
           type="button"
           onClick={() => switchMode('signIn')}
-          className={`flex-1 px-4 py-2 rounded-full transition ${
+          className={`flex-1 px-3 sm:px-4 py-2.5 min-h-[40px] rounded-full transition ${
             !isSignUp ? 'bg-drop-500 text-white' : 'text-ink-300 hover:text-white'
           }`}
         >
@@ -174,7 +174,7 @@ export function LoginPage(): React.ReactElement {
           aria-selected={isSignUp}
           type="button"
           onClick={() => switchMode('signUp')}
-          className={`flex-1 px-4 py-2 rounded-full transition ${
+          className={`flex-1 px-3 sm:px-4 py-2.5 min-h-[40px] rounded-full transition ${
             isSignUp ? 'bg-drop-500 text-white' : 'text-ink-300 hover:text-white'
           }`}
         >
@@ -182,8 +182,8 @@ export function LoginPage(): React.ReactElement {
         </button>
       </div>
 
-      <div className="rounded-2xl bg-ink-800/70 border border-ink-700 p-7">
-        <h1 className="font-display text-4xl text-white">
+      <div className="rounded-2xl bg-ink-800/70 border border-ink-700 p-5 sm:p-7">
+        <h1 className="font-display text-3xl sm:text-4xl text-white">
           {stage === 'confirm'
             ? 'Confirm your email'
             : isSignUp

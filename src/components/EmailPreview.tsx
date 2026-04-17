@@ -28,9 +28,9 @@ export function EmailPreview({
           From {drop.organizerName || 'you'} via Drop · To: friend@example.com
         </span>
       </div>
-      <div className="p-6 md:p-8 bg-ink-900">
-        <div className="font-display text-4xl text-drop-400">Drop</div>
-        <h2 className="text-white text-2xl md:text-3xl font-semibold mt-4 leading-tight">
+      <div className="p-5 sm:p-6 md:p-8 bg-ink-900">
+        <div className="font-display text-3xl md:text-4xl text-drop-400">Drop</div>
+        <h2 className="text-white text-xl sm:text-2xl md:text-3xl font-semibold mt-4 leading-tight">
           {drop.organizerName || 'Someone'} is rallying the group for {drop.recipientFirstName}.
         </h2>
         <p className="text-ink-200 mt-4 whitespace-pre-line leading-relaxed">
@@ -40,13 +40,13 @@ export function EmailPreview({
         <motion.div
           initial={{ opacity: 0, scale: 0.98 }}
           animate={{ opacity: 1, scale: 1 }}
-          className="mt-5 rounded-2xl overflow-hidden border border-ink-700 bg-gradient-to-br from-ink-800 to-[#2a1a14] p-6"
+          className="mt-5 rounded-2xl overflow-hidden border border-ink-700 bg-gradient-to-br from-ink-800 to-[#2a1a14] p-5 sm:p-6"
         >
           <div className="text-drop-300 text-xs uppercase tracking-wider">Live progress</div>
-          <div className="text-white font-display text-3xl mt-1">For {drop.recipientFirstName}</div>
-          <div className="text-white text-4xl font-bold mt-2">
+          <div className="text-white font-display text-2xl sm:text-3xl mt-1">For {drop.recipientFirstName}</div>
+          <div className="text-white text-3xl sm:text-4xl font-bold mt-2 break-words">
             {formatMoney(raisedCents)}{' '}
-            <span className="text-ink-300 text-lg font-medium">
+            <span className="text-ink-300 text-base sm:text-lg font-medium">
               {drop.goalAmountCents ? `of ${formatMoney(drop.goalAmountCents)}` : 'pledged'}
             </span>
           </div>

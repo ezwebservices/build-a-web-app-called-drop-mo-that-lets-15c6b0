@@ -14,7 +14,7 @@ export function ProgressBar({ raisedCents, goalCents, contributorCount }: Props)
     <div>
       <div className="flex items-baseline justify-between mb-3">
         <div>
-          <div className="text-4xl md:text-5xl font-bold text-white tracking-tight">
+          <div className="text-3xl sm:text-4xl md:text-5xl font-bold text-white tracking-tight">
             {formatMoney(raisedCents)}
           </div>
           <div className="text-sm text-ink-300 mt-1">

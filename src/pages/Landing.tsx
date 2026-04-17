@@ -28,7 +28,7 @@ export function LandingPage(): React.ReactElement {
   return (
     <div className="relative overflow-hidden">
       <div className="absolute inset-0 grain pointer-events-none" />
-      <section className="relative max-w-6xl mx-auto px-5 pt-16 md:pt-28 pb-24">
+      <section className="relative max-w-6xl mx-auto px-5 pt-12 sm:pt-16 md:pt-28 pb-16 sm:pb-24">
         <motion.div
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
@@ -39,22 +39,22 @@ export function LandingPage(): React.ReactElement {
             <span className="w-1.5 h-1.5 rounded-full bg-drop-400 animate-pulse" />
             A surprise, not a fundraiser
           </div>
-          <h1 className="font-display text-6xl md:text-8xl leading-[0.95] text-white">
+          <h1 className="font-display text-[2.5rem] sm:text-6xl md:text-8xl leading-[0.95] text-white break-words">
             Rally the group.
             <br />
             <span className="italic text-drop-400">Surprise the one.</span>
           </h1>
-          <p className="mt-6 text-lg md:text-xl text-ink-200 max-w-2xl leading-relaxed">
+          <p className="mt-5 sm:mt-6 text-base sm:text-lg md:text-xl text-ink-200 max-w-2xl leading-relaxed">
             Someone you love just got hit with something hard — a flood, a bill, a bad week. Drop
             helps you coordinate a secret Venmo flood from their whole network, arriving all at
             once. They never see it coming.
           </p>
-          <div className="mt-8 flex flex-wrap gap-3">
-            <Link to={startHref}>
-              <Button size="lg">Start a drop</Button>
+          <div className="mt-8 flex flex-col sm:flex-row sm:flex-wrap gap-3">
+            <Link to={startHref} className="w-full sm:w-auto">
+              <Button size="lg" className="w-full sm:w-auto">Start a drop</Button>
             </Link>
-            <Link to={returnHref}>
-              <Button size="lg" variant="outline">
+            <Link to={returnHref} className="w-full sm:w-auto">
+              <Button size="lg" variant="outline" className="w-full sm:w-auto">
                 I've got one in progress
               </Button>
             </Link>
@@ -84,19 +84,19 @@ export function LandingPage(): React.ReactElement {
         </div>
       </section>
 
-      <section className="relative max-w-5xl mx-auto px-5 pb-32">
-        <div className="rounded-3xl bg-gradient-to-br from-ink-800 to-ink-900 border border-ink-700 p-8 md:p-12">
-          <h2 className="font-display text-4xl md:text-5xl text-white max-w-2xl leading-tight">
+      <section className="relative max-w-5xl mx-auto px-5 pb-20 sm:pb-32">
+        <div className="rounded-3xl bg-gradient-to-br from-ink-800 to-ink-900 border border-ink-700 p-6 sm:p-8 md:p-12">
+          <h2 className="font-display text-3xl sm:text-4xl md:text-5xl text-white max-w-2xl leading-tight">
             Imagine their phone at 9:00 AM.
           </h2>
-          <p className="mt-4 text-ink-200 max-w-2xl text-lg leading-relaxed">
+          <p className="mt-4 text-ink-200 max-w-2xl text-base sm:text-lg leading-relaxed">
             Ping. Ping. Ping. Twenty Venmos from twenty people who love them. No announcement, no
             GoFundMe page, no awkwardness. Just an avalanche of support — and the quiet feeling of
             being held up by the people in their life.
           </p>
           <div className="mt-8">
-            <Link to={startHref}>
-              <Button size="lg">Pull off the surprise</Button>
+            <Link to={startHref} className="block sm:inline-block">
+              <Button size="lg" className="w-full sm:w-auto">Pull off the surprise</Button>
             </Link>
           </div>
         </div>

@@ -63,7 +63,7 @@ export function PledgeStatusPage(): React.ReactElement {
     return (
       <div className="max-w-xl mx-auto px-5 py-24 text-center">
         <Logo size={36} />
-        <h1 className="font-display text-5xl text-white mt-6">Pledge not found.</h1>
+        <h1 className="font-display text-3xl sm:text-5xl text-white mt-6">Pledge not found.</h1>
         <p className="text-ink-300 mt-3">
           The link may have expired. If you pledged, check your email for the latest update.
         </p>
@@ -102,9 +102,9 @@ export function PledgeStatusPage(): React.ReactElement {
           <motion.div
             initial={{ opacity: 0, scale: 0.96 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="mt-10 rounded-3xl border border-green-500/40 bg-green-500/10 p-8 text-center"
+            className="mt-8 sm:mt-10 rounded-3xl border border-green-500/40 bg-green-500/10 p-6 sm:p-8 text-center"
           >
-            <div className="font-display text-5xl text-white">
+            <div className="font-display text-3xl sm:text-5xl text-white">
               {justSent ? `You're a legend, ${pledge.contributorName.split(' ')[0]}.` : 'Already sent. ✓'}
             </div>
             <p className="text-ink-100 mt-3">
@@ -118,8 +118,8 @@ export function PledgeStatusPage(): React.ReactElement {
             </div>
           </motion.div>
         ) : pledge.status === 'skipped' ? (
-          <div className="mt-10 rounded-3xl border border-ink-700 bg-ink-800/70 p-8 text-center">
-            <h1 className="font-display text-4xl text-white">Marked as skipped.</h1>
+          <div className="mt-8 sm:mt-10 rounded-3xl border border-ink-700 bg-ink-800/70 p-6 sm:p-8 text-center">
+            <h1 className="font-display text-3xl sm:text-4xl text-white">Marked as skipped.</h1>
             <p className="text-ink-300 mt-2">No worries. The drop still goes ahead.</p>
             <div className="mt-5">
               <Button onClick={resetStatus}>Actually, I'll still send</Button>
@@ -129,10 +129,10 @@ export function PledgeStatusPage(): React.ReactElement {
           <motion.div
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
-            className="mt-10 rounded-3xl border border-ink-700 bg-gradient-to-br from-ink-800 to-[#281813] p-8"
+            className="mt-8 sm:mt-10 rounded-3xl border border-ink-700 bg-gradient-to-br from-ink-800 to-[#281813] p-6 sm:p-8"
           >
             <div className="text-xs uppercase tracking-widest text-drop-300">It's drop day.</div>
-            <h1 className="font-display text-5xl md:text-6xl text-white mt-3 leading-[0.95]">
+            <h1 className="font-display text-[1.75rem] sm:text-5xl md:text-6xl text-white mt-3 leading-[1.05] sm:leading-[0.95] break-words">
               Send {formatMoney(pledge.amountCents)} to {drop.recipientFirstName} now.
             </h1>
             <p className="text-ink-200 mt-3">
@@ -144,11 +144,11 @@ export function PledgeStatusPage(): React.ReactElement {
                 Open Venmo · Send {formatMoney(pledge.amountCents)}
               </Button>
             </a>
-            <div className="mt-5 flex flex-wrap gap-3 justify-center">
-              <Button variant="outline" onClick={markSent}>
+            <div className="mt-5 flex flex-col sm:flex-row flex-wrap gap-3 justify-center">
+              <Button variant="outline" onClick={markSent} className="w-full sm:w-auto">
                 I sent it
               </Button>
-              <Button variant="ghost" onClick={markSkipped}>
+              <Button variant="ghost" onClick={markSkipped} className="w-full sm:w-auto">
                 I can't this time
               </Button>
             </div>
@@ -157,9 +157,9 @@ export function PledgeStatusPage(): React.ReactElement {
             </div>
           </motion.div>
         ) : (
-          <div className="mt-10 rounded-3xl border border-ink-700 bg-gradient-to-br from-ink-800 to-[#281813] p-8">
+          <div className="mt-8 sm:mt-10 rounded-3xl border border-ink-700 bg-gradient-to-br from-ink-800 to-[#281813] p-6 sm:p-8">
             <div className="text-xs uppercase tracking-widest text-drop-300">You're locked in.</div>
-            <h1 className="font-display text-5xl text-white mt-3">
+            <h1 className="font-display text-3xl sm:text-4xl md:text-5xl text-white mt-3 break-words">
               Pledged {formatMoney(pledge.amountCents)} for {drop.recipientFirstName}.
             </h1>
             <p className="text-ink-300 mt-3">

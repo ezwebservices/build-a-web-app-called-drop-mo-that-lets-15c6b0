@@ -66,7 +66,7 @@ export function PublicDropPage(): React.ReactElement {
     return (
       <div className="max-w-xl mx-auto px-5 py-24 text-center">
         <Logo size={36} />
-        <h1 className="font-display text-5xl text-white mt-6">Link's not working.</h1>
+        <h1 className="font-display text-3xl sm:text-5xl text-white mt-6">Link's not working.</h1>
         <p className="text-ink-300 mt-3">
           The drop may have been cancelled, or the URL got mangled. Ping whoever sent it.
         </p>
@@ -78,7 +78,7 @@ export function PublicDropPage(): React.ReactElement {
     return (
       <div className="max-w-xl mx-auto px-5 py-24 text-center">
         <Logo size={36} />
-        <h1 className="font-display text-5xl text-white mt-6">This drop was called off.</h1>
+        <h1 className="font-display text-3xl sm:text-5xl text-white mt-6">This drop was called off.</h1>
         <p className="text-ink-300 mt-3">
           The organizer cancelled the drop. No action needed — and please still keep the surprise.
         </p>
@@ -124,13 +124,13 @@ export function PublicDropPage(): React.ReactElement {
         <motion.div
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
-          className="mt-10 rounded-3xl border border-ink-700 bg-gradient-to-br from-ink-800 to-[#281813] p-7 md:p-10"
+          className="mt-8 sm:mt-10 rounded-3xl border border-ink-700 bg-gradient-to-br from-ink-800 to-[#281813] p-5 sm:p-7 md:p-10"
         >
           <div className="inline-flex items-center gap-2 text-xs uppercase tracking-widest text-drop-300 bg-drop-900/30 border border-drop-700/60 rounded-full px-3 py-1">
             <span className="w-1.5 h-1.5 rounded-full bg-drop-400 animate-pulse" />
             You're in on the surprise
           </div>
-          <h1 className="mt-5 font-display text-5xl md:text-7xl text-white leading-[0.95]">
+          <h1 className="mt-5 font-display text-[2rem] sm:text-5xl md:text-7xl text-white leading-[1.05] sm:leading-[0.95] break-words">
             Let's rally for{' '}
             <span className="italic text-drop-400">{drop.recipientFirstName}</span>.
           </h1>
@@ -157,10 +157,10 @@ export function PublicDropPage(): React.ReactElement {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
           onSubmit={onPledge}
-          className="mt-8 rounded-3xl border border-ink-700 bg-ink-800/60 p-7 md:p-10 space-y-5"
+          className="mt-8 rounded-3xl border border-ink-700 bg-ink-800/60 p-5 sm:p-7 md:p-10 space-y-5"
         >
           <div>
-            <h2 className="font-display text-3xl text-white">How much are you in for?</h2>
+            <h2 className="font-display text-2xl sm:text-3xl text-white">How much are you in for?</h2>
             <p className="text-ink-300 text-sm mt-1">
               You won't send anything today — just pledge. On drop day, we'll email you a one-tap
               Venmo link.
@@ -172,7 +172,7 @@ export function PublicDropPage(): React.ReactElement {
                 type="button"
                 key={s}
                 onClick={() => setAmount(String(s))}
-                className={`px-4 py-2 rounded-full border transition ${
+                className={`px-4 py-2.5 min-h-[44px] text-sm rounded-full border transition ${
                   Number(amount) === s
                     ? 'bg-drop-500 border-drop-400 text-white'
                     : 'border-ink-600 text-ink-200 hover:border-ink-400'

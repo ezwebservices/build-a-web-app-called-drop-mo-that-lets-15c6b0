@@ -56,13 +56,13 @@ export function DashboardPage(): React.ReactElement {
 
   return (
     <div className="max-w-5xl mx-auto px-5 pt-10 pb-24">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="font-display text-5xl text-white">Your drops</h1>
-          <p className="text-ink-300 mt-1 text-sm">Signed in as {session.email}</p>
+          <h1 className="font-display text-3xl sm:text-4xl md:text-5xl text-white">Your drops</h1>
+          <p className="text-ink-300 mt-1 text-sm break-all">Signed in as {session.email}</p>
         </div>
-        <Link to="/new">
-          <Button>Start a drop</Button>
+        <Link to="/new" className="sm:shrink-0">
+          <Button className="w-full sm:w-auto">Start a drop</Button>
         </Link>
       </div>
 
@@ -99,20 +99,20 @@ export function DashboardPage(): React.ReactElement {
                 to={`/drops/${drop.id}`}
                 className="block rounded-2xl border border-ink-700 bg-ink-800/70 p-5 hover:border-drop-400/60 transition"
               >
-                <div className="flex items-start justify-between gap-4">
-                  <div>
+                <div className="flex items-start justify-between gap-3 sm:gap-4">
+                  <div className="min-w-0 flex-1">
                     <div className="text-xs uppercase tracking-wider text-drop-300">
                       {drop.status}
                     </div>
-                    <div className="text-white text-xl font-semibold mt-1">
+                    <div className="text-white text-lg sm:text-xl font-semibold mt-1 break-words">
                       For {drop.recipientFirstName} · @{drop.recipientVenmoHandle}
                     </div>
-                    <div className="text-ink-300 text-sm mt-1">
+                    <div className="text-ink-300 text-xs sm:text-sm mt-1">
                       Drop day: {formatDropTime(drop.dropAtIso, drop.timezone)}
                     </div>
                   </div>
-                  <div className="text-right">
-                    <div className="text-white text-2xl font-bold">{formatMoney(totalCents)}</div>
+                  <div className="text-right shrink-0">
+                    <div className="text-white text-xl sm:text-2xl font-bold">{formatMoney(totalCents)}</div>
                     <div className="text-ink-300 text-xs">
                       {pledgeCount} {pledgeCount === 1 ? 'pledge' : 'pledges'}
                       {drop.goalAmountCents ? ` of ${formatMoney(drop.goalAmountCents)}` : ''}

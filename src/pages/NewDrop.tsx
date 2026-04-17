@@ -47,13 +47,13 @@ export function NewDropPage(): React.ReactElement {
   if (!session) {
     return (
       <div className="max-w-xl mx-auto px-5 py-24 text-center">
-        <h1 className="font-display text-5xl text-white">First — make an account</h1>
+        <h1 className="font-display text-3xl sm:text-5xl text-white">First — make an account</h1>
         <p className="text-ink-300 mt-3">
           Organizers need an account so you can come back and manage the drop. Takes a second.
         </p>
-        <div className="mt-6 flex gap-3 justify-center">
-          <Button onClick={() => nav('/login?mode=signUp')}>Create account</Button>
-          <Button variant="outline" onClick={() => nav('/login')}>
+        <div className="mt-6 flex flex-col sm:flex-row gap-3 justify-center">
+          <Button onClick={() => nav('/login?mode=signUp')} className="w-full sm:w-auto">Create account</Button>
+          <Button variant="outline" onClick={() => nav('/login')} className="w-full sm:w-auto">
             I already have one
           </Button>
         </div>
@@ -108,7 +108,7 @@ export function NewDropPage(): React.ReactElement {
   return (
     <div className="max-w-2xl mx-auto px-5 pt-10 pb-24">
       <div className="text-xs uppercase tracking-wider text-drop-300 mb-2">Step 1 of 3</div>
-      <h1 className="font-display text-5xl text-white">Start a drop</h1>
+      <h1 className="font-display text-3xl sm:text-4xl md:text-5xl text-white">Start a drop</h1>
       <p className="text-ink-300 mt-2 max-w-xl">
         Details stay private. The recipient will never see this page or know it existed.
       </p>
@@ -184,11 +184,11 @@ export function NewDropPage(): React.ReactElement {
         </Field>
         {err && <p className="text-sm text-drop-300">{err}</p>}
         {warning && <p className="text-sm text-amber-300">{warning}</p>}
-        <div className="flex gap-3 pt-2">
-          <Button type="submit" size="lg" disabled={submitting}>
+        <div className="flex flex-col sm:flex-row gap-3 pt-2">
+          <Button type="submit" size="lg" disabled={submitting} className="w-full sm:w-auto">
             {submitting ? 'Saving…' : 'Review the invite →'}
           </Button>
-          <Button type="button" variant="ghost" onClick={() => nav('/dashboard')}>
+          <Button type="button" variant="ghost" onClick={() => nav('/dashboard')} className="w-full sm:w-auto">
             Cancel
           </Button>
         </div>
