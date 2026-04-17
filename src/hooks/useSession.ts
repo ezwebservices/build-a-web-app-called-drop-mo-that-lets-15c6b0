@@ -20,7 +20,7 @@ async function readSession(): Promise<Session | null> {
     const user = await getCurrentUser();
     const attrs = await fetchUserAttributes();
     const email = (attrs.email ?? user.signInDetails?.loginId ?? '').toLowerCase();
-    const name = attrs.preferredUsername ?? attrs.name ?? email.split('@')[0] ?? 'Friend';
+    const name = attrs.name ?? email.split('@')[0] ?? 'Friend';
     return { email, name, userId: user.userId };
   } catch {
     return null;

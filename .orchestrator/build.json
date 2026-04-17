@@ -5736,6 +5736,205 @@
     {
       "type": "employee_status",
       "message": "QA finished"
+    },
+    {
+      "type": "done",
+      "message": "Changes applied by 3 team member(s) across 3 subtask(s)"
+    },
+    {
+      "type": "phase_progress",
+      "message": "Orchestrator planning change",
+      "phase": 1,
+      "total_phases": 0
+    },
+    {
+      "type": "status",
+      "message": "Orchestrator starting..."
+    },
+    {
+      "type": "token_usage",
+      "message": "0K in / 0K out / 16K cached  ~$0.0433"
+    },
+    {
+      "type": "token_usage",
+      "message": "0K in / 0K out / 16K cached  ~$0.0433"
+    },
+    {
+      "type": "file_created",
+      "message": "Created C:/Users/brand/Documents/Orchestrator/workspaces/15c6b06b-0b3a-46dc-be91-7a83c249e074/.orchestrator/_iteration_plan.json",
+      "file_path": "C:/Users/brand/Documents/Orchestrator/workspaces/15c6b06b-0b3a-46dc-be91-7a83c249e074/.orchestrator/_iteration_plan.json"
+    },
+    {
+      "type": "token_usage",
+      "message": "0K in / 0K out / 26K cached  ~$0.0107"
+    },
+    {
+      "type": "thinking",
+      "message": "Plan written: single Engineer subtask to reconcile the `preferredUsername` mismatch between the signup form and the Amplify Auth schema."
+    },
+    {
+      "type": "token_usage",
+      "message": "0K in / 0K out / 42K cached  ~$0.0640"
+    },
+    {
+      "type": "status",
+      "message": "Orchestrator finished (exit 0)"
+    },
+    {
+      "type": "thinking",
+      "message": "This is a narrow bug fix: Cognito signup is failing because the frontend is submitting a 'preferredUsername' attribute that isn't declared in the Amplify Auth schema. The fix is either to add preferredUsername to the auth resource's user attributes or to remove it from the signup form fields. Single-engineer task — no design or QA ceremony needed for a schema/field mismatch."
+    },
+    {
+      "type": "status",
+      "message": "Orchestrator split this into 1 subtask(s)"
+    },
+    {
+      "type": "phase_progress",
+      "message": "Engineer",
+      "phase": 2,
+      "total_phases": 2
+    },
+    {
+      "type": "employee_status",
+      "message": "Engineer is working: Fix the 'Attributes did not conform to the schema: The attribute preferredUsername is not defined in schema' signup error. Investigate amplify/auth/resource.ts and the Authenticator/signup form configuration. Either (a) add preferredUsername to userAttributes in the auth resource so it's part of the Cognito schema, or (b) remove preferredUsername from the signUpAttributes / formFields passed to <Authenticator> so it's not sent. Choose whichever matches the intended UX — if the app doesn't actually need a preferred username (Drop-mo uses email-based auth per CLAUDE.md), remove it from the form. Run npm run build until it exits 0 and verify the signup flow no longer throws the schema error."
+    },
+    {
+      "type": "status",
+      "message": "Engineer starting..."
+    },
+    {
+      "type": "token_usage",
+      "message": "0K in / 0K out / 16K cached  ~$0.0423"
+    },
+    {
+      "type": "token_usage",
+      "message": "0K in / 0K out / 16K cached  ~$0.0423"
+    },
+    {
+      "type": "token_usage",
+      "message": "0K in / 0K out / 26K cached  ~$0.0097"
+    },
+    {
+      "type": "token_usage",
+      "message": "0K in / 0K out / 26K cached  ~$0.0132"
+    },
+    {
+      "type": "token_usage",
+      "message": "0K in / 0K out / 26K cached  ~$0.0132"
+    },
+    {
+      "type": "token_usage",
+      "message": "0K in / 0K out / 27K cached  ~$0.0289"
+    },
+    {
+      "type": "token_usage",
+      "message": "0K in / 0K out / 27K cached  ~$0.0289"
+    },
+    {
+      "type": "token_usage",
+      "message": "0K in / 0K out / 33K cached  ~$0.0147"
+    },
+    {
+      "type": "token_usage",
+      "message": "0K in / 0K out / 33K cached  ~$0.0147"
+    },
+    {
+      "type": "thinking",
+      "message": "The deployed Cognito pool schema doesn't include `preferredUsername`. Per the task and CLAUDE.md (email-based auth), I'll remove it from the auth resource, the signup call, and clean up the session fallback."
+    },
+    {
+      "type": "token_usage",
+      "message": "0K in / 0K out / 33K cached  ~$0.0147"
+    },
+    {
+      "type": "file_created",
+      "message": "Created C:/Users/brand/Documents/Orchestrator/workspaces/15c6b06b-0b3a-46dc-be91-7a83c249e074/amplify/auth/resource.ts",
+      "file_path": "C:/Users/brand/Documents/Orchestrator/workspaces/15c6b06b-0b3a-46dc-be91-7a83c249e074/amplify/auth/resource.ts"
+    },
+    {
+      "type": "token_usage",
+      "message": "0K in / 0K out / 34K cached  ~$0.0172"
+    },
+    {
+      "type": "file_created",
+      "message": "Created C:/Users/brand/Documents/Orchestrator/workspaces/15c6b06b-0b3a-46dc-be91-7a83c249e074/src/pages/Login.tsx",
+      "file_path": "C:/Users/brand/Documents/Orchestrator/workspaces/15c6b06b-0b3a-46dc-be91-7a83c249e074/src/pages/Login.tsx"
+    },
+    {
+      "type": "token_usage",
+      "message": "0K in / 0K out / 35K cached  ~$0.0126"
+    },
+    {
+      "type": "token_usage",
+      "message": "0K in / 0K out / 35K cached  ~$0.0126"
+    },
+    {
+      "type": "thinking",
+      "message": "Now I'll remove the dead `name` field from Login.tsx since it's no longer persisted anywhere, and clean up useSession.ts."
+    },
+    {
+      "type": "token_usage",
+      "message": "0K in / 0K out / 35K cached  ~$0.0126"
+    },
+    {
+      "type": "file_created",
+      "message": "Created C:/Users/brand/Documents/Orchestrator/workspaces/15c6b06b-0b3a-46dc-be91-7a83c249e074/src/pages/Login.tsx",
+      "file_path": "C:/Users/brand/Documents/Orchestrator/workspaces/15c6b06b-0b3a-46dc-be91-7a83c249e074/src/pages/Login.tsx"
+    },
+    {
+      "type": "token_usage",
+      "message": "0K in / 0K out / 36K cached  ~$0.0149"
+    },
+    {
+      "type": "file_created",
+      "message": "Created C:/Users/brand/Documents/Orchestrator/workspaces/15c6b06b-0b3a-46dc-be91-7a83c249e074/src/pages/Login.tsx",
+      "file_path": "C:/Users/brand/Documents/Orchestrator/workspaces/15c6b06b-0b3a-46dc-be91-7a83c249e074/src/pages/Login.tsx"
+    },
+    {
+      "type": "token_usage",
+      "message": "0K in / 0K out / 36K cached  ~$0.0141"
+    },
+    {
+      "type": "file_created",
+      "message": "Created C:/Users/brand/Documents/Orchestrator/workspaces/15c6b06b-0b3a-46dc-be91-7a83c249e074/src/pages/Login.tsx",
+      "file_path": "C:/Users/brand/Documents/Orchestrator/workspaces/15c6b06b-0b3a-46dc-be91-7a83c249e074/src/pages/Login.tsx"
+    },
+    {
+      "type": "token_usage",
+      "message": "0K in / 0K out / 37K cached  ~$0.0137"
+    },
+    {
+      "type": "file_created",
+      "message": "Created C:/Users/brand/Documents/Orchestrator/workspaces/15c6b06b-0b3a-46dc-be91-7a83c249e074/src/hooks/useSession.ts",
+      "file_path": "C:/Users/brand/Documents/Orchestrator/workspaces/15c6b06b-0b3a-46dc-be91-7a83c249e074/src/hooks/useSession.ts"
+    },
+    {
+      "type": "token_usage",
+      "message": "0K in / 0K out / 37K cached  ~$0.0138"
+    },
+    {
+      "type": "command_run",
+      "message": "$ cd \"C:\\Users\\brand\\Documents\\Orchestrator\\workspaces\\15c6b06b-0b3a-46dc-be91-7a83c249e074\" && npm run build 2>&1 | tail -50"
+    },
+    {
+      "type": "token_usage",
+      "message": "0K in / 0K out / 38K cached  ~$0.0139"
+    },
+    {
+      "type": "thinking",
+      "message": "Build passes. Summary of changes:\n\n- `amplify/auth/resource.ts`: removed `preferredUsername` from userAttributes (only `email` required now).\n- `src/pages/Login.tsx`: removed `preferredUsername` from the `signUp` call, and removed the now-dead \"Your name\" form field and its validation.\n- `src/hooks/"
+    },
+    {
+      "type": "token_usage",
+      "message": "0K in / 4K out / 385K cached  ~$0.2688"
+    },
+    {
+      "type": "status",
+      "message": "Engineer finished (exit 0)"
+    },
+    {
+      "type": "employee_status",
+      "message": "Engineer finished"
     }
   ],
   "created_at": "2026-04-17T15:54:51.211871600+00:00",

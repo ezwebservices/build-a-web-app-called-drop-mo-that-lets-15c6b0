@@ -23,7 +23,6 @@ export function LoginPage(): React.ReactElement {
   const [mode, setMode] = useState<Mode>(initialMode);
   const [stage, setStage] = useState<Stage>('form');
   const [email, setEmail] = useState('');
-  const [name, setName] = useState('');
   const [password, setPassword] = useState('');
   const [code, setCode] = useState('');
   const [error, setError] = useState('');
@@ -65,10 +64,6 @@ export function LoginPage(): React.ReactElement {
       setError('We need an email to send you back into your drops.');
       return;
     }
-    if (isSignUp && !name.trim()) {
-      setError('Your name shows up on the invites you send — drop it in.');
-      return;
-    }
     if (password.length < 8) {
       setError('Password must be at least 8 characters.');
       return;
@@ -83,7 +78,6 @@ export function LoginPage(): React.ReactElement {
           options: {
             userAttributes: {
               email: trimmedEmail,
-              preferredUsername: name.trim(),
             },
             autoSignIn: true,
           },
@@ -206,16 +200,6 @@ export function LoginPage(): React.ReactElement {
 
         {stage === 'form' ? (
           <form onSubmit={onSubmit} className="mt-6 space-y-4">
-            {isSignUp && (
-              <Field label="Your name">
-                <Input
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  placeholder="Jamie Rivera"
-                  autoComplete="name"
-                />
-              </Field>
-            )}
             <Field label="Email">
               <Input
                 type="email"
