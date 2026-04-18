@@ -18,17 +18,17 @@ export function Nav(): React.ReactElement {
   }
 
   return (
-    <header className="sticky top-0 z-20 backdrop-blur-md bg-ink-900/70 border-b border-ink-700">
+    <header className="sticky top-0 z-20 backdrop-blur-md bg-white/80 border-b border-drop-100">
       <div className="max-w-6xl mx-auto px-4 sm:px-5 py-3 sm:py-4 flex items-center justify-between gap-3">
         <Link to="/" className="focus:outline-none shrink-0">
-          <Logo />
+          <Logo className="text-ink-900" />
         </Link>
         <nav className="flex items-center gap-1 sm:gap-2">
           {session ? (
             <>
               <Link
                 to="/dashboard"
-                className="text-sm text-ink-200 hover:text-white px-3 py-2 min-h-[44px] inline-flex items-center"
+                className="text-sm text-ink-500 hover:text-ink-900 px-3 py-2 min-h-[44px] inline-flex items-center"
               >
                 Dashboard
               </Link>
@@ -36,7 +36,7 @@ export function Nav(): React.ReactElement {
                 variant="ghost"
                 size="sm"
                 onClick={onSignOut}
-                className="hidden sm:inline-flex"
+                className="hidden sm:inline-flex text-ink-500 hover:text-ink-900"
               >
                 Sign out
               </Button>
@@ -51,13 +51,13 @@ export function Nav(): React.ReactElement {
             <>
               <Link
                 to="/login"
-                className="text-sm text-ink-200 hover:text-white px-3 py-2 min-h-[44px] inline-flex items-center"
+                className="text-sm text-ink-500 hover:text-ink-900 px-3 py-2 min-h-[44px] inline-flex items-center"
               >
                 Sign in
               </Link>
               <Link
                 to="/login?mode=signUp"
-                className="hidden sm:inline-flex text-sm text-ink-200 hover:text-white px-3 py-2 min-h-[44px] items-center"
+                className="hidden sm:inline-flex text-sm text-ink-500 hover:text-ink-900 px-3 py-2 min-h-[44px] items-center"
               >
                 Sign up
               </Link>

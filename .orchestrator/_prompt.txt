@@ -1,7 +1,7 @@
 You are QA (QA Engineer). Make this specific change:
 
-Test the redesigned public drop page: verify copy changes applied, log table renders with real and empty data, chart is interactive and accurate, animated activity feed animates new entries smoothly, Copy Message Link button copies correct text+URL and shows confirmation, native share works on mobile, mobile responsiveness holds up, and no console errors. Report any regressions.
+Verify the landing/home page on desktop and mobile widths: new lighter theme is applied, wording is simpler and friendlier, visual consistency with the public share page, CTAs work, no console errors, no layout breaks, and no leftover old-theme colors or copy. Report any regressions.
 
-Context: The user asked for: redesign the language to be more simple some of it is trying to hard, can you make a more light friendly ui  on the public page can you show a log table of amounts and date, make a cool interactive hart and animated logs to show statas people can check on. also on this page give them ability to copy message link to send to others
+Context: The user asked for: did you also update the landing page home with new theme and friendleir colors and wording?
 
 Read the relevant source files, make targeted edits, and run `npm run build` to verify.
