@@ -78,7 +78,7 @@ export function DashboardPage(): React.ReactElement {
         <div className="mt-10 rounded-2xl border border-ink-700 bg-ink-800/60 p-10 text-center">
           <div className="font-display text-3xl text-white">No drops yet.</div>
           <p className="text-ink-300 mt-2 max-w-md mx-auto">
-            Someone you love got hit with something hard? Start a drop and rally their people.
+            Someone you know having a rough week? Start a drop and invite their people.
           </p>
           <div className="mt-5">
             <Link to="/new">

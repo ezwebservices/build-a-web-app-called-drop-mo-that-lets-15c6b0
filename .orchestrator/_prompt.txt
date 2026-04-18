@@ -1,7 +1,7 @@
 You are QA (QA Engineer). Make this specific change:
 
-Verify mobile UX across the full app at 320px, 375px, 414px, and 768px widths using browser devtools responsive mode. Test: landing → sign up → create drop → invite contributors → contributor pledge flow → drop-day CTA → public share page. Check for horizontal overflow, cut-off text, unreachable buttons, broken modals, tiny tap targets, unreadable font sizes, and keyboard behavior when inputs are focused on mobile. Report any issues found with the specific component and viewport width.
+Test the redesigned public drop page: verify copy changes applied, log table renders with real and empty data, chart is interactive and accurate, animated activity feed animates new entries smoothly, Copy Message Link button copies correct text+URL and shows confirmation, native share works on mobile, mobile responsiveness holds up, and no console errors. Report any regressions.
 
-Context: The user asked for: go through and make view when on mobile screen, ehance user experience on mobile go through components
+Context: The user asked for: redesign the language to be more simple some of it is trying to hard, can you make a more light friendly ui  on the public page can you show a log table of amounts and date, make a cool interactive hart and animated logs to show statas people can check on. also on this page give them ability to copy message link to send to others
 
 Read the relevant source files, make targeted edits, and run `npm run build` to verify.

@@ -194,7 +194,7 @@ export function LoginPage(): React.ReactElement {
           {stage === 'confirm'
             ? 'We sent a 6-digit code to your inbox.'
             : isSignUp
-              ? 'Make an account so you can rally the group and pull off the surprise.'
+              ? 'Make a quick account so you can set up the drop and invite people.'
               : "Pick up where you left off — your drops are waiting."}
         </p>
 
@@ -266,7 +266,7 @@ export function LoginPage(): React.ReactElement {
           <p className="text-sm text-ink-300 mt-6 text-center">
             {isSignUp ? (
               <>
-                Already in on a drop?{' '}
+                Already have an account?{' '}
                 <button
                   type="button"
                   onClick={() => switchMode('signIn')}
@@ -291,7 +291,7 @@ export function LoginPage(): React.ReactElement {
         )}
         <p className="text-xs text-ink-400 mt-6">
           By {isSignUp ? 'creating an account' : 'signing in'} you agree to keep drops private from
-          their recipients. Keeping the surprise is everything.
+          their recipients. That's the whole point.
         </p>
       </div>
       <p className="text-center text-sm text-ink-300 mt-6">

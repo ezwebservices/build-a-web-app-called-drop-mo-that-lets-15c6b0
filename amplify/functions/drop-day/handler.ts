@@ -44,23 +44,23 @@ export const handler: Handler<Event> = async (event) => {
 
     const subject =
       event.kind === 'reminder'
-        ? `Tomorrow's the drop for ${event.recipientFirstName}`
-        : `It's time — drop ${amount} to ${event.recipientFirstName}`;
+        ? `Tomorrow's the day for ${event.recipientFirstName}`
+        : `Time to send ${amount} to ${event.recipientFirstName}`;
 
     const html = `<!doctype html><html><body style="margin:0;background:#0b0c10;color:#e9ebf1;font-family:Inter,Arial,sans-serif;">
 <div style="max-width:560px;margin:0 auto;padding:32px 24px;">
   <div style="font-family:'Instrument Serif',Georgia,serif;font-size:48px;color:#ff6a3d;">Drop</div>
-  <h1 style="font-size:28px;">${event.kind === 'reminder' ? `Drop day is tomorrow.` : `It's drop day.`}</h1>
+  <h1 style="font-size:28px;">${event.kind === 'reminder' ? `Tomorrow's the day.` : `Today's the day.`}</h1>
   <p style="line-height:1.6;color:#c7cbd6;">
     ${event.kind === 'reminder'
-      ? `Get ready — tomorrow at the scheduled time, you'll send ${amount} to ${event.recipientFirstName}.`
-      : `Tap the button below to send <strong>${amount}</strong> to ${event.recipientFirstName} on Venmo. Everyone's sending at the same time.`}
+      ? `Heads up — tomorrow at the scheduled time, you'll send ${amount} to ${event.recipientFirstName}.`
+      : `Tap the button to send <strong>${amount}</strong> to ${event.recipientFirstName} on Venmo. Everyone's sending right around now.`}
   </p>
   ${event.kind === 'dropday'
     ? `<a href="${venmoLink(event.recipientVenmoHandle, p.amountCents, note)}" style="display:inline-block;background:#ff4714;color:#fff;padding:16px 28px;border-radius:999px;text-decoration:none;font-weight:700;">Send ${amount} on Venmo</a>
        <p style="margin-top:24px;"><a href="${markSentUrl}" style="color:#ff9975;">I sent it →</a></p>`
     : ''}
-  <p style="color:#6b7186;font-size:12px;margin-top:32px;">Keep the surprise. Don't tell ${event.recipientFirstName}.</p>
+  <p style="color:#6b7186;font-size:12px;margin-top:32px;">Please keep it a surprise — don't mention it to ${event.recipientFirstName}.</p>
 </div></body></html>`;
 
     try {

@@ -31,7 +31,7 @@ export function EmailPreview({
       <div className="p-5 sm:p-6 md:p-8 bg-ink-900">
         <div className="font-display text-3xl md:text-4xl text-drop-400">Drop</div>
         <h2 className="text-white text-xl sm:text-2xl md:text-3xl font-semibold mt-4 leading-tight">
-          {drop.organizerName || 'Someone'} is rallying the group for {drop.recipientFirstName}.
+          {drop.organizerName || 'Someone'} is putting together a small surprise for {drop.recipientFirstName}.
         </h2>
         <p className="text-ink-200 mt-4 whitespace-pre-line leading-relaxed">
           {drop.personalNote || drop.story}
@@ -57,19 +57,19 @@ export function EmailPreview({
             />
           </div>
           <div className="text-ink-300 text-sm mt-3">
-            {contributorCount} {contributorCount === 1 ? 'person' : 'people'} in on the surprise
+            {contributorCount} {contributorCount === 1 ? 'person has' : 'people have'} chipped in
           </div>
         </motion.div>
 
         <div className="mt-6">
           <div className="inline-block px-6 py-3 rounded-full bg-gradient-to-r from-drop-400 to-drop-600 text-white font-semibold">
-            Join the drop →
+            Chip in →
           </div>
           <div className="text-ink-400 text-xs mt-4">
             Drop day: {formatDropTime(drop.dropAtIso, drop.timezone)}
           </div>
           <div className="text-ink-500 text-xs mt-4">
-            {drop.recipientFirstName} doesn't know. Let's keep it that way.
+            {drop.recipientFirstName} doesn't know — please keep it that way.
           </div>
         </div>
       </div>

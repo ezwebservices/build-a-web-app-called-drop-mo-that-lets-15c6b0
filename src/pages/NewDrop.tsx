@@ -89,7 +89,7 @@ export function NewDropPage(): React.ReactElement {
         dropAtIso: new Date(dropAt).toISOString(),
         timezone: getBrowserTimezone(),
         personalNote: note.trim(),
-        inviteSubject: `A surprise for ${firstName.trim()} — are you in?`,
+        inviteSubject: `A little surprise for ${firstName.trim()}`,
         organizerName: session!.name,
         organizerEmail: session!.email,
       });
@@ -137,13 +137,13 @@ export function NewDropPage(): React.ReactElement {
         </Field>
         <Field
           label="Their story"
-          hint="What happened, in your words. Group-chat voice, not charity-website voice. Markdown works."
+          hint="In your own words — the way you'd tell a friend. Markdown works."
         >
           <Textarea
             value={story}
             onChange={(e) => setStory(e.target.value)}
             placeholder={
-              "Maya's basement flooded last week and the insurance won't cover the pump or the drywall. She's been shoveling mud instead of sleeping. Let's help her breathe."
+              "Maya's basement flooded last week and the insurance won't cover the pump or the drywall. She's been shoveling mud instead of sleeping. Let's help her out."
             }
             className="min-h-[160px]"
           />
@@ -179,7 +179,7 @@ export function NewDropPage(): React.ReactElement {
           <Textarea
             value={note}
             onChange={(e) => setNote(e.target.value)}
-            placeholder="Hey — pulling this together quietly for Maya. Would love to have you in on it."
+            placeholder="Hey — putting something small together for Maya. Would love to have you in on it."
           />
         </Field>
         {err && <p className="text-sm text-drop-300">{err}</p>}

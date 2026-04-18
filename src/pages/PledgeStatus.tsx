@@ -105,11 +105,11 @@ export function PledgeStatusPage(): React.ReactElement {
             className="mt-8 sm:mt-10 rounded-3xl border border-green-500/40 bg-green-500/10 p-6 sm:p-8 text-center"
           >
             <div className="font-display text-3xl sm:text-5xl text-white">
-              {justSent ? `You're a legend, ${pledge.contributorName.split(' ')[0]}.` : 'Already sent. ✓'}
+              {justSent ? `Thank you, ${pledge.contributorName.split(' ')[0]}.` : 'Already sent. ✓'}
             </div>
             <p className="text-ink-100 mt-3">
               {formatMoney(pledge.amountCents)} on its way to {drop.recipientFirstName}. Thanks for
-              keeping the surprise intact.
+              keeping it a surprise.
             </p>
             <div className="mt-5">
               <Button variant="ghost" onClick={resetStatus}>
@@ -131,13 +131,13 @@ export function PledgeStatusPage(): React.ReactElement {
             animate={{ opacity: 1, y: 0 }}
             className="mt-8 sm:mt-10 rounded-3xl border border-ink-700 bg-gradient-to-br from-ink-800 to-[#281813] p-6 sm:p-8"
           >
-            <div className="text-xs uppercase tracking-widest text-drop-300">It's drop day.</div>
+            <div className="text-xs uppercase tracking-widest text-drop-300">Today's the day</div>
             <h1 className="font-display text-[1.75rem] sm:text-5xl md:text-6xl text-white mt-3 leading-[1.05] sm:leading-[0.95] break-words">
               Send {formatMoney(pledge.amountCents)} to {drop.recipientFirstName} now.
             </h1>
             <p className="text-ink-200 mt-3">
-              Tap the button — it opens Venmo with everything pre-filled. Everyone's sending at the
-              same time.
+              Tap the button — it opens Venmo with everything filled in. Everyone's sending right
+              around now.
             </p>
             <a href={venmoUrl} target="_blank" rel="noreferrer" className="block mt-6">
               <Button size="lg" className="w-full">
@@ -158,12 +158,13 @@ export function PledgeStatusPage(): React.ReactElement {
           </motion.div>
         ) : (
           <div className="mt-8 sm:mt-10 rounded-3xl border border-ink-700 bg-gradient-to-br from-ink-800 to-[#281813] p-6 sm:p-8">
-            <div className="text-xs uppercase tracking-widest text-drop-300">You're locked in.</div>
+            <div className="text-xs uppercase tracking-widest text-drop-300">You're all set</div>
             <h1 className="font-display text-3xl sm:text-4xl md:text-5xl text-white mt-3 break-words">
               Pledged {formatMoney(pledge.amountCents)} for {drop.recipientFirstName}.
             </h1>
             <p className="text-ink-300 mt-3">
-              We'll email you the one-tap Venmo link on drop day. In the meantime — zip it.
+              We'll email you a Venmo link when the day comes. Until then, please keep it to
+              yourself.
             </p>
             <div className="mt-6">
               <div className="text-xs uppercase tracking-widest text-ink-300 mb-2">
