@@ -59,7 +59,7 @@ export function LandingPage(): React.ReactElement {
               </Button>
             </Link>
           </div>
-          <p className="mt-4 text-sm text-ink-400">
+          <p className="mt-4 text-sm text-ink-600">
             Free. No fees. We never touch the money — Venmo does the moving.
           </p>
         </motion.div>

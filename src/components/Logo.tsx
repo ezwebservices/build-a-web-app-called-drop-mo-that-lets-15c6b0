@@ -3,27 +3,47 @@ import { cn } from '../lib/utils';
 
 export function Logo({ className, size = 28 }: { className?: string; size?: number }): React.ReactElement {
   return (
-    <span className={cn('inline-flex items-center gap-2 text-white', className)}>
+    <span className={cn('inline-flex items-center gap-2 text-ink-900', className)}>
       <motion.svg
         width={size}
         height={size}
-        viewBox="0 0 64 64"
-        initial={{ rotate: -8 }}
-        animate={{ rotate: [-8, 4, -4, 0] }}
-        transition={{ duration: 1.2, ease: 'easeOut' }}
+        viewBox="0 0 56 56"
+        initial={{ rotate: 0 }}
+        whileHover={{ rotate: [0, -4, 4, 0] }}
+        transition={{ duration: 0.6, ease: 'easeOut' }}
+        aria-hidden="true"
       >
-        <defs>
-          <linearGradient id="logoGrad" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0" stopColor="#ff9975" />
-            <stop offset="1" stopColor="#ed2f09" />
-          </linearGradient>
-        </defs>
-        <path
-          d="M32 4c-9 13-16 22-16 32a16 16 0 0 0 32 0c0-10-7-19-16-32z"
-          fill="url(#logoGrad)"
-        />
+        <g transform="rotate(8 28 28)">
+          <motion.circle
+            cx="14"
+            cy="14"
+            r="6"
+            fill="#5FCB95"
+            initial={{ y: -18, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ delay: 0, type: 'spring', stiffness: 320, damping: 18 }}
+          />
+          <motion.circle
+            cx="28"
+            cy="28"
+            r="7.5"
+            fill="#F2BE3D"
+            initial={{ y: -22, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ delay: 0.06, type: 'spring', stiffness: 320, damping: 18 }}
+          />
+          <motion.circle
+            cx="44"
+            cy="44"
+            r="9"
+            fill="#DB5A24"
+            initial={{ y: -28, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ delay: 0.12, type: 'spring', stiffness: 320, damping: 18 }}
+          />
+        </g>
       </motion.svg>
-      <span className="font-display text-2xl leading-none">Drop</span>
+      <span className="font-display text-2xl leading-none tracking-tight">drop</span>
     </span>
   );
 }

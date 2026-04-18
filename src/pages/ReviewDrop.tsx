@@ -44,7 +44,7 @@ export function ReviewDropPage(): React.ReactElement {
   if (loading) {
     return (
       <div className="max-w-xl mx-auto px-5 py-24 text-center">
-        <p className="text-ink-300">Loading…</p>
+        <p className="text-ink-500">Loading…</p>
       </div>
     );
   }
@@ -90,9 +90,9 @@ export function ReviewDropPage(): React.ReactElement {
     <div className="max-w-5xl mx-auto px-5 pt-8 sm:pt-10 pb-24 grid md:grid-cols-5 gap-6 md:gap-8">
       <div className="md:col-span-2 space-y-5">
         <div>
-          <div className="text-xs uppercase tracking-wider text-drop-300 mb-2">Step 2 of 3</div>
-          <h1 className="font-display text-3xl sm:text-4xl text-white">Review the invite</h1>
-          <p className="text-ink-300 text-sm mt-2">
+          <div className="text-xs uppercase tracking-wider text-drop-700 mb-2">Step 2 of 3</div>
+          <h1 className="font-display text-3xl sm:text-4xl text-ink-900">Review the invite</h1>
+          <p className="text-ink-500 text-sm mt-2">
             This is what lands in their inbox. Tweak the subject and note — the live progress image
             updates automatically as people pledge.
           </p>
@@ -104,7 +104,7 @@ export function ReviewDropPage(): React.ReactElement {
           <Textarea value={note} onChange={(e) => setNote(e.target.value)} />
         </Field>
         <div className="pt-2">
-          <div className="text-xs uppercase tracking-wider text-drop-300 mb-2">Step 3 of 3</div>
+          <div className="text-xs uppercase tracking-wider text-drop-700 mb-2">Step 3 of 3</div>
           <Field
             label="Who gets the invite?"
             hint="Paste emails separated by commas, spaces, or new lines. We'll dedupe."
@@ -117,13 +117,13 @@ export function ReviewDropPage(): React.ReactElement {
             />
           </Field>
           {parsed.length > 0 && (
-            <div className="mt-2 text-xs text-ink-300">
-              Ready to invite <span className="text-white font-semibold">{parsed.length}</span>{' '}
+            <div className="mt-2 text-xs text-ink-500">
+              Ready to invite <span className="text-ink-900 font-semibold">{parsed.length}</span>{' '}
               {parsed.length === 1 ? 'person' : 'people'}.
             </div>
           )}
-          {err && <p className="text-sm text-drop-300 mt-2">{err}</p>}
-          {warning && <p className="text-sm text-amber-300 mt-2">{warning}</p>}
+          {err && <p className="text-sm text-drop-700 mt-2">{err}</p>}
+          {warning && <p className="text-sm text-amber-700 mt-2">{warning}</p>}
         </div>
         <div className="flex flex-col sm:flex-row gap-3 pt-2">
           <Button size="lg" onClick={onSend} disabled={sending} className="w-full sm:w-auto">
@@ -144,8 +144,8 @@ export function ReviewDropPage(): React.ReactElement {
 function NotFound(): React.ReactElement {
   return (
     <div className="max-w-xl mx-auto px-5 py-24 text-center">
-      <h1 className="font-display text-4xl sm:text-5xl text-white">Drop not found</h1>
-      <p className="text-ink-300 mt-3">It may have been cancelled or the link is wrong.</p>
+      <h1 className="font-display text-4xl sm:text-5xl text-ink-900">Drop not found</h1>
+      <p className="text-ink-500 mt-3">It may have been cancelled or the link is wrong.</p>
     </div>
   );
 }

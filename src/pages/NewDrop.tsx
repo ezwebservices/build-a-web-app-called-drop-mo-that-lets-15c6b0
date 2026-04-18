@@ -39,7 +39,7 @@ export function NewDropPage(): React.ReactElement {
   if (loading) {
     return (
       <div className="max-w-xl mx-auto px-5 py-24 text-center">
-        <p className="text-ink-300">Loading…</p>
+        <p className="text-ink-500">Loading…</p>
       </div>
     );
   }
@@ -47,8 +47,8 @@ export function NewDropPage(): React.ReactElement {
   if (!session) {
     return (
       <div className="max-w-xl mx-auto px-5 py-24 text-center">
-        <h1 className="font-display text-3xl sm:text-5xl text-white">First — make an account</h1>
-        <p className="text-ink-300 mt-3">
+        <h1 className="font-display text-3xl sm:text-5xl text-ink-900">First — make an account</h1>
+        <p className="text-ink-500 mt-3">
           Organizers need an account so you can come back and manage the drop. Takes a second.
         </p>
         <div className="mt-6 flex flex-col sm:flex-row gap-3 justify-center">
@@ -107,9 +107,9 @@ export function NewDropPage(): React.ReactElement {
 
   return (
     <div className="max-w-2xl mx-auto px-5 pt-10 pb-24">
-      <div className="text-xs uppercase tracking-wider text-drop-300 mb-2">Step 1 of 3</div>
-      <h1 className="font-display text-3xl sm:text-4xl md:text-5xl text-white">Start a drop</h1>
-      <p className="text-ink-300 mt-2 max-w-xl">
+      <div className="text-xs uppercase tracking-wider text-drop-700 mb-2">Step 1 of 3</div>
+      <h1 className="font-display text-3xl sm:text-4xl md:text-5xl text-ink-900">Start a drop</h1>
+      <p className="text-ink-500 mt-2 max-w-xl">
         Details stay private. The recipient will never see this page or know it existed.
       </p>
 
@@ -124,7 +124,7 @@ export function NewDropPage(): React.ReactElement {
         </Field>
         <Field label="Their Venmo handle" hint="Paste it however — we'll clean up the @.">
           <div className="flex">
-            <span className="inline-flex items-center px-4 rounded-l-xl bg-ink-700 border border-r-0 border-ink-600 text-ink-300">
+            <span className="inline-flex items-center px-4 rounded-l-xl bg-drop-50 border border-r-0 border-ink-200 text-ink-700">
               @
             </span>
             <Input
@@ -151,7 +151,7 @@ export function NewDropPage(): React.ReactElement {
         <div className="grid md:grid-cols-2 gap-5">
           <Field label="Goal" optional hint="Optional — we'll just show total raised if you skip.">
             <div className="flex">
-              <span className="inline-flex items-center px-4 rounded-l-xl bg-ink-700 border border-r-0 border-ink-600 text-ink-300">
+              <span className="inline-flex items-center px-4 rounded-l-xl bg-drop-50 border border-r-0 border-ink-200 text-ink-700">
                 $
               </span>
               <Input
@@ -182,8 +182,8 @@ export function NewDropPage(): React.ReactElement {
             placeholder="Hey — putting something small together for Maya. Would love to have you in on it."
           />
         </Field>
-        {err && <p className="text-sm text-drop-300">{err}</p>}
-        {warning && <p className="text-sm text-amber-300">{warning}</p>}
+        {err && <p className="text-sm text-drop-700">{err}</p>}
+        {warning && <p className="text-sm text-amber-700">{warning}</p>}
         <div className="flex flex-col sm:flex-row gap-3 pt-2">
           <Button type="submit" size="lg" disabled={submitting} className="w-full sm:w-auto">
             {submitting ? 'Saving…' : 'Review the invite →'}

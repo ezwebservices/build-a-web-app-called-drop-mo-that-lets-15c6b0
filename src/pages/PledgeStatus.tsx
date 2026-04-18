@@ -54,7 +54,7 @@ export function PledgeStatusPage(): React.ReactElement {
     return (
       <div className="max-w-xl mx-auto px-5 py-24 text-center">
         <Logo size={36} />
-        <p className="text-ink-300 mt-6">Loading your pledge…</p>
+        <p className="text-ink-500 mt-6">Loading your pledge…</p>
       </div>
     );
   }
@@ -63,8 +63,8 @@ export function PledgeStatusPage(): React.ReactElement {
     return (
       <div className="max-w-xl mx-auto px-5 py-24 text-center">
         <Logo size={36} />
-        <h1 className="font-display text-3xl sm:text-5xl text-white mt-6">Pledge not found.</h1>
-        <p className="text-ink-300 mt-3">
+        <h1 className="font-display text-3xl sm:text-5xl text-ink-900 mt-6">Pledge not found.</h1>
+        <p className="text-ink-500 mt-3">
           The link may have expired. If you pledged, check your email for the latest update.
         </p>
       </div>
@@ -102,12 +102,12 @@ export function PledgeStatusPage(): React.ReactElement {
           <motion.div
             initial={{ opacity: 0, scale: 0.96 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="mt-8 sm:mt-10 rounded-3xl border border-green-500/40 bg-green-500/10 p-6 sm:p-8 text-center"
+            className="mt-8 sm:mt-10 rounded-3xl border border-mint-400 bg-mint-100 p-6 sm:p-8 text-center"
           >
-            <div className="font-display text-3xl sm:text-5xl text-white">
+            <div className="font-display text-3xl sm:text-5xl text-ink-900">
               {justSent ? `Thank you, ${pledge.contributorName.split(' ')[0]}.` : 'Already sent. ✓'}
             </div>
-            <p className="text-ink-100 mt-3">
+            <p className="text-ink-700 mt-3">
               {formatMoney(pledge.amountCents)} on its way to {drop.recipientFirstName}. Thanks for
               keeping it a surprise.
             </p>
@@ -118,9 +118,9 @@ export function PledgeStatusPage(): React.ReactElement {
             </div>
           </motion.div>
         ) : pledge.status === 'skipped' ? (
-          <div className="mt-8 sm:mt-10 rounded-3xl border border-ink-700 bg-ink-800/70 p-6 sm:p-8 text-center">
-            <h1 className="font-display text-3xl sm:text-4xl text-white">Marked as skipped.</h1>
-            <p className="text-ink-300 mt-2">No worries. The drop still goes ahead.</p>
+          <div className="mt-8 sm:mt-10 rounded-3xl border border-drop-100 bg-white shadow-sm p-6 sm:p-8 text-center">
+            <h1 className="font-display text-3xl sm:text-4xl text-ink-900">Marked as skipped.</h1>
+            <p className="text-ink-500 mt-2">No worries. The drop still goes ahead.</p>
             <div className="mt-5">
               <Button onClick={resetStatus}>Actually, I'll still send</Button>
             </div>
@@ -129,13 +129,13 @@ export function PledgeStatusPage(): React.ReactElement {
           <motion.div
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
-            className="mt-8 sm:mt-10 rounded-3xl border border-ink-700 bg-gradient-to-br from-ink-800 to-[#281813] p-6 sm:p-8"
+            className="mt-8 sm:mt-10 rounded-3xl border border-drop-100 bg-gradient-to-br from-drop-50 via-white to-sun-100 shadow-sm p-6 sm:p-8"
           >
-            <div className="text-xs uppercase tracking-widest text-drop-300">Today's the day</div>
-            <h1 className="font-display text-[1.75rem] sm:text-5xl md:text-6xl text-white mt-3 leading-[1.05] sm:leading-[0.95] break-words">
+            <div className="text-xs uppercase tracking-widest text-drop-700">Today's the day</div>
+            <h1 className="font-display text-[1.75rem] sm:text-5xl md:text-6xl text-ink-900 mt-3 leading-[1.05] sm:leading-[0.95] break-words">
               Send {formatMoney(pledge.amountCents)} to {drop.recipientFirstName} now.
             </h1>
-            <p className="text-ink-200 mt-3">
+            <p className="text-ink-700 mt-3">
               Tap the button — it opens Venmo with everything filled in. Everyone's sending right
               around now.
             </p>
@@ -152,28 +152,28 @@ export function PledgeStatusPage(): React.ReactElement {
                 I can't this time
               </Button>
             </div>
-            <div className="mt-6 text-xs text-ink-400 text-center">
+            <div className="mt-6 text-xs text-ink-600 text-center">
               Recipient: @{drop.recipientVenmoHandle} · Note: "{note}"
             </div>
           </motion.div>
         ) : (
-          <div className="mt-8 sm:mt-10 rounded-3xl border border-ink-700 bg-gradient-to-br from-ink-800 to-[#281813] p-6 sm:p-8">
-            <div className="text-xs uppercase tracking-widest text-drop-300">You're all set</div>
-            <h1 className="font-display text-3xl sm:text-4xl md:text-5xl text-white mt-3 break-words">
+          <div className="mt-8 sm:mt-10 rounded-3xl border border-drop-100 bg-gradient-to-br from-drop-50 via-white to-sun-100 shadow-sm p-6 sm:p-8">
+            <div className="text-xs uppercase tracking-widest text-drop-700">You're all set</div>
+            <h1 className="font-display text-3xl sm:text-4xl md:text-5xl text-ink-900 mt-3 break-words">
               Pledged {formatMoney(pledge.amountCents)} for {drop.recipientFirstName}.
             </h1>
-            <p className="text-ink-300 mt-3">
+            <p className="text-ink-500 mt-3">
               We'll email you a Venmo link when the day comes. Until then, please keep it to
               yourself.
             </p>
             <div className="mt-6">
-              <div className="text-xs uppercase tracking-widest text-ink-300 mb-2">
+              <div className="text-xs uppercase tracking-widest text-ink-500 mb-2">
                 {formatDropTime(drop.dropAtIso, drop.timezone)}
               </div>
               <Countdown toIso={drop.dropAtIso} />
             </div>
             <div className="mt-6">
-              <Link to={`/d/${drop.publicToken}`} className="text-drop-300 text-sm hover:text-drop-200">
+              <Link to={`/d/${drop.publicToken}`} className="text-drop-700 text-sm hover:text-drop-800 underline-offset-2 hover:underline">
                 Change my pledge →
               </Link>
             </div>

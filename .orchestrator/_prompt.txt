@@ -1,7 +1,7 @@
 You are QA (QA Engineer). Make this specific change:
 
-Verify the landing/home page on desktop and mobile widths: new lighter theme is applied, wording is simpler and friendlier, visual consistency with the public share page, CTAs work, no console errors, no layout breaks, and no leftover old-theme colors or copy. Report any regressions.
+Verify on a mobile viewport (375px) and desktop: (1) no light-on-light unreadable text anywhere — walk the landing page, auth, organizer dashboard, create-drop flow, and public drop page; flag any contrast failures with file:line. (2) New logo appears everywhere the old droplet was, and nothing still references the old mark. (3) Public drop page tabs work: tap targets ≥44px, sticky on scroll, keyboard nav, correct tab state preserved on refresh (if implemented via URL). (4) `npm run build` passes. Report pass/fail per item; do not mark complete if any regressions remain.
 
-Context: The user asked for: did you also update the landing page home with new theme and friendleir colors and wording?
+Context: The user asked for: with the lighter new theme some components have light text making it unreadable fix this issues, also the public page for the drop is too complex make it more simple and easy to use, make inline sub navs with tabs if needed, design for mobile first.. the logo looks like a drop of blood. maybe we should come up with a better name and logo that fits this idea
 
 Read the relevant source files, make targeted edits, and run `npm run build` to verify.

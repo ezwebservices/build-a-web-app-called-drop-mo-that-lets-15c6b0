@@ -18,11 +18,11 @@ export function Countdown({ toIso }: { toIso: string }): React.ReactElement {
   return (
     <div className="flex gap-2 sm:gap-3">
       {items.map((i) => (
-        <div key={i.label} className="flex-1 text-center rounded-2xl bg-ink-800/70 border border-ink-700 px-2 py-3 sm:px-3 sm:py-4">
-          <div className="text-white font-display text-2xl sm:text-3xl md:text-4xl tabular-nums">
+        <div key={i.label} className="flex-1 text-center rounded-2xl bg-drop-50 border border-drop-100 px-2 py-3 sm:px-3 sm:py-4">
+          <div className="text-ink-900 font-display text-2xl sm:text-3xl md:text-4xl tabular-nums">
             {String(i.value).padStart(2, '0')}
           </div>
-          <div className="text-[10px] sm:text-xs uppercase tracking-widest text-ink-300 mt-1">{i.label}</div>
+          <div className="text-[10px] sm:text-xs uppercase tracking-widest text-ink-500 mt-1">{i.label}</div>
         </div>
       ))}
     </div>

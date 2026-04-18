@@ -48,7 +48,7 @@ export function DashboardPage(): React.ReactElement {
   if (sessionLoading) {
     return (
       <div className="max-w-5xl mx-auto px-5 pt-10 pb-24">
-        <p className="text-ink-300">Loading your drops…</p>
+        <p className="text-ink-500">Loading your drops…</p>
       </div>
     );
   }
@@ -58,8 +58,8 @@ export function DashboardPage(): React.ReactElement {
     <div className="max-w-5xl mx-auto px-5 pt-10 pb-24">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="font-display text-3xl sm:text-4xl md:text-5xl text-white">Your drops</h1>
-          <p className="text-ink-300 mt-1 text-sm break-all">Signed in as {session.email}</p>
+          <h1 className="font-display text-3xl sm:text-4xl md:text-5xl text-ink-900">Your drops</h1>
+          <p className="text-ink-500 mt-1 text-sm break-all">Signed in as {session.email}</p>
         </div>
         <Link to="/new" className="sm:shrink-0">
           <Button className="w-full sm:w-auto">Start a drop</Button>
@@ -67,17 +67,17 @@ export function DashboardPage(): React.ReactElement {
       </div>
 
       {error && (
-        <div className="mt-6 rounded-xl border border-drop-500/40 bg-drop-500/10 text-drop-200 px-4 py-3 text-sm">
+        <div className="mt-6 rounded-xl border border-red-200 bg-red-50 text-red-700 px-4 py-3 text-sm">
           {error}
         </div>
       )}
 
       {loading ? (
-        <p className="mt-8 text-ink-300">Loading…</p>
+        <p className="mt-8 text-ink-500">Loading…</p>
       ) : rows.length === 0 ? (
-        <div className="mt-10 rounded-2xl border border-ink-700 bg-ink-800/60 p-10 text-center">
-          <div className="font-display text-3xl text-white">No drops yet.</div>
-          <p className="text-ink-300 mt-2 max-w-md mx-auto">
+        <div className="mt-10 rounded-2xl border border-drop-100 bg-white shadow-sm p-10 text-center">
+          <div className="font-display text-3xl text-ink-900">No drops yet.</div>
+          <p className="text-ink-500 mt-2 max-w-md mx-auto">
             Someone you know having a rough week? Start a drop and invite their people.
           </p>
           <div className="mt-5">
@@ -97,23 +97,23 @@ export function DashboardPage(): React.ReactElement {
             >
               <Link
                 to={`/drops/${drop.id}`}
-                className="block rounded-2xl border border-ink-700 bg-ink-800/70 p-5 hover:border-drop-400/60 transition"
+                className="block rounded-2xl border border-drop-100 bg-white shadow-sm p-5 hover:border-drop-300 hover:shadow-md transition"
               >
                 <div className="flex items-start justify-between gap-3 sm:gap-4">
                   <div className="min-w-0 flex-1">
-                    <div className="text-xs uppercase tracking-wider text-drop-300">
+                    <div className="text-xs uppercase tracking-wider text-drop-700">
                       {drop.status}
                     </div>
-                    <div className="text-white text-lg sm:text-xl font-semibold mt-1 break-words">
+                    <div className="text-ink-900 text-lg sm:text-xl font-semibold mt-1 break-words">
                       For {drop.recipientFirstName} · @{drop.recipientVenmoHandle}
                     </div>
-                    <div className="text-ink-300 text-xs sm:text-sm mt-1">
+                    <div className="text-ink-500 text-xs sm:text-sm mt-1">
                       Drop day: {formatDropTime(drop.dropAtIso, drop.timezone)}
                     </div>
                   </div>
                   <div className="text-right shrink-0">
-                    <div className="text-white text-xl sm:text-2xl font-bold">{formatMoney(totalCents)}</div>
-                    <div className="text-ink-300 text-xs">
+                    <div className="text-ink-900 text-xl sm:text-2xl font-bold">{formatMoney(totalCents)}</div>
+                    <div className="text-ink-500 text-xs">
                       {pledgeCount} {pledgeCount === 1 ? 'pledge' : 'pledges'}
                       {drop.goalAmountCents ? ` of ${formatMoney(drop.goalAmountCents)}` : ''}
                     </div>

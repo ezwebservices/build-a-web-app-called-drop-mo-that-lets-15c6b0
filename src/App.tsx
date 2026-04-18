@@ -37,8 +37,8 @@ function App(): React.ReactElement {
 function NotFound(): React.ReactElement {
   return (
     <div className="max-w-xl mx-auto px-5 py-24 text-center">
-      <h1 className="font-display text-4xl sm:text-5xl text-white">404</h1>
-      <p className="text-ink-300 mt-2">We couldn't find that page.</p>
+      <h1 className="font-display text-4xl sm:text-5xl text-ink-900">404</h1>
+      <p className="text-ink-500 mt-2">We couldn't find that page.</p>
     </div>
   );
 }
@@ -46,7 +46,7 @@ function NotFound(): React.ReactElement {
 function Footer(): React.ReactElement {
   return (
     <footer className="border-t border-drop-100 bg-white/60 mt-10">
-      <div className="max-w-6xl mx-auto px-5 py-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 text-xs text-ink-400">
+      <div className="max-w-6xl mx-auto px-5 py-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 text-xs text-ink-500">
         <div>© {new Date().getFullYear()} Drop — rally the group, surprise the one.</div>
         <div>No fees. Ever.</div>
       </div>

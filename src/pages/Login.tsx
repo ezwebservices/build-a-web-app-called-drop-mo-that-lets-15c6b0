@@ -156,7 +156,7 @@ export function LoginPage(): React.ReactElement {
       <div
         role="tablist"
         aria-label="Sign in or create account"
-        className="flex p-1 rounded-full bg-ink-800/70 border border-ink-700 mb-6 text-sm"
+        className="flex p-1 rounded-full bg-drop-50 border border-drop-100 mb-6 text-sm"
       >
         <button
           role="tab"
@@ -164,7 +164,7 @@ export function LoginPage(): React.ReactElement {
           type="button"
           onClick={() => switchMode('signIn')}
           className={`flex-1 px-3 sm:px-4 py-2.5 min-h-[40px] rounded-full transition ${
-            !isSignUp ? 'bg-drop-500 text-white' : 'text-ink-300 hover:text-white'
+            !isSignUp ? 'bg-drop-600 text-white shadow-sm' : 'text-ink-500 hover:text-ink-900'
           }`}
         >
           Sign in
@@ -175,22 +175,22 @@ export function LoginPage(): React.ReactElement {
           type="button"
           onClick={() => switchMode('signUp')}
           className={`flex-1 px-3 sm:px-4 py-2.5 min-h-[40px] rounded-full transition ${
-            isSignUp ? 'bg-drop-500 text-white' : 'text-ink-300 hover:text-white'
+            isSignUp ? 'bg-drop-600 text-white shadow-sm' : 'text-ink-500 hover:text-ink-900'
           }`}
         >
           Create account
         </button>
       </div>
 
-      <div className="rounded-2xl bg-ink-800/70 border border-ink-700 p-5 sm:p-7">
-        <h1 className="font-display text-3xl sm:text-4xl text-white">
+      <div className="rounded-2xl bg-white border border-drop-100 shadow-sm p-5 sm:p-7">
+        <h1 className="font-display text-3xl sm:text-4xl text-ink-900">
           {stage === 'confirm'
             ? 'Confirm your email'
             : isSignUp
               ? 'Start a drop'
               : 'Welcome back'}
         </h1>
-        <p className="text-ink-300 mt-1 text-sm">
+        <p className="text-ink-500 mt-1 text-sm">
           {stage === 'confirm'
             ? 'We sent a 6-digit code to your inbox.'
             : isSignUp
@@ -217,8 +217,8 @@ export function LoginPage(): React.ReactElement {
                 autoComplete={isSignUp ? 'new-password' : 'current-password'}
               />
             </Field>
-            {error && <p className="text-sm text-drop-300">{error}</p>}
-            {info && <p className="text-sm text-ink-200">{info}</p>}
+            {error && <p className="text-sm text-red-600">{error}</p>}
+            {info && <p className="text-sm text-ink-700">{info}</p>}
             <Button type="submit" className="w-full" size="lg" disabled={submitting}>
               {submitting
                 ? 'Working…'
@@ -238,23 +238,23 @@ export function LoginPage(): React.ReactElement {
                 autoComplete="one-time-code"
               />
             </Field>
-            {error && <p className="text-sm text-drop-300">{error}</p>}
-            {info && <p className="text-sm text-ink-200">{info}</p>}
+            {error && <p className="text-sm text-red-600">{error}</p>}
+            {info && <p className="text-sm text-ink-700">{info}</p>}
             <Button type="submit" className="w-full" size="lg" disabled={submitting}>
               {submitting ? 'Confirming…' : 'Confirm & continue'}
             </Button>
-            <div className="flex justify-between text-xs text-ink-300">
+            <div className="flex justify-between text-xs text-ink-500">
               <button
                 type="button"
                 onClick={onResend}
-                className="hover:text-white underline-offset-2 hover:underline"
+                className="hover:text-ink-900 underline-offset-2 hover:underline"
               >
                 Resend code
               </button>
               <button
                 type="button"
                 onClick={() => setStage('form')}
-                className="hover:text-white"
+                className="hover:text-ink-900"
               >
                 ← back
               </button>
@@ -263,14 +263,14 @@ export function LoginPage(): React.ReactElement {
         )}
 
         {stage === 'form' && (
-          <p className="text-sm text-ink-300 mt-6 text-center">
+          <p className="text-sm text-ink-500 mt-6 text-center">
             {isSignUp ? (
               <>
                 Already have an account?{' '}
                 <button
                   type="button"
                   onClick={() => switchMode('signIn')}
-                  className="text-drop-300 hover:text-white underline-offset-2 hover:underline"
+                  className="text-drop-700 hover:text-drop-800 underline-offset-2 hover:underline"
                 >
                   Sign in
                 </button>
@@ -281,7 +281,7 @@ export function LoginPage(): React.ReactElement {
                 <button
                   type="button"
                   onClick={() => switchMode('signUp')}
-                  className="text-drop-300 hover:text-white underline-offset-2 hover:underline"
+                  className="text-drop-700 hover:text-drop-800 underline-offset-2 hover:underline"
                 >
                   Create an account
                 </button>
@@ -289,13 +289,13 @@ export function LoginPage(): React.ReactElement {
             )}
           </p>
         )}
-        <p className="text-xs text-ink-400 mt-6">
+        <p className="text-xs text-ink-500 mt-6">
           By {isSignUp ? 'creating an account' : 'signing in'} you agree to keep drops private from
           their recipients. That's the whole point.
         </p>
       </div>
-      <p className="text-center text-sm text-ink-300 mt-6">
-        <Link to="/" className="hover:text-white">
+      <p className="text-center text-sm text-ink-500 mt-6">
+        <Link to="/" className="hover:text-ink-900">
           ← back to home
         </Link>
       </p>

@@ -6,8 +6,8 @@ html,
 body,
 #root {
   min-height: 100%;
-  background: #0b0c10;
-  color: #e9ebf1;
+  background: #FFFBF7;
+  color: #1A1410;
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, sans-serif;
   -webkit-font-smoothing: antialiased;
 }
@@ -22,9 +22,9 @@ body {
 
 .grain {
   background-image:
-    radial-gradient(ellipse at 20% 0%, rgba(255, 106, 61, 0.14), transparent 55%),
-    radial-gradient(ellipse at 100% 10%, rgba(237, 47, 9, 0.12), transparent 60%),
-    radial-gradient(ellipse at 50% 100%, rgba(255, 71, 20, 0.08), transparent 65%);
+    radial-gradient(ellipse at 20% 0%, rgba(248, 111, 55, 0.10), transparent 55%),
+    radial-gradient(ellipse at 100% 10%, rgba(242, 190, 61, 0.10), transparent 60%),
+    radial-gradient(ellipse at 50% 100%, rgba(95, 203, 149, 0.06), transparent 65%);
 }
 
 button:focus-visible,
@@ -32,28 +32,36 @@ a:focus-visible,
 input:focus-visible,
 textarea:focus-visible,
 select:focus-visible {
-  outline: 2px solid #ff6a3d;
+  outline: 2px solid #DB5A24;
   outline-offset: 2px;
 }
 
 input::placeholder,
 textarea::placeholder {
-  color: #6b7186;
+  color: #8A8079;
 }
 
-/* Amplify Authenticator dark theme overrides */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Amplify Authenticator light theme overrides */
 [data-amplify-authenticator] {
-  --amplify-colors-background-primary: #13151c;
-  --amplify-colors-background-secondary: #1c1f29;
-  --amplify-colors-brand-primary-80: #ff4714;
-  --amplify-colors-brand-primary-90: #ed2f09;
-  --amplify-colors-brand-primary-100: #c42208;
-  --amplify-colors-font-interactive: #ff9975;
-  --amplify-colors-font-primary: #e9ebf1;
-  --amplify-colors-font-secondary: #c7cbd6;
-  --amplify-colors-border-primary: #2a2e3b;
-  --amplify-components-button-primary-background-color: #ff4714;
-  --amplify-components-button-primary-hover-background-color: #ed2f09;
-  --amplify-components-fieldcontrol-background-color: #0b0c10;
-  --amplify-components-fieldcontrol-color: #e9ebf1;
+  --amplify-colors-background-primary: #FFFFFF;
+  --amplify-colors-background-secondary: #FFF6F1;
+  --amplify-colors-brand-primary-80: #F86F37;
+  --amplify-colors-brand-primary-90: #DB5A24;
+  --amplify-colors-brand-primary-100: #B0481D;
+  --amplify-colors-font-interactive: #DB5A24;
+  --amplify-colors-font-primary: #1A1410;
+  --amplify-colors-font-secondary: #6B6058;
+  --amplify-colors-border-primary: #D9D2CC;
+  --amplify-components-button-primary-background-color: #DB5A24;
+  --amplify-components-button-primary-hover-background-color: #B0481D;
+  --amplify-components-fieldcontrol-background-color: #FFFFFF;
+  --amplify-components-fieldcontrol-color: #1A1410;
 }
